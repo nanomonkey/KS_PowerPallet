@@ -349,9 +349,9 @@ void DoDatalogging() {
   //LogPulseEnergy(header);
   //LogBatteryVoltage(header);
   Serial.println(data_buffer);
-//  if (save_to_sd = 0) {
-//    DoDatalogSD(data_buffer);
-//  }
+  if (save_datalog_to_sd && sd_loaded){
+    DatalogSD(data_buffer, sd_data_file_name);
+  }
 //  DoTests();
   lineCount++;
 }

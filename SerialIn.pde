@@ -117,7 +117,20 @@ void DoSerialIn() {
       break;   
     case 'e':
       TransitionEngine(ENGINE_GOV_TUNING);
-      break;  
+      break; 
+    case 'x':
+      testSD();
+      break;
+   case 'h' || 'H':
+      Serial.println(HELP);
+      break; 
+//   case '$':
+//      Serial.readBytesUntil(';', serial_buffer, 20)
+//      readSerial(serial_buffer);
+//      break;
+//   case 'W':  //write to config.ini
+//      Serial.read
+    //used values: $HheMmGgTtLlSscDdIiPp
     }
   }
   

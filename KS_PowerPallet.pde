@@ -1,6 +1,8 @@
 // KS_Engine3
 // Library used to run APL Power Pallet
 // Developed for the APL GCU/PCU: http://gekgasifier.pbworks.com/Gasifier-Control-Unit
+//#define <pins_arduino.h> <pins_PCU.h>
+//#define <pins_arduino.c> <pins_PCU.c>
 
 #include <EEPROM.h>         // included with Arduino, can read/writes to non-volatile memory
 #include <Servo.h>          // Arduino's native servo library
@@ -16,14 +18,16 @@
 #include <ui.h>             // part of KSlibs, menu
 #include <util.h>           // part of KSlibs, utility functions, GCU_Setup
 #include <avr/io.h>         // advanced: provides port definitions for the microcontroller (ATmega1280, http://www.atmel.com/dyn/resources/prod_documents/doc2549.PDF)   
-//#include <SdFat.h>
-//#include <SdFatUtil.h> 
+#include <SD.h>             // SD card  
+
 //#include <ctype.h>
 
 //constant definitions
 #define ABSENT -500
 
-#define CODE_VERSION "v1.10" 
+#define CODE_VERSION "v1.12" 
+
+const char HELP[] PROGMEM = "#p: add 0.02 to p/n#P: subtract 0.02 from p/n#i: add 0.02 to i/n#I: subtract 0.02 from i/n#d & D: reserved for d in PID (not implemented)/n#c: Calibrate Pressure Sensors/n#s: add 10 to Servo1 calibration/n#S: subtract 10  degrees from Servo1 position/n#l: add 0.01 to lambda_setpoint/n#L: subtract 0.01 from lambda_setpoint/n#t: subtract 100 ms from Sample Period (loopPeriod1)/n#T: add 100 ms from Sample Period (loopPeriod1)/n#g: Shake grate/n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)/n#m: add 5ms to grate shake interval/n#M: subtract 5 ms from grate shake interval/n#e: Engine Governor Tuning mode/n# h: Print Help Text";
 
 // Analog Input Mapping
 #define ANA_LAMBDA ANA0
@@ -151,6 +155,7 @@ Servo Servo_Throttle;
 #define DISPLAY_SERVO 7
 #define DISPLAY_CALIBRATE_PRESSURE 8
 #define DISPLAY_CONFIG 9
+#define DISPLAY_SD 10
 
 
 //Testing States
@@ -168,6 +173,7 @@ Servo Servo_Throttle;
 #define TESTING_ANA_OIL_PRESSURE 11
 #define TESTING_SERVO 12     //used in Display to defeat any other writes to servo
 
+
 //Datalogging Buffer
 String data_buffer = "";
 char float_buf[15] = "";
@@ -183,11 +189,11 @@ int lineCount = 0;
 //Configuration Variables
 int config_var;
 byte config_changed = false;
-static char *Configuration[] = { "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  "};  //15 character Display prompt
-static char *Config_Choices[] = {"10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  "}; //8 char options for last two buttons
-int defaults[] = {0, 1, 30, 35, 100, 6};  //default values to be saved to EEPROM for the following getConfig variables
-int config_min[] = {0, 0, 0, 0, 5, 41, 1};  //minimum values allowed 
-int config_max[] = {254, 254, 254, 40, 135, 10}; //maximum values allowed  
+static char *Configuration[] = { "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card"};  //15 character Display prompt
+static char *Config_Choices[] = {"10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES "}; //8 char options for last two buttons
+int defaults[] = {0, 1, 10, 35, 100, 6, 0};  //default values to be saved to EEPROM for the following getConfig variables
+int config_min[] = {0, 0, 0, 0, 5, 41, 1, 0};  //minimum values allowed 
+int config_max[] = {254, 254, 254, 40, 135, 10, 254}; //maximum values allowed  
 
 //Don't forget to add the following to update_config_var in Display!
 int engine_type = getConfig(1);  
@@ -196,6 +202,7 @@ int aug_rev_time = getConfig(3)*100;
 int current_low_boundary = getConfig(4);  
 int current_high_boundary = getConfig(5);
 int low_oil_psi = getConfig(6);
+int save_datalog_to_sd = getConfig(7);
 
 
 // Grate turning variables
@@ -413,6 +420,7 @@ float servo2_db = 0; // used to deadband the servo movement
 
 //Serial
 char serial_last_input = '\0'; // \0 is the ABSENT character
+char serial_buffer[21];
 
 //Relay Muliplexer  Still to be implemented
 byte shiftRegister = 0;  //Holder for all 8 relay states (8 bits, initialized to B00000000, all relays off)
@@ -472,17 +480,26 @@ char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is grea
   "Check Fuel          ",
   "Check Fuel & Switch "
 };
+
 // SD Card
-//Sd2Card sd_card;
-//SdVolume sd_volume;
-//SdFile sd_root;
-//SdFile sd_file;
+boolean sd_loaded;
 
-#define SCK_PIN 52 //??
-#define SS_PIN 53
+int config_count = 20; //number of configurations in config.txt
 
-char sd_file_name[] = "Test.txt";     //Create an array that contains the name of our file.
-char sd_contents[256];           //This will be a data buffer for writing contents to the file.
+typedef struct{
+  char name[8];
+  int sensor_num;
+  int flag;
+  int show;
+} config_entry;
+//config_entry config[config_num];  //use config_entry struct
+
+Sd2Card sd_card;
+SdVolume sd_volume;
+SdFile sd_root;
+SdFile sd_file;
+
+char sd_data_file_name[] = "datalog1.txt";     //Create an array that contains the name of our datalog file, updated upon 
 char sd_in_char=0;
 int sd_index=0;  
 
@@ -504,7 +521,6 @@ void setup() {
   pinMode(FET5,OUTPUT);
   pinMode(FET6,OUTPUT);
   pinMode(FET7,OUTPUT);
-
   
   //pinMode(FET_BLOWER,OUTPUT); //TODO: Move into library (set PE0 to output)
   //digitalWrite(FET_BLOWER,HIGH);
@@ -551,9 +567,10 @@ void setup() {
   InitGrate();  
   InitPeriodHertz(); //attach interrupt
   InitCounterHertz();
+  InitSD();
   //InitGovernor();
-  InitPulseEnergyMonitoring();
-//  InitSD();
+  //InitPulseEnergyMonitoring();
+  
   
   TransitionEngine(ENGINE_ON); //default to engine on. if PCU resets, don't shut a running engine off. in the ENGINE_ON state, should detect and transition out of engine on.
   TransitionLambda(LAMBDA_UNKNOWN);
@@ -596,7 +613,6 @@ void loop() {
           DoGrate();
           DoFilter();
           DoDatalogging();
-  //      DoDatalogSD();
           DoAlarmUpdate();
           DoAlarm();
         }

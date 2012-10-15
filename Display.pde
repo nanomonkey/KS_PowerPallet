@@ -1,4 +1,6 @@
 void DoDisplay() {
+  //char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
+  char menu1[]  = "NEXT  ADV   +    -  ";
   boolean disp_alt; // Var for alternating value display
   char choice[5] = "    ";
   char buf[20];
@@ -11,16 +13,10 @@ void DoDisplay() {
   switch (display_state) {
   case DISPLAY_SPLASH:
     //Row 0
-    Disp_RC(0,0);
-    if (GCU_version == V2) {
-      Disp_PutStr("   KS GCU V 2.0    ");
-    } 
-    else if (GCU_version == V3) {
-      Disp_PutStr("    KS PCU V 3.0    ");
-    }
+    Disp_PutStr(PSTR("    Power Pallet    "));
     //Row 1
     Disp_RC(1,0);
-    Disp_PutStr("www.allpowerlabs.org");
+    Disp_PutStr(PSTR("www.allpowerlabs.org"));
     //Row 2
     Disp_RC(2,0);
     sprintf(buf, "       %s        ", CODE_VERSION);
@@ -63,7 +59,7 @@ void DoDisplay() {
       }
       //Row 3
       Disp_RC(3, 0);
-      Disp_PutStr("NEXT ADV QUIET      ");
+      Disp_PutStr(PSTR("NEXT ADV QUIET      "));
       if (millis() - alarm_on[alarm_shown] > 4000){ //Wait to show RESET button in case new alarm state has taken over screen.
         Disp_RC(3, 15);
         Disp_PutStr("RESET");
@@ -204,7 +200,7 @@ void DoDisplay() {
     item_count = 1;
     //Row 0
     Disp_RC(0,0);
-    Disp_PutStr("Testing             "); 
+    Disp_PutStr(PSTR("Testing             ")); 
     //Row 1			
     Disp_RC(1,0);
     sprintf(buf, "Test:%-15s", TestingStateName[testing_state]);
@@ -235,11 +231,11 @@ void DoDisplay() {
         GoToNextTestingState(); //first testing state
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT       TEST     ");
+      Disp_PutStr(PSTR("NEXT       TEST     "));
       break;
     default:
       Disp_RC(3,0);
-      Disp_PutStr("NEXT                ");
+      Disp_PutStr(PSTR("NEXT                "));
     }
     break;
   case DISPLAY_LAMBDA:
@@ -275,11 +271,11 @@ void DoDisplay() {
       Disp_RC(0,0);
       Disp_CursOn();
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV   +    -  ");
+      Disp_PutStr(menu1);
       break;
     case 2: //Lambda reading
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV           ");
+      Disp_PutStr(PSTR("NEXT  ADV           "));
       Disp_RC(0,11);
       Disp_CursOn();
       break;
@@ -296,7 +292,7 @@ void DoDisplay() {
       }
       lambda_PID.SetTunings(P,I,0);
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV   +    -  ");
+      Disp_PutStr(menu1);
       Disp_RC(1,0);
       Disp_CursOn();
       break;
@@ -313,7 +309,7 @@ void DoDisplay() {
       }
       lambda_PID.SetTunings(P,I,0);
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV   +    -  ");
+      Disp_PutStr(menu1);
       Disp_RC(1,11);
       Disp_CursOn();
       break;
@@ -359,7 +355,7 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV   +    -  ");
+      Disp_PutStr(menu1);
       Disp_RC(0,0);
       Disp_CursOn();
       break;
@@ -379,7 +375,7 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV   +    -  ");
+      Disp_PutStr(menu1);
       Disp_RC(0,11);
       Disp_CursOn();
       break;
@@ -399,7 +395,7 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV   +    -  ");
+      Disp_PutStr(menu1);
       Disp_RC(1,0);
       Disp_CursOn();
       break;
@@ -411,7 +407,7 @@ void DoDisplay() {
       grate_val = GRATE_SHAKE_CROSS;
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV  OFF   ON ");
+      Disp_PutStr(PSTR("NEXT  ADV  OFF   ON "));
       Disp_RC(1,11);
       Disp_CursOn();
       break; 
@@ -428,7 +424,7 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 1
     Disp_RC(1,0);
-    Disp_PutStr(" Careful of Sides!  "); 
+    Disp_PutStr(PSTR(" Careful of Sides!  ")); 
     Disp_RC(2,0);
     Disp_PutStr("                    ");
     switch (cur_item) {
@@ -443,7 +439,7 @@ void DoDisplay() {
         premix_valve_closed -= 1;
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV   +    -  ");
+      Disp_PutStr(menu1);
       Disp_RC(0,0);
       Disp_CursOn();
       break;
@@ -458,7 +454,7 @@ void DoDisplay() {
         }
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV   +    -  ");
+      Disp_PutStr(menu1);
       Disp_RC(0,11);
       Disp_CursOn();
       break;
@@ -567,6 +563,67 @@ void DoDisplay() {
       }
     }
     break;
+  case DISPLAY_SD:
+    Disp_CursOff();
+    Disp_RC(0,0);
+    Disp_PutStr("   Test SD Card     ");
+    Disp_RC(1,0);
+    Disp_PutStr("See Serial Monitor  ");
+    Disp_RC(2,0);
+    Disp_PutStr("for more information");
+    Disp_RC(3,0);
+    Disp_PutStr("NEXT            TEST");
+    if (key == 3 and cur_item == 1) {  //only allow the button to be pressed once
+     #if defined(__AVR_ATmega1280__)
+     Serial.print("# __AVR_ATmega1280_ defined as");
+     Serial.println(__AVR_ATmega1280__);
+     #endif 
+      //Serial.print("SDA_PIN = ");
+      //Serial.println(int(SDA_PIN));
+      //Serial.print("SCL_PIN = ");
+      //Serial.println(int(SCL_PIN));
+      Serial.print("SS_PIN = ");
+      Serial.println(int(SS_PIN));
+      Serial.print("MOSI_PIN = ");
+      Serial.println(int(MOSI_PIN));
+      Serial.print("MISO_PIN = ");
+      Serial.println(int(MISO_PIN));
+      Serial.print("SCK_PIN = ");
+      Serial.println(int(SCK_PIN));
+
+//      for (int i = 50; i < 90; i++){
+//        ss_PIN = i;
+//        Serial.print("# Setting ss_pin to ");
+//        Serial.println(ss_PIN);
+//        testSD();
+//      }
+      testSD();
+      cur_item++;  
+    }
+    if (key == 2) {
+      for (int t = 1; t<10; t++){
+//        digitalWrite(SS_PIN, HIGH); 
+//        digitalWrite(MOSI_PIN, HIGH); 
+//        digitalWrite(MISO_PIN, HIGH); 
+//        digitalWrite(SCK_PIN, HIGH); 
+        //digitalWrite(70, HIGH);
+        //digitalWrite(71, LOW);
+//        Serial.println("#HIGH");
+        Serial.println("#70 ON, 71 OFF");
+        delay(100);
+//        digitalWrite(SS_PIN, LOW); 
+//        digitalWrite(MOSI_PIN, LOW); 
+//        digitalWrite(MISO_PIN, LOW); 
+//        digitalWrite(SCK_PIN, LOW); 
+        digitalWrite(70, LOW);
+        digitalWrite(71, HIGH);
+       Serial.println("#70 OFF, 71 ON");
+//        Serial.println("#LOW");
+        delay(500);
+      }
+      //DDRJ |= _BV(PJ2) | _BV(PJ3);
+    }
+    break;
 //  case DISPLAY_PHIDGET:
 //      Disp_CursOff();
 ////    Disp_RC(0,0);
@@ -636,6 +693,9 @@ void TransitionDisplay(int new_state) {
     break;
 //  case DISPLAY_PHIDGET: 
 //    break;
+  case DISPLAY_SD:
+    cur_item = 1;
+    break;
   }
   display_state=new_state;
 }
@@ -692,6 +752,9 @@ void DoKeyInput() {
 //      TransitionDisplay(DISPLAY_PHIDGET);
 //      break;
 //    case DISPLAY_PHIDGET:
+      TransitionDisplay(DISPLAY_SD);
+      break;
+    case DISPLAY_SD:
       TransitionDisplay(DISPLAY_REACTOR);
       break;
     }
@@ -778,5 +841,15 @@ void update_config_var(int var_num){
     case 7:
       low_oil_psi = getConfig(6);
       break;
+    case 8:
+      save_datalog_to_sd = getConfig(7);
+      break;
+  }
+}
+
+void resetConfig() {  //sets EEPROM configs back to untouched state...
+  int default_count = sizeof(defaults)/sizeof(int);
+  for (int i=0; i < default_count; i++){
+    EEPROM.write(500+i, defaults[i]);
   }
 }
