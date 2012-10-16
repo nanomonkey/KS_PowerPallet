@@ -121,9 +121,9 @@ void DoSerialIn() {
     case 'x':
       testSD();
       break;
-   case 'h' || 'H':
-      Serial.println(HELP);
-      break; 
+//   case 'h' || 'H':
+//      Serial.println(HELP);
+//      break; 
 //   case '$':
 //      Serial.readBytesUntil(';', serial_buffer, 20)
 //      readSerial(serial_buffer);

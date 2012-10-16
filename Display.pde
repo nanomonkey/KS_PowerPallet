@@ -1,5 +1,9 @@
 void DoDisplay() {
+  //Think about replacing long strings with variables in program space using PROGMEM and PSTR()
   //char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
+  //strcpy_P(buf, (char*)pgm_read_word(&menu1))); 
+  //Serial.println(buf);
+  
   char menu1[]  = "NEXT  ADV   +    -  ";
   boolean disp_alt; // Var for alternating value display
   char choice[5] = "    ";
@@ -13,10 +17,10 @@ void DoDisplay() {
   switch (display_state) {
   case DISPLAY_SPLASH:
     //Row 0
-    Disp_PutStr(PSTR("    Power Pallet    "));
+    Disp_PutStr("    Power Pallet    ");
     //Row 1
     Disp_RC(1,0);
-    Disp_PutStr(PSTR("www.allpowerlabs.org"));
+    Disp_PutStr("www.allpowerlabs.org");
     //Row 2
     Disp_RC(2,0);
     sprintf(buf, "       %s        ", CODE_VERSION);
@@ -59,7 +63,7 @@ void DoDisplay() {
       }
       //Row 3
       Disp_RC(3, 0);
-      Disp_PutStr(PSTR("NEXT ADV QUIET      "));
+      Disp_PutStr("NEXT ADV QUIET      ");
       if (millis() - alarm_on[alarm_shown] > 4000){ //Wait to show RESET button in case new alarm state has taken over screen.
         Disp_RC(3, 15);
         Disp_PutStr("RESET");
@@ -200,7 +204,7 @@ void DoDisplay() {
     item_count = 1;
     //Row 0
     Disp_RC(0,0);
-    Disp_PutStr(PSTR("Testing             ")); 
+    Disp_PutStr("Testing             "); 
     //Row 1			
     Disp_RC(1,0);
     sprintf(buf, "Test:%-15s", TestingStateName[testing_state]);
@@ -231,11 +235,11 @@ void DoDisplay() {
         GoToNextTestingState(); //first testing state
       }
       Disp_RC(3,0);
-      Disp_PutStr(PSTR("NEXT       TEST     "));
+      Disp_PutStr("NEXT       TEST     ");
       break;
     default:
       Disp_RC(3,0);
-      Disp_PutStr(PSTR("NEXT                "));
+      Disp_PutStr("NEXT                ");
     }
     break;
   case DISPLAY_LAMBDA:
@@ -275,7 +279,7 @@ void DoDisplay() {
       break;
     case 2: //Lambda reading
       Disp_RC(3,0);
-      Disp_PutStr(PSTR("NEXT  ADV           "));
+      Disp_PutStr("NEXT  ADV           ");
       Disp_RC(0,11);
       Disp_CursOn();
       break;
@@ -407,7 +411,7 @@ void DoDisplay() {
       grate_val = GRATE_SHAKE_CROSS;
       }
       Disp_RC(3,0);
-      Disp_PutStr(PSTR("NEXT  ADV  OFF   ON "));
+      Disp_PutStr("NEXT  ADV  OFF   ON ");
       Disp_RC(1,11);
       Disp_CursOn();
       break; 
@@ -424,7 +428,7 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 1
     Disp_RC(1,0);
-    Disp_PutStr(PSTR(" Careful of Sides!  ")); 
+    Disp_PutStr(" Careful of Sides!  "); 
     Disp_RC(2,0);
     Disp_PutStr("                    ");
     switch (cur_item) {

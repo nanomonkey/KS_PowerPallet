@@ -27,7 +27,7 @@
 
 #define CODE_VERSION "v1.12" 
 
-const char HELP[] PROGMEM = "#p: add 0.02 to p/n#P: subtract 0.02 from p/n#i: add 0.02 to i/n#I: subtract 0.02 from i/n#d & D: reserved for d in PID (not implemented)/n#c: Calibrate Pressure Sensors/n#s: add 10 to Servo1 calibration/n#S: subtract 10  degrees from Servo1 position/n#l: add 0.01 to lambda_setpoint/n#L: subtract 0.01 from lambda_setpoint/n#t: subtract 100 ms from Sample Period (loopPeriod1)/n#T: add 100 ms from Sample Period (loopPeriod1)/n#g: Shake grate/n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)/n#m: add 5ms to grate shake interval/n#M: subtract 5 ms from grate shake interval/n#e: Engine Governor Tuning mode/n# h: Print Help Text";
+//const char HELP[] PROGMEM = "#p: add 0.02 to p/n#P: subtract 0.02 from p/n#i: add 0.02 to i/n#I: subtract 0.02 from i/n#d & D: reserved for d in PID (not implemented)/n#c: Calibrate Pressure Sensors/n#s: add 10 to Servo1 calibration/n#S: subtract 10  degrees from Servo1 position/n#l: add 0.01 to lambda_setpoint/n#L: subtract 0.01 from lambda_setpoint/n#t: subtract 100 ms from Sample Period (loopPeriod1)/n#T: add 100 ms from Sample Period (loopPeriod1)/n#g: Shake grate/n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)/n#m: add 5ms to grate shake interval/n#M: subtract 5 ms from grate shake interval/n#e: Engine Governor Tuning mode/n# h: Print Help Text";
 
 // Analog Input Mapping
 #define ANA_LAMBDA ANA0

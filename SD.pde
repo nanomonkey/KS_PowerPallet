@@ -10,12 +10,16 @@ void InitSD() {
   } else {
       Serial.println("card initialized.");
       sd_loaded = true;
-      int data_log_num = EEPROM.read(18);
-      if (data_log_num == 255){
+      int data_log_num = EEPROMReadInt(30); //reads from EEPROM bytes 30 and 31
+      if (data_log_num == 32767){  //unsigned??  --> 65,535
         data_log_num = 1;
+      } else { 
+        data_log_num++;
       }
-      sprintf(sd_data_file_name, "log%5i.csv", data_log_num); //99,999 possible logs...is that enough?
-      EEPROM.write(18, data_log_num + 1); //update the value for the next time
+      sprintf(sd_data_file_name, "log%05i.csv", data_log_num); 
+      Serial.print("#Writing data to ");
+      Serial.println(sd_data_file_name);
+      EEPROMWriteInt(30, data_log_num); 
   }
 }
 
@@ -194,7 +198,21 @@ void testSD() {
     return;
   }
 }
-    
+
+void EEPROMWriteInt(int p_address, int p_value){  
+  byte lowByte = ((p_value >> 0) & 0xFF);
+  byte highByte = ((p_value >> 8) & 0xFF);
+  
+  EEPROM.write(p_address, lowByte);
+  EEPROM.write(p_address + 1, highByte);
+}
+
+unsigned int EEPROMReadInt(int p_address){
+  byte lowByte = EEPROM.read(p_address);
+  byte highByte = EEPROM.read(p_address + 1);
+
+  return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
+}    
   
 //void readJSON(String line){
 //  //{key:value, key2:[0,1,2,3],{nested_object_key:nested_object_value}}  //allow nested objects??
