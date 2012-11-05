@@ -1,4 +1,4 @@
-// KS_Engine3
+// KS_PowerPallet
 // Library used to run APL Power Pallet
 // Developed for the APL GCU/PCU: http://gekgasifier.pbworks.com/Gasifier-Control-Unit
 //#define <pins_arduino.h> <pins_PCU.h>
@@ -20,12 +20,23 @@
 #include <avr/io.h>         // advanced: provides port definitions for the microcontroller (ATmega1280, http://www.atmel.com/dyn/resources/prod_documents/doc2549.PDF)   
 #include <SD.h>             // SD card  
 
-//#include <ctype.h>
+/*
+EEPROM bytes used of 4k space:
+0,1,2,3,4,5,6,7,8,9,10, 13,14,15,16,17,18,19,21, 33,34,35,36
+500-999 DISPLAY_CONFIG states
+1000-4000 Sensor configuration
+*/
 
 //constant definitions
 #define ABSENT -500
 
 #define CODE_VERSION "v1.12" 
+
+//PROGMEM string buffer
+//char p_buffer[21];
+//#define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
+//#define putstring(x) SerialPrint_P(PSTR(x))
+//#define Disp_PutStr_P(str) (strcpy_P(buf, (char*)pgm_read_word(str))); 
 
 //const char HELP[] PROGMEM = "#p: add 0.02 to p/n#P: subtract 0.02 from p/n#i: add 0.02 to i/n#I: subtract 0.02 from i/n#d & D: reserved for d in PID (not implemented)/n#c: Calibrate Pressure Sensors/n#s: add 10 to Servo1 calibration/n#S: subtract 10  degrees from Servo1 position/n#l: add 0.01 to lambda_setpoint/n#L: subtract 0.01 from lambda_setpoint/n#t: subtract 100 ms from Sample Period (loopPeriod1)/n#T: add 100 ms from Sample Period (loopPeriod1)/n#g: Shake grate/n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)/n#m: add 5ms to grate shake interval/n#M: subtract 5 ms from grate shake interval/n#e: Engine Governor Tuning mode/n# h: Print Help Text";
 
@@ -279,7 +290,7 @@ int auger_pulse_state = 0;
 int AugerCurrentValue = 0; // current level in .1A,  ADC Count = (120 * Current) + 1350
 enum AugerCurrentLevels { CURRENT_OFF = 0, CURRENT_LOW = 1, CURRENT_ON = 2, CURRENT_HIGH = 3} AugerCurrentLevel;  
 static char *AugerCurrentLevelName[] = { "Off", "Low", "On", "High"};
-//Any changes to the following needs to be updated to update_config_var!!!
+//Any changes to the following needs to be updated to update_config_var!!!   AugerCurrentLevel[AugerCurrentLevelName]
 int AugerCurrentLevelBoundary[4][2] = { { -140, 10}, { 10, current_low_boundary}, {current_low_boundary+10, current_high_boundary-10}, {current_high_boundary, 750} };  //.1A readings
 
 //oil pressure
@@ -418,9 +429,12 @@ float servo1_db = 0; // used to deadband the servo movement
 float servo2_pos;
 float servo2_db = 0; // used to deadband the servo movement
 
+//Serial Number
+int serial_num = EEPROMReadInt(33);
+
 //Serial
 char serial_last_input = '\0'; // \0 is the ABSENT character
-char serial_buffer[21];
+char serial_buffer[20];
 
 //Relay Muliplexer  Still to be implemented
 byte shiftRegister = 0;  //Holder for all 8 relay states (8 bits, initialized to B00000000, all relays off)

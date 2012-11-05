@@ -241,19 +241,31 @@ void LogCounterHertz(boolean header = false) {
   }
 }
 
+//ENGINE_OFF 0, ENGINE_ON 1, ENGINE_STARTING 2, ENGINE_GOV_TUNING 3, ENGINE_SHUTDOWN 4
 
 void LogEngine(boolean header=false) {
   if (header) {
     PrintColumn("Engine");
   } else {
-    if (engine_state == ENGINE_OFF) {
-      PrintColumn("Off");
-    }
-    if (engine_state == ENGINE_ON) {
-      PrintColumn("On");
-    }
-    if (engine_state == ENGINE_STARTING) {
-      PrintColumn("Starting");
+    switch(engine_state){
+      case ENGINE_OFF:
+        PrintColumn("Off"); 
+        break;
+      case ENGINE_ON:
+        PrintColumn("On");
+        break;
+      case ENGINE_STARTING:
+        PrintColumn("Starting");
+        break;
+      case ENGINE_GOV_TUNING:
+        PrintColumn("Govenor Tuning");
+        break;
+      case ENGINE_SHUTDOWN:
+        PrintColumn("Shutdown");
+        break;
+      default:
+        PrintColumnInt(engine_state);
+        break;
     }
   }
 }
@@ -325,9 +337,17 @@ void PrintColumnInt(int str) {
 void DoDatalogging() {
   data_buffer = "";
   boolean header = false;
-  //Serial.begin(57600); //reset serial?
   Serial.begin(115200);
   if (lineCount == 0) {
+    if (serial_num > 1){
+      data_buffer = "# Power Pallet ";
+      data_buffer += serial_num;
+      data_buffer += "PCU #";
+      data_buffer += uniqueNumber();
+      Serial.println(data_buffer);
+      DatalogSD(data_buffer, sd_data_file_name);
+      data_buffer = "";
+    }
     header = true;
   }
   LogTime(header);

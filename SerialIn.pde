@@ -121,12 +121,29 @@ void DoSerialIn() {
     case 'x':
       testSD();
       break;
+    case '!': //Clear EEPROM memory address
+      int memorySpace = SerialReadInt();
+      if (memorySpace<4000){
+        EEPROM.write(255, memorySpace);
+      }
+      break;
+//    case '#':
+//      if (serial_num < 1){
+//        Serial.println("# No serial number saved, set line ending to 'Newline' and enter one now: ");
+//        serial_num = SerialReadInt();
+//        if (serial_num > 0){
+//          EEPROMWriteInt(33, serial_num);
+//        }
+//      }
+//      Serial.print("# Serial number: ");
+//      Serial.println(serial_num);
+//      break;
 //   case 'h' || 'H':
 //      Serial.println(HELP);
 //      break; 
 //   case '$':
-//      Serial.readBytesUntil(';', serial_buffer, 20)
-//      readSerial(serial_buffer);
+//      SerialReadString(';');
+//      Serial.println(serial_buffer);
 //      break;
 //   case 'W':  //write to config.ini
 //      Serial.read
@@ -135,6 +152,37 @@ void DoSerialIn() {
   }
   
 }
+
+int SerialReadInt(){
+  byte incomingByte;
+  int integerValue = 0;  
+  while(1) {            
+    incomingByte = Serial.read();
+    if (incomingByte == '\n') break;   // exit the while(1), we're done receiving
+    if (incomingByte == -1) continue;  // if no characters are in the buffer read() returns -1
+    integerValue *= 10;  // shift left 1 decimal place
+    // convert ASCII to integer, add, and shift left 1 decimal place
+    integerValue = ((incomingByte - 48) + integerValue);
+  }
+  return integerValue;
+}
+
+void SerialReadString(char endString){
+  byte incomingByte;
+  int charCount = 0;
+  unsigned long serial_time = millis();
+  while(charCount <= 20){
+    if (millis() - serial_time > 300) break;
+    incomingByte = Serial.read();
+    if (incomingByte == '\n' || incomingByte == endString) break;
+    if (incomingByte == -1) continue;
+    serial_buffer[charCount] = incomingByte;
+    incomingByte++;
+    serial_buffer[charCount] = '\0';
+  }
+}
+    
+
 
 void PrintLambdaUpdate(double P, double I, double D, double nP, double nI, double nD) {
   Serial.print("#Updating PID from [");

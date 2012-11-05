@@ -29,7 +29,7 @@ void DatalogSD(String dataString, char file_name[13]) {    //file_name should be
   if (dataFile) {
     dataFile.println(dataString);
     dataFile.close();
-    Serial.println(dataString);
+    //Serial.println(dataString);
   }  
   else {
     Serial.print("# Error loading ");
@@ -129,17 +129,17 @@ void checkSDconfig(){
 //}  
       
 void testSD() {
-  InitSD();
-  DatalogSD("test data", "datalog.txt");
-  checkSDconfig();
-  if (!sd_card.init(SPI_HALF_SPEED, SS_PIN)) {
-    Serial.println("initialization failed. ");
-    sd_loaded = false;
-    return;
-  } else {
-    Serial.println("card initialized.");
-    sd_loaded = true;
-  }
+  //InitSD();
+  //DatalogSD("test data", "datalog.txt");
+  //checkSDconfig();
+//  if (!sd_card.init(SPI_HALF_SPEED, SS_PIN)) {
+//    Serial.println("initialization failed. ");
+//    sd_loaded = false;
+//    return;
+//  } else {
+//    Serial.println("card initialized.");
+//    sd_loaded = true;
+//  }
   switch(sd_card.type()) {
     case SD_CARD_TYPE_SD1:
       Serial.println("SD1");
@@ -226,3 +226,18 @@ unsigned int EEPROMReadInt(int p_address){
 //    }
 //    ...
 //  }
+
+int uniqueNumber(){
+  if (EEPROMReadInt(35) != 0){
+    for (int y=0; y<=1; y++){
+      byte uniqueByte;
+      for (int x=0; x<8; x++){
+        bitWrite(uniqueByte, x, bitRead(analogRead(ANA0),0));
+      }
+      EEPROM.write(35+y, uniqueByte);
+    }
+  }
+  return EEPROMReadInt(35);
+}
+      
+      

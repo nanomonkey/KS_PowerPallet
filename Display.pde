@@ -1,10 +1,7 @@
 void DoDisplay() {
-  //Think about replacing long strings with variables in program space using PROGMEM and PSTR()
-  //char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
-  //strcpy_P(buf, (char*)pgm_read_word(&menu1))); 
-  //Serial.println(buf);
-  
-  char menu1[]  = "NEXT  ADV   +    -  ";
+  //Think about replacing long strings with variables in program space using PROGMEM, PSTR() and Disp_PutStr_P();
+  //const char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
+  char menu1[] = "NEXT  ADV   +    -  ";
   boolean disp_alt; // Var for alternating value display
   char choice[5] = "    ";
   char buf[20];
