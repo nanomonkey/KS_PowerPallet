@@ -337,7 +337,7 @@ void PrintColumnInt(int str) {
 void DoDatalogging() {
   data_buffer = "";
   boolean header = false;
-  Serial.begin(115200);
+  //Serial.begin(115200);
   if (lineCount == 0) {
     if (serial_num > 1){
       data_buffer = "# Power Pallet ";
