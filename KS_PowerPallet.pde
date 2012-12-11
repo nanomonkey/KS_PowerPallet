@@ -19,6 +19,8 @@
 #include <util.h>           // part of KSlibs, utility functions, GCU_Setup
 #include <avr/io.h>         // advanced: provides port definitions for the microcontroller (ATmega1280, http://www.atmel.com/dyn/resources/prod_documents/doc2549.PDF)   
 #include <SD.h>             // SD card  
+#include <MCP2515.h> 
+#include <SPI.h>
 
 /*
 EEPROM bytes used of 4k space:

@@ -152,7 +152,7 @@ void DoDisplay() {
       }
       Disp_PutStr(buf);
       Disp_RC(3, 11);
-      sprintf(buf, "         ");
+      sprintf(buf, "     %4i", millis()/100.0);
       //if (disp_alt) {
       //  sprintf(buf, "Hz   %4i", int(CalculatePeriodHertz()));
       //} else {

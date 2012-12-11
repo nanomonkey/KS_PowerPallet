@@ -1,4 +1,4 @@
-void InitSD() {
+boolean InitSD() {
   pinMode(SS_PIN, OUTPUT); 
   pinMode(MOSI_PIN, OUTPUT); 
   pinMode(MISO_PIN, INPUT); 
@@ -21,6 +21,7 @@ void InitSD() {
       Serial.println(sd_data_file_name);
       EEPROMWriteInt(30, data_log_num); 
   }
+  return sd_loaded;
 }
 
 void DatalogSD(String dataString, char file_name[13]) {    //file_name should be 8.3 format names
