@@ -205,10 +205,16 @@ void TransitionAuger(int new_state) {
 void checkAuger(){
   FuelSwitchValue = analogRead(ANA_FUEL_SWITCH); // switch voltage, 1024 if on, 0 if off
   if (FuelSwitchValue > 600){
+    if (FuelDemand == SWITCH_OFF){
+      fuel_state_entered = millis();
+    }
     FuelDemand = SWITCH_ON;
   } 
   else {
     FuelDemand = SWITCH_OFF;
+    if (FuelDemand == SWITCH_ON){
+      fuel_state_entered = millis();
+    }
   }
   if (relay_board == 1){     //when relay board is present auger current sensing is enabled
     AugerCurrentValue = (10*(analogRead(ANA_AUGER_CURRENT)-120))/12;  //convert from analog values to current (.1A) values

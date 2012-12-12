@@ -27,7 +27,10 @@ void DoAlarm() {
       removeAlarm(ALARM_AUGER_LOW_CURRENT);
     }
   }
-  if (auger_state == AUGER_FORWARD and (millis() - auger_state_entered > alarm_start[ALARM_AUGER_ON_LONG])){
+//  if (auger_state == AUGER_FORWARD and (millis() - auger_state_entered > alarm_start[ALARM_AUGER_ON_LONG])){
+//    setAlarm(ALARM_AUGER_ON_LONG);
+//  } 
+  if (auger_state == AUGER_FORWARD and (millis() - fuel_state_entered > alarm_start[ALARM_AUGER_ON_LONG])){
     setAlarm(ALARM_AUGER_ON_LONG);
   } 
   else {

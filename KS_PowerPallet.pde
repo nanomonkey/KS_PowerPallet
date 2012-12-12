@@ -19,8 +19,8 @@
 #include <util.h>           // part of KSlibs, utility functions, GCU_Setup
 #include <avr/io.h>         // advanced: provides port definitions for the microcontroller (ATmega1280, http://www.atmel.com/dyn/resources/prod_documents/doc2549.PDF)   
 #include <SD.h>             // SD card  
-#include <MCP2515.h> 
-#include <SPI.h>
+//#include <MCP2515.h> 
+//#include <SPI.h>
 
 /*
 EEPROM bytes used of 4k space:
@@ -265,6 +265,7 @@ byte FuelDemand = false;
 enum FuelSwitchLevels { SWITCH_OFF = false, SWITCH_ON = true} FuelSwitchLevel;
 static char *FuelSwitchLevelName[] = { "Off","On"};
 //int FuelSwitchLevelBoundary[2][2] = {{ 0, 200 }, {800, 1024}}; //not currently used
+unsigned long fuel_state_entered;
 #endif
 
 //Auger states
