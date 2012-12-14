@@ -11,7 +11,7 @@ boolean InitSD() {
       Serial.println("card initialized.");
       sd_loaded = true;
       int data_log_num = EEPROMReadInt(30); //reads from EEPROM bytes 30 and 31
-      if (data_log_num == 32767){  //unsigned??  --> 65,535
+      if (data_log_num == 32767){  //TODO: unsigned??  --> 65,535
         data_log_num = 1;
       } else { 
         data_log_num++;
@@ -130,17 +130,6 @@ void checkSDconfig(){
 //}  
       
 void testSD() {
-  //InitSD();
-  //DatalogSD("test data", "datalog.txt");
-  //checkSDconfig();
-//  if (!sd_card.init(SPI_HALF_SPEED, SS_PIN)) {
-//    Serial.println("initialization failed. ");
-//    sd_loaded = false;
-//    return;
-//  } else {
-//    Serial.println("card initialized.");
-//    sd_loaded = true;
-//  }
   switch(sd_card.type()) {
     case SD_CARD_TYPE_SD1:
       Serial.println("SD1");
@@ -199,6 +188,7 @@ void testSD() {
     return;
   }
 }
+
 
 void EEPROMWriteInt(int p_address, int p_value){  
   byte lowByte = ((p_value >> 0) & 0xFF);
