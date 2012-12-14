@@ -339,7 +339,7 @@ void DoDatalogging() {
   boolean header = false;
   //Serial.begin(115200);
   if (lineCount == 0) {
-    if (serial_num > 1){
+    if (sizeof(serial_num) > 1){
       data_buffer = "# Power Pallet ";
       data_buffer += serial_num;
       data_buffer += "PCU #";

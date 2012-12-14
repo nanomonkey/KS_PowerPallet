@@ -214,6 +214,22 @@ unsigned int EEPROMReadInt(int p_address){
 
   return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
 }    
+
+void EEPROMReadAlpha(int address, int length, char* buffer){
+  int i=0;
+  while (i < length){
+    buffer[i] = int(EEPROM.read(address+i));
+    buffer[i+1] = '/0';
+  }
+  //return i;
+}
+
+void EEPROMWriteAlpha(int address, int length, char* buffer){
+  int i=0;
+  while (i < length){
+    EEPROM.write(address+i, buffer[i]);
+  }
+}
   
 //void readJSON(String line){
 //  //{key:value, key2:[0,1,2,3],{nested_object_key:nested_object_value}}  //allow nested objects??

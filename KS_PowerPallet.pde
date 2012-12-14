@@ -433,7 +433,7 @@ float servo2_pos;
 float servo2_db = 0; // used to deadband the servo movement
 
 //Serial Number
-int serial_num = EEPROMReadInt(33);
+char serial_num[11] = "";
 
 //Serial
 char serial_last_input = '\0'; // \0 is the ABSENT character
@@ -554,7 +554,7 @@ void setup() {
  
   //Serial.begin(57600); 
   Serial.begin(115200);
- 
+  EEPROMReadAlpha(33, 10, serial_num);
  //Library initializations                    
   Disp_Init();
   Kpd_Init();

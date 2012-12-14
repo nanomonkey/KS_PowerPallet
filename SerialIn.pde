@@ -122,22 +122,22 @@ void DoSerialIn() {
       testSD();
       break;
     case '!': //Clear EEPROM memory address
+    { //extra bracket necessary for scope of memorySpace declaration:
       int memorySpace = SerialReadInt();
       if (memorySpace<4000){
         EEPROM.write(255, memorySpace);
       }
+    }
       break;
-//    case '#':
-//      if (serial_num < 1){
-//        Serial.println("# No serial number saved, set line ending to 'Newline' and enter one now: ");
-//        serial_num = SerialReadInt();
-//        if (serial_num > 0){
-//          EEPROMWriteInt(33, serial_num);
-//        }
-//      }
-//      Serial.print("# Serial number: ");
-//      Serial.println(serial_num);
-//      break;
+    case '#':
+      if (serial_num[0] == '/0') {
+        Serial.println("# No serial saved, set line ending to 'Newline' and enter one now: ");
+        SerialReadString(';');
+        EEPROMWriteAlpha(33, 11, serial_buffer);
+      }
+      Serial.print("# Serial number: ");
+      Serial.println(serial_num);
+      break;
 //   case 'h' || 'H':
 //      Serial.println(HELP);
 //      break; 

@@ -24,7 +24,8 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
-    Disp_PutStr("                    ");
+    sprintf(buf, "       %s        ", serial_num);
+    Disp_PutStr(buf);
     Disp_CursOff();
     //Transition out after delay
     if (millis()-display_state_entered>2000) {
