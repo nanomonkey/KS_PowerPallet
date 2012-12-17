@@ -170,5 +170,7 @@ void resetAlarm(int alarm_num){
   case ALARM_BOUND_AUGER:
     TransitionAuger(AUGER_OFF);
     break;
+  case ALARM_HIGH_PCOMB:
+    break;
   }
 }

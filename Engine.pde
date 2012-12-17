@@ -24,6 +24,11 @@ void DoEngine() {
         Serial.println(millis()-engine_state_entered);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
+      if (Press[P_COMB] > 7472) {  
+        Serial.println("# Reactor Pressure too high (above 30 inch water), Engine Shutdown");
+        setAlarm(ALARM_HIGH_PCOMB);
+        TransitionEngine(ENGINE_SHUTDOWN);
+      }
       break;
     case ENGINE_STARTING:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {

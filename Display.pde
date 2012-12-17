@@ -519,37 +519,37 @@ void DoDisplay() {
     Disp_RC(0,0);
     Disp_PutStr("   Configurations   ");
     Disp_RC(1,0);
-    if (Config_Choices[cur_item-1] == "+    -  "){
+    if (Config_Choices[cur_item] == "+    -  "){
       sprintf(buf, "%s:%3i", Configuration[cur_item-1], config_var);
     } else {
       if (config_var == 0){
-      choice[0] = Config_Choices[cur_item-1][0];
-      choice[1] = Config_Choices[cur_item-1][1];
-      choice[2] = Config_Choices[cur_item-1][2];
-      choice[3] = Config_Choices[cur_item-1][3];
+      choice[0] = Config_Choices[cur_item][0];
+      choice[1] = Config_Choices[cur_item][1];
+      choice[2] = Config_Choices[cur_item][2];
+      choice[3] = Config_Choices[cur_item][3];
       } else {
-        choice[0] = Config_Choices[cur_item-1][4];
-        choice[1] = Config_Choices[cur_item-1][5];
-        choice[2] = Config_Choices[cur_item-1][6];
-        choice[3] = Config_Choices[cur_item-1][7];
+        choice[0] = Config_Choices[cur_item][4];
+        choice[1] = Config_Choices[cur_item][5];
+        choice[2] = Config_Choices[cur_item][6];
+        choice[3] = Config_Choices[cur_item][7];
       }
-      sprintf(buf, "%s:%s", Configuration[cur_item-1], choice);
+      sprintf(buf, "%s:%s", Configuration[cur_item], choice);
     }
     Disp_PutStr(buf);
     Disp_RC(2,0);
     Disp_PutStr("ADV to save choice  ");
     Disp_RC(3,0);
-    sprintf(buf, "NEXT  ADV   %s", Config_Choices[cur_item-1]);
+    sprintf(buf, "NEXT  ADV   %s", Config_Choices[cur_item]);
     Disp_PutStr(buf);
-    if (Config_Choices[cur_item-1] == "+    -  "){
+    if (Config_Choices[cur_item] == "+    -  "){
       if (key == 2) {
-        if (config_max[cur_item-1] >= config_var + 1){
+        if (config_max[cur_item] >= config_var + 1){
           config_var += 1;
           config_changed = true;
         }
       }
       if (key == 3) {
-        if (config_min[cur_item-1] <= config_var - 1){
+        if (config_min[cur_item] <= config_var - 1){
           config_var -= 1;
           config_changed = true;
         }
@@ -690,7 +690,7 @@ void TransitionDisplay(int new_state) {
 //    cur_item = 1;
 //    break; 
   case DISPLAY_CONFIG: 
-    cur_item = 1;
+    cur_item = 0;
     config_changed = false;
     break;
 //  case DISPLAY_PHIDGET: 
@@ -793,19 +793,26 @@ void TransitionMessage(String t_message) {
 }
 
 void saveConfig(int item, int state){  //EEPROM:  0-499 for internal states, 500-999 for configurable states, 1000-4000 for data logging configurations.
-  int old_state = EEPROM.read(499+item);
-  if(state != old_state){
-    EEPROM.write(499+item, state);
-    delay(5); //ensure that value is not read until EERPROM has been fully written (~3.3ms)
+  if (item == 0  and state == 1){
+    resetConfig();
+  }
+  if (item>0){  //skip first config 
+    int old_state = EEPROM.read(499+item);
+    if(state != old_state){
+      EEPROM.write(499+item, state);
+      delay(5); //ensure that value is not read until EERPROM has been fully written (~3.3ms)
+    }
   }
 }
 
 int getConfig(int item){
-  int value;
-  value = int(EEPROM.read(499+item));
-  if (value == 255){  //values hasn't been saved yet to EEPROM, go with default value saved in defaults[]
-    value = defaults[item-1];
-    EEPROM.write(499+item, value);
+  int value = 0;
+  if (item>0){  //Config item zero is 'Reset to Defaults?' so skip
+    value = int(EEPROM.read(499+item));
+    if (value == 255){  //values hasn't been saved yet to EEPROM, go with default value saved in defaults[]
+      value = defaults[item-1];
+      EEPROM.write(499+item, value);
+    }
   }
   config_changed = true;
   return value;
@@ -813,6 +820,11 @@ int getConfig(int item){
 
 void update_config_var(int var_num){
   switch (var_num) {
+    case 0:
+      for (int i=1; i<8; i++){
+        update_config_var(i);
+      }
+      break;
     case 1:
       engine_type = getConfig(1);
       //Serial.println("Updating engine_type");
@@ -851,7 +863,7 @@ void update_config_var(int var_num){
 
 void resetConfig() {  //sets EEPROM configs back to untouched state...
   int default_count = sizeof(defaults)/sizeof(int);
-  for (int i=0; i < default_count; i++){
-    EEPROM.write(500+i, defaults[i]);
+  for (int i=1; i < default_count; i++){
+    EEPROM.write(499+i, defaults[i]);
   }
 }
