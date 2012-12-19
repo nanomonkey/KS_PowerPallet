@@ -14,6 +14,7 @@ void DoDisplay() {
   switch (display_state) {
   case DISPLAY_SPLASH:
     //Row 0
+    Disp_RC(0,0);
     Disp_PutStr("    Power Pallet    ");
     //Row 1
     Disp_RC(1,0);
@@ -23,10 +24,10 @@ void DoDisplay() {
     sprintf(buf, "       %s        ", CODE_VERSION);
     Disp_PutStr(buf);
     //Row 3
-    Disp_RC(3,0);
-    sprintf(buf, "       %s        ", serial_num);
-    Disp_PutStr(buf);
-    Disp_CursOff();
+//    Disp_RC(3,0);
+//    sprintf(buf, "       %s%i        ", serial_num, unique_number);
+//    Disp_PutStr(buf);
+//    Disp_CursOff();
     //Transition out after delay
     if (millis()-display_state_entered>2000) {
       TransitionDisplay(DISPLAY_REACTOR);
@@ -153,7 +154,7 @@ void DoDisplay() {
       }
       Disp_PutStr(buf);
       Disp_RC(3, 11);
-      sprintf(buf, "     %4i", millis()/100.0);
+      sprintf(buf, "   %6i", millis()/1000);
       //if (disp_alt) {
       //  sprintf(buf, "Hz   %4i", int(CalculatePeriodHertz()));
       //} else {
@@ -521,7 +522,7 @@ void DoDisplay() {
     Disp_RC(1,0);
     if (Config_Choices[cur_item] == "+    -  "){
       sprintf(buf, "%s:%3i", Configuration[cur_item], config_var);
-    } else if (Config_Choices[cur_item] == "+5   -5 "){
+    } else if (Config_Choices[cur_item] == "+5  -5  "){
       sprintf(buf, "%s:%3i", Configuration[cur_item], 5*config_var);
     } else {
       if (config_var == 0){
@@ -556,7 +557,7 @@ void DoDisplay() {
           config_changed = true;
         }
       }
-    } else if (Config_Choices[cur_item] == "+5   -5 "){
+    } else if (Config_Choices[cur_item] == "+5  -5  "){
       if (key == 2) {
         if (config_max[cur_item] >= config_var + 1){
           config_var += 1;
@@ -786,7 +787,11 @@ void DoKeyInput() {
     cur_item++;
     //Serial.println("cur_item++");
     if (cur_item>item_count) {
+      if (display_state == DISPLAY_CONFIG){
+        cur_item = 0;
+      } else {
       cur_item = 1;
+      }
     } 
     key = -1; //key caught
   }

@@ -24,7 +24,7 @@
 
 /*
 EEPROM bytes used of 4k space:
-0,1,2,3,4,5,6,7,8,9,10, 13,14,15,16,17,18,19,21, 33,34,35,36
+0,1,2,3,4,5,6,7,8,9,10, 13,14,15,16,17,18,19,21, 33,34,35,36, 40-?,
 500-999 DISPLAY_CONFIG states
 1000-4000 Sensor configuration
 */
@@ -203,7 +203,7 @@ int lineCount = 0;
 int config_var;
 byte config_changed = false;
 static char *Configuration[] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", " Pratio Count? ", "High Coolant T "};  //15 character Display prompt
-static char *Config_Choices[] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+   -   "}; //8 char options for last two buttons
+static char *Config_Choices[] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  "}; //8 char options for last two buttons
 int defaults[] = {0, 0, 1, 10, 35, 100, 6, 0, 100, 98};  //default values to be saved to EEPROM for the following getConfig variables
 int config_min[] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0};  //minimum values allowed 
 int config_max[] = {254, 254, 254, 254, 40, 135, 10, 254, 250, 250}; //maximum values allowed  
@@ -435,7 +435,9 @@ float servo2_pos;
 float servo2_db = 0; // used to deadband the servo movement
 
 //Serial Number
-char serial_num[11] = "";
+char serial_num[11] = "#";
+int unique_number = 12;
+
 
 //Serial
 char serial_last_input = '\0'; // \0 is the ABSENT character
@@ -560,9 +562,8 @@ void setup() {
   LoadServo();
   //LoadLambda(); - must save lambda data first?
  
-  //Serial.begin(57600); 
   Serial.begin(115200);
-  EEPROMReadAlpha(33, 10, serial_num);
+  //EEPROMReadAlpha(40, 10, serial_num);
  //Library initializations                    
   Disp_Init();
   Kpd_Init();
@@ -580,6 +581,7 @@ void setup() {
   ADC_Reset();
   Temp_Reset();
   Press_Reset();
+  //unique_number = uniqueNumber();
   Fet_Reset();
   //Servo_Reset();
   Timer_Reset();

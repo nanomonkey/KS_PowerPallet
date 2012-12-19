@@ -133,7 +133,7 @@ void DoSerialIn() {
       if (serial_num[0] == '/0') {
         Serial.println("# No serial saved, set line ending to 'Newline' and enter one now: ");
         SerialReadString(';');
-        EEPROMWriteAlpha(33, 11, serial_buffer);
+        EEPROMWriteAlpha(40, 10, serial_buffer);
       }
       Serial.print("# Serial number: ");
       Serial.println(serial_num);
