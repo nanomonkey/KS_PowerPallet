@@ -79,6 +79,11 @@ void DoAlarm() {
   } else { 
     removeAlarm(ALARM_HIGH_BRED);
   }
+  if (engine_state == ENGINE_ON && Temp_Data[T_ENG_COOLANT] > high_coolant_temp){
+    setAlarm(ALARM_HIGH_COOLANT_TEMP);
+  }  else {
+    removeAlarm(ALARM_HIGH_COOLANT_TEMP);
+  }
 //Low Oil Pressure alarm set in Engine state machine due to quick transition times.
 //#if ANA_OIL_PRESSURE != ABSENT
 //  if (engine_state == ENGINE_ON && P_reactorLevel != OFF && EngineOilPressureLevel == OIL_P_LOW && millis() - oil_pressure_state > 500  && millis() - engine_state_entered > 3000) {
@@ -171,6 +176,8 @@ void resetAlarm(int alarm_num){
     TransitionAuger(AUGER_OFF);
     break;
   case ALARM_HIGH_PCOMB:
+    break;
+  case ALARM_HIGH_COOLANT_TEMP:
     break;
   }
 }

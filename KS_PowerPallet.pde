@@ -202,11 +202,11 @@ int lineCount = 0;
 //Configuration Variables
 int config_var;
 byte config_changed = false;
-static char *Configuration[] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", " Pratio Count? "};  //15 character Display prompt
-static char *Config_Choices[] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  "}; //8 char options for last two buttons
-int defaults[] = {0, 0, 1, 10, 35, 100, 6, 0, 100};  //default values to be saved to EEPROM for the following getConfig variables
+static char *Configuration[] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", " Pratio Count? ", "High Coolant T "};  //15 character Display prompt
+static char *Config_Choices[] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+   -   "}; //8 char options for last two buttons
+int defaults[] = {0, 0, 1, 10, 35, 100, 6, 0, 100, 98};  //default values to be saved to EEPROM for the following getConfig variables
 int config_min[] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0};  //minimum values allowed 
-int config_max[] = {254, 254, 254, 254, 40, 135, 10, 254, 2}; //maximum values allowed  
+int config_max[] = {254, 254, 254, 254, 40, 135, 10, 254, 250, 250}; //maximum values allowed  
 
 //Don't forget to add the following to update_config_var in Display!
 int engine_type = getConfig(1);  
@@ -216,7 +216,8 @@ int current_low_boundary = getConfig(4);
 int current_high_boundary = getConfig(5);
 int low_oil_psi = getConfig(6);
 int save_datalog_to_sd = getConfig(7);
-int pratio_max = getConfig(8);
+int pratio_max = getConfig(8)*5;
+int high_coolant_temp = getConfig(9)*5;
 
 
 // Grate turning variables
@@ -451,10 +452,10 @@ int clockPin = 52; //To SRCLK on Relay Board, Second Pin from Bottom on Left han
 boolean alarm = false;
 int pressureRatioAccumulator = 0;
 
-#define ALARM_NUM 12
-unsigned long alarm_on[ALARM_NUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, 50, 230, 0, 0, 0, 30000, 60000, 10, 0};  //count or time in milliseconds when alarm goes off
-unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 0, 0, 0, 0, 180000, 0, 0};  //time when engine will be shutdown
+#define ALARM_NUM 13
+unsigned long alarm_on[ALARM_NUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, 50, 230, 0, 0, 0, 30000, 60000, 10, 0, 0};  //count or time in milliseconds when alarm goes off
+unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 0, 0, 0, 0, 180000, 0, 0, 3000};  //time when engine will be shutdown
 int alarm_count = 0;
 int alarm_queue[ALARM_NUM] = {};
 int alarm_shown = 0;
@@ -471,6 +472,7 @@ int alarm_shown = 0;
 #define ALARM_AUGER_LOW_CURRENT 9
 #define ALARM_BOUND_AUGER 10
 #define ALARM_HIGH_PCOMB 11
+#define ALARM_HIGH_COOLANT_TEMP 12
 
 char* display_alarm[ALARM_NUM] = {  //line 1 on display
   "Auger on too long   ",
@@ -484,7 +486,8 @@ char* display_alarm[ALARM_NUM] = {  //line 1 on display
   "No O2 Sensor Signal ",
   "Auger Low Current   ",
   "FuelSwitch/Auger Jam",
-  "High P_comb         "
+  "High P_comb         ",
+  "High Coolant Temp   "
 }; //20 char message for 4x20 display
 
 char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
@@ -499,7 +502,8 @@ char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is grea
   "                    ",
   "Check Fuel          ",
   "Check Fuel & Switch ",
-  "Check Air Intake    "
+  "Check Air Intake    ",
+  "                    "
 };
 
 // SD Card

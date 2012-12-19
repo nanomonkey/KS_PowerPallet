@@ -29,6 +29,10 @@ void DoEngine() {
         setAlarm(ALARM_HIGH_PCOMB);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
+      if (alarm_on[ALARM_HIGH_COOLANT_TEMP] > shutdown[ALARM_HIGH_COOLANT_TEMP]){
+        Serial.println("# Engine coolant temp too high, Engine shutdown");
+        TransitionEngine(ENGINE_SHUTDOWN);
+      }
       break;
     case ENGINE_STARTING:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
