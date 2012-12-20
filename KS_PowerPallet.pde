@@ -36,8 +36,8 @@ EEPROM bytes used of 4k space:
 #define CODE_VERSION "v1.12" 
 
 //PROGMEM string buffer
-//char p_buffer[21];
-//#define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
+char p_buffer[21];
+#define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
 //#define putstring(x) SerialPrint_P(PSTR(x))
 //#define Disp_PutStr_P(str) (strcpy_P(buf, (char*)pgm_read_word(str))); 
 

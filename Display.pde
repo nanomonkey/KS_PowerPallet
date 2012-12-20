@@ -12,10 +12,10 @@ void DoDisplay() {
   case DISPLAY_SPLASH:
     //Row 0
     Disp_RC(0,0);
-    Disp_PutStr("    Power Pallet    ");
+    Disp_PutStr(P("    Power Pallet    "));
     //Row 1
     Disp_RC(1,0);
-    Disp_PutStr("www.allpowerlabs.org");
+    Disp_PutStr(P("www.allpowerlabs.org"));
     //Row 2
     Disp_RC(2,0);
     sprintf(buf, "       %s        ", CODE_VERSION);
@@ -59,10 +59,10 @@ void DoDisplay() {
       }
       //Row 3
       Disp_RC(3, 0);
-      Disp_PutStr("NEXT ADV QUIET      ");
+      Disp_PutStr(P("NEXT ADV QUIET      "));
       if (millis() - alarm_on[alarm_shown] > 4000){ //Wait to show RESET button in case new alarm state has taken over screen.
         Disp_RC(3, 15);
-        Disp_PutStr("RESET");
+        Disp_PutStr(P("RESET"));
       }
     } else {
       //Row 0
@@ -101,7 +101,7 @@ void DoDisplay() {
         sprintf(buf, "Pratio%3i  ", int(pRatioReactor*100)); //pressure ratio
         Disp_PutStr(buf);
       } else {
-        Disp_PutStr("Pratio --  ");
+        Disp_PutStr(P("Pratio --  "));
       }
       Disp_RC(2, 11);
       if (true) {
@@ -200,7 +200,7 @@ void DoDisplay() {
     item_count = 1;
     //Row 0
     Disp_RC(0,0);
-    Disp_PutStr("Testing             "); 
+    Disp_PutStr(P("Testing             ")); 
     //Row 1			
     Disp_RC(1,0);
     sprintf(buf, "Test:%-15s", TestingStateName[testing_state]);
@@ -233,11 +233,11 @@ void DoDisplay() {
         GoToNextTestingState(); //first testing state
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT       TEST     ");
+      Disp_PutStr(P("NEXT       TEST     "));
       break;
     default:
       Disp_RC(3,0);
-      Disp_PutStr("NEXT                ");
+      Disp_PutStr(P("NEXT                "));
     }
     break;
   case DISPLAY_LAMBDA:
@@ -279,7 +279,7 @@ void DoDisplay() {
       break;
     case 2: //Lambda reading
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV           ");
+      Disp_PutStr(P("NEXT  ADV           "));
       Disp_RC(0,11);
       Disp_CursOn();
       break;
@@ -336,10 +336,10 @@ void DoDisplay() {
     Disp_PutStr(buf);
     Disp_RC(1,11);
     if (grate_motor_state == GRATE_MOTOR_OFF) {  
-      Disp_PutStr("Grate Off");
+      Disp_PutStr(P("Grate Off"));
     } 
     else {
-      Disp_PutStr("Grate  On");
+      Disp_PutStr(P("Grate  On"));
     }
     Disp_RC(2,0);
     Disp_PutStr("                    ");
@@ -416,7 +416,7 @@ void DoDisplay() {
       grate_val = GRATE_SHAKE_CROSS;
       }
       Disp_RC(3,0);
-      Disp_PutStr("NEXT  ADV  OFF   ON ");
+      Disp_PutStr(P("NEXT  ADV  OFF   ON "));
       Disp_RC(1,11);
       Disp_CursOn();
       break; 
@@ -433,7 +433,7 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 1
     Disp_RC(1,0);
-    Disp_PutStr(" Careful of Sides!  "); 
+    Disp_PutStr(P(" Careful of Sides!  ")); 
     Disp_RC(2,0);
     Disp_PutStr("                    ");
     switch (cur_item) {
@@ -475,18 +475,18 @@ void DoDisplay() {
     Disp_CursOff();
     item_count = 1;
     Disp_RC(0,0);
-    Disp_PutStr("Calibrate Pressure  ");
+    Disp_PutStr(P("Calibrate Pressure  "));
     Disp_RC(1,0);
-    Disp_PutStr("Sensors to zero?    ");
+    Disp_PutStr(P("Sensors to zero?    "));
     Disp_RC(2,0);
     Disp_PutStr("                    ");
     Disp_RC(3,0);
-    Disp_PutStr("NEXT       YES      ");
+    Disp_PutStr(P("NEXT       YES      "));
     if (key == 2) {
       CalibratePressureSensors();
       LoadPressureSensorCalibration();
       Disp_RC(2,0);
-      Disp_PutStr("   CALIBRATED!      ");
+      Disp_PutStr(P("   CALIBRATED!      "));
     }
     break;
 //  case DISPLAY_RELAY:
@@ -526,7 +526,7 @@ void DoDisplay() {
       config_var = 254;
     }
     Disp_RC(0,0);
-    Disp_PutStr("   Configurations   ");
+    Disp_PutStr(P("   Configurations   "));
     Disp_RC(1,0);
     if (Config_Choices[cur_item] == "+    -  "){
       sprintf(buf, "%s:%3i", Configuration[cur_item], config_var);
@@ -548,7 +548,7 @@ void DoDisplay() {
     }
     Disp_PutStr(buf);
     Disp_RC(2,0);
-    Disp_PutStr("ADV to save choice  ");
+    Disp_PutStr(P("ADV to save choice  "));
     Disp_RC(3,0);
     sprintf(buf, "NEXT  ADV   %s", Config_Choices[cur_item]);
     Disp_PutStr(buf);
@@ -859,3 +859,4 @@ void resetConfig() {  //sets EEPROM configs back to untouched state...
     EEPROM.write(499+i, defaults[i]);
   }
 }
+
