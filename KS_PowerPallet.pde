@@ -177,6 +177,7 @@ Servo Servo_Throttle;
 #define DISPLAY_CONFIG 9
 #define DISPLAY_SD 10
 
+const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
 
 //Testing States
 #define TESTING_OFF 0
@@ -192,7 +193,7 @@ Servo Servo_Throttle;
 #define TESTING_ANA_FUEL_SWITCH 10
 #define TESTING_ANA_OIL_PRESSURE 11
 #define TESTING_SERVO 12     //used in Display to defeat any other writes to servo
-
+#define TESTING_GOV_TUNING 13
 
 //Datalogging Buffer
 String data_buffer = "";
@@ -201,7 +202,7 @@ char float_buf[15] = "";
 //Test Variables
 int testing_state = TESTING_OFF;
 unsigned long testing_state_entered = 0;
-static char *TestingStateName[] = { "Off","Auger","Grate","Engine","Starter","Flare","O2 Reset","Alarm","ANA_Lambda","ANA_Eng_Switch","ANA_Fuel_Switch","ANA_Oil"};
+static char *TestingStateName[] = { "Off","Auger","Grate","Engine","Starter","Flare","O2 Reset","Alarm","ANA_Lambda","ANA_Eng_Switch","ANA_Fuel_Switch","ANA_Oil", "Gov Tuning"};
 
 // Datalogging variables
 int lineCount = 0;

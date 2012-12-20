@@ -1,6 +1,4 @@
 void DoDisplay() {
-  //PROGMEM prog_char menu1[] = "NEXT  ADV   +    -  ";
-  char menu1[] = "NEXT  ADV   +    -  ";
   boolean disp_alt; // Var for alternating value display
   char choice[5] = "    ";
   char buf[20];
@@ -50,13 +48,9 @@ void DoDisplay() {
       Disp_PutStr(buf);
       //Row 1
       Disp_RC(1, 0);
-//      strcpy_P(buf, display_alarm[alarm_shown]);
-//      Disp_PutStr(buf);
       Disp_PutStr(display_alarm[alarm_shown]);
       //Row 2
       Disp_RC(2, 0);
-//      strcpy_P(buf, display_alarm2[alarm_shown]);
-//      Disp_PutStr(buf);
       Disp_PutStr(display_alarm2[alarm_shown]);
       if (shutdown[alarm_shown] > 999 && engine_state == ENGINE_ON){     //anything less than 999 is probably a count and not a shutdown time in millisecond so don't show. 
         Disp_RC(2, 13);
@@ -226,6 +220,8 @@ void DoDisplay() {
     case TESTING_ANA_OIL_PRESSURE:
       sprintf(buf, "Value: %4i         ", int(analogRead(ANA_OIL_PRESSURE)));
       break;
+    case TESTING_GOV_TUNING:
+      break;
     default:
       sprintf(buf,"                   ");
     }
@@ -278,9 +274,8 @@ void DoDisplay() {
       Disp_RC(0,0);
       Disp_CursOn();
       Disp_RC(3,0);
-//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
-//      Disp_PutStr(buf);
-      Disp_PutStr(menu1);
+      strcpy_P(buf, menu1);
+      Disp_PutStr(buf);
       break;
     case 2: //Lambda reading
       Disp_RC(3,0);
@@ -301,9 +296,8 @@ void DoDisplay() {
       }
       lambda_PID.SetTunings(P,I,0);
       Disp_RC(3,0);
-//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
-//      Disp_PutStr(buf);
-      Disp_PutStr(menu1);
+      strcpy_P(buf, menu1);
+      Disp_PutStr(buf);
       Disp_RC(1,0);
       Disp_CursOn();
       break;
@@ -320,9 +314,8 @@ void DoDisplay() {
       }
       lambda_PID.SetTunings(P,I,0);
       Disp_RC(3,0);
-//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
-//      Disp_PutStr(buf);
-      Disp_PutStr(menu1);
+      strcpy_P(buf, menu1);
+      Disp_PutStr(buf);
       Disp_RC(1,11);
       Disp_CursOn();
       break;
@@ -368,9 +361,8 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
-//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
-//      Disp_PutStr(buf);
-      Disp_PutStr(menu1);
+      strcpy_P(buf, menu1);
+      Disp_PutStr(buf);
       Disp_RC(0,0);
       Disp_CursOn();
       break;
@@ -390,9 +382,8 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
-//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
-//      Disp_PutStr(buf);
-      Disp_PutStr(menu1);
+      strcpy_P(buf, menu1);
+      Disp_PutStr(buf);
       Disp_RC(0,11);
       Disp_CursOn();
       break;
@@ -412,9 +403,8 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
-//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
-//      Disp_PutStr(buf);
-      Disp_PutStr(menu1);
+      strcpy_P(buf, menu1);
+      Disp_PutStr(buf);
       Disp_RC(1,0);
       Disp_CursOn();
       break;
@@ -458,9 +448,8 @@ void DoDisplay() {
         premix_valve_closed -= 1;
       }
       Disp_RC(3,0);
-//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
-//      Disp_PutStr(buf);
-      Disp_PutStr(menu1);
+      strcpy_P(buf, menu1);
+      Disp_PutStr(buf);
       Disp_RC(0,0);
       Disp_CursOn();
       break;
@@ -475,9 +464,8 @@ void DoDisplay() {
         }
       }
       Disp_RC(3,0);
-//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
-//      Disp_PutStr(buf);
-      Disp_PutStr(menu1);
+      strcpy_P(buf, menu1);
+      Disp_PutStr(buf);
       Disp_RC(0,11);
       Disp_CursOn();
       break;
@@ -601,21 +589,21 @@ void DoDisplay() {
       }
     }
     break;
-  case DISPLAY_SD:
-    Disp_CursOff();
-    Disp_RC(0,0);
-    Disp_PutStr("   Test SD Card     ");
-    Disp_RC(1,0);
-    Disp_PutStr("See Serial Monitor  ");
-    Disp_RC(2,0);
-    Disp_PutStr("for more information");
-    Disp_RC(3,0);
-    Disp_PutStr("NEXT            TEST");
-    if (key == 3 and cur_item == 1) {  //only allow the button to be pressed once
-      testSD();
-      cur_item++;  
-    }
-    break;
+//  case DISPLAY_SD:
+//    Disp_CursOff();
+//    Disp_RC(0,0);
+//    Disp_PutStr("   Test SD Card     ");
+//    Disp_RC(1,0);
+//    Disp_PutStr("See Serial Monitor  ");
+//    Disp_RC(2,0);
+//    Disp_PutStr("for more information");
+//    Disp_RC(3,0);
+//    Disp_PutStr("NEXT            TEST");
+//    if (key == 3 and cur_item == 1) {  //only allow the button to be pressed once
+//      testSD();
+//      cur_item++;  
+//    }
+//    break;
 //  case DISPLAY_PHIDGET:
 //      Disp_CursOff();
 ////    Disp_RC(0,0);
