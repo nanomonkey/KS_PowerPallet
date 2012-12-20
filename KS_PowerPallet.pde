@@ -209,7 +209,7 @@ int lineCount = 0;
 //Configuration Variables
 int config_var;
 byte config_changed = false;
-static char *Configuration[] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", " Pratio Count? ", "High Coolant T "};  //15 character Display prompt
+static char *Configuration[] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Count?  ", "High Coolant T "};  //15 character Display prompt
 static char *Config_Choices[] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  "}; //8 char options for last two buttons
 int defaults[] = {0, 0, 1, 10, 35, 100, 6, 0, 100, 98};  //default values to be saved to EEPROM for the following getConfig variables
 int config_min[] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0};  //minimum values allowed 
@@ -482,8 +482,9 @@ int alarm_shown = 0;
 #define ALARM_BOUND_AUGER 10
 #define ALARM_HIGH_PCOMB 11
 #define ALARM_HIGH_COOLANT_TEMP 12
+//#define ALARM_TCOMB_LOW 13
 
-char* display_alarm[ALARM_NUM] PROGMEM = {  //line 1 on display
+char* display_alarm[ALARM_NUM] = {  //line 1 on display
   "Auger on too long   ",
   "Auger off too long  ",
   "Bad Reactor P_ratio ",
@@ -499,7 +500,7 @@ char* display_alarm[ALARM_NUM] PROGMEM = {  //line 1 on display
   "High Coolant Temp   "
 }; //20 char message for 4x20 display
 
-char* display_alarm2[ALARM_NUM] PROGMEM = {  //line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
+char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
   "Check Fuel          ",
   "Bridging?           ",
   "Reactor Fuel Issue  ",

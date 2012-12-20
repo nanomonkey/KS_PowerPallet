@@ -50,12 +50,14 @@ void DoDisplay() {
       Disp_PutStr(buf);
       //Row 1
       Disp_RC(1, 0);
-      strcpy_P(buf, display_alarm[alarm_shown]);
-      Disp_PutStr(buf);
+//      strcpy_P(buf, display_alarm[alarm_shown]);
+//      Disp_PutStr(buf);
+      Disp_PutStr(display_alarm[alarm_shown]);
       //Row 2
       Disp_RC(2, 0);
-      strcpy_P(buf, display_alarm2[alarm_shown]);
-      Disp_PutStr(buf);
+//      strcpy_P(buf, display_alarm2[alarm_shown]);
+//      Disp_PutStr(buf);
+      Disp_PutStr(display_alarm2[alarm_shown]);
       if (shutdown[alarm_shown] > 999 && engine_state == ENGINE_ON){     //anything less than 999 is probably a count and not a shutdown time in millisecond so don't show. 
         Disp_RC(2, 13);
         sprintf(buf, "OFF:%3i", (shutdown[alarm_shown] - alarm_start[alarm_shown] - (millis() - alarm_on[alarm_shown]))/1000);
@@ -524,7 +526,7 @@ void DoDisplay() {
 //    break;
   case DISPLAY_CONFIG:
     Disp_CursOff();
-    item_count = sizeof(Config_Choices)/sizeof(Config_Choices[0]);
+    item_count = sizeof(defaults)/sizeof(int);
     if (config_changed == false){
       config_var = getConfig(cur_item);
     }
@@ -741,9 +743,9 @@ void DoKeyInput() {
 //      TransitionDisplay(DISPLAY_PHIDGET);
 //      break;
 //    case DISPLAY_PHIDGET:
-      TransitionDisplay(DISPLAY_SD);
-      break;
-    case DISPLAY_SD:
+//      TransitionDisplay(DISPLAY_SD);
+//      break;
+//    case DISPLAY_SD:
       TransitionDisplay(DISPLAY_REACTOR);
       break;
     }
@@ -755,8 +757,8 @@ void DoKeyInput() {
       update_config_var(cur_item);
       config_changed = false;
     }
-    cur_item++;
-    if (cur_item>item_count) {
+    cur_item += 1;
+    if (cur_item > item_count) {
       if (display_state == DISPLAY_CONFIG){
         cur_item = 0;
       } else {
@@ -786,7 +788,7 @@ void saveConfig(int item, int state){  //EEPROM:  0-499 for internal states, 500
   if (item == 0  and state == 1){
     resetConfig();
   }
-  if (item>0){  //skip first config 
+  if (item > 0){  //skip first config 
     int old_state = EEPROM.read(499+item);
     if(state != old_state){
       EEPROM.write(499+item, state);
@@ -797,10 +799,10 @@ void saveConfig(int item, int state){  //EEPROM:  0-499 for internal states, 500
 
 int getConfig(int item){
   int value = 0;
-  if (item>0){  //Config item zero is 'Reset to Defaults?' so skip
+  if (item > 0){  //Config item zero is 'Reset to Defaults?' so skip
     value = int(EEPROM.read(499+item));
     if (value == 255){  //values hasn't been saved yet to EEPROM, go with default value saved in defaults[]
-      value = defaults[item-1];
+      value = defaults[item];
       EEPROM.write(499+item, value);
     }
   }
@@ -811,6 +813,7 @@ int getConfig(int item){
 void update_config_var(int var_num){
   switch (var_num) {
     case 0:
+      putstring("# Updating Configurations to Defaults\n");
       for (int i=1; i<9; i++){
         update_config_var(i);
       }
