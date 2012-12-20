@@ -1,6 +1,6 @@
 void TransitionTesting(int new_state) {
   testing_state_entered = millis();
-  Serial.print("#Switching to testing state:");
+  putstring("#Switching to testing state:");
   Serial.println(TestingStateName[new_state]);
   switch (new_state) {
   case TESTING_OFF:

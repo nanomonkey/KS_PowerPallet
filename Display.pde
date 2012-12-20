@@ -1,6 +1,5 @@
 void DoDisplay() {
-  //Think about replacing long strings with variables in program space using PROGMEM, PSTR() and Disp_PutStr_P();
-  //const char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
+  //PROGMEM prog_char menu1[] = "NEXT  ADV   +    -  ";
   char menu1[] = "NEXT  ADV   +    -  ";
   boolean disp_alt; // Var for alternating value display
   char choice[5] = "    ";
@@ -51,10 +50,12 @@ void DoDisplay() {
       Disp_PutStr(buf);
       //Row 1
       Disp_RC(1, 0);
-      Disp_PutStr(display_alarm[alarm_shown]);
+      strcpy_P(buf, display_alarm[alarm_shown]);
+      Disp_PutStr(buf);
       //Row 2
       Disp_RC(2, 0);
-      Disp_PutStr(display_alarm2[alarm_shown]);
+      strcpy_P(buf, display_alarm2[alarm_shown]);
+      Disp_PutStr(buf);
       if (shutdown[alarm_shown] > 999 && engine_state == ENGINE_ON){     //anything less than 999 is probably a count and not a shutdown time in millisecond so don't show. 
         Disp_RC(2, 13);
         sprintf(buf, "OFF:%3i", (shutdown[alarm_shown] - alarm_start[alarm_shown] - (millis() - alarm_on[alarm_shown]))/1000);
@@ -274,6 +275,8 @@ void DoDisplay() {
       Disp_RC(0,0);
       Disp_CursOn();
       Disp_RC(3,0);
+//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
+//      Disp_PutStr(buf);
       Disp_PutStr(menu1);
       break;
     case 2: //Lambda reading
@@ -295,6 +298,8 @@ void DoDisplay() {
       }
       lambda_PID.SetTunings(P,I,0);
       Disp_RC(3,0);
+//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
+//      Disp_PutStr(buf);
       Disp_PutStr(menu1);
       Disp_RC(1,0);
       Disp_CursOn();
@@ -312,6 +317,8 @@ void DoDisplay() {
       }
       lambda_PID.SetTunings(P,I,0);
       Disp_RC(3,0);
+//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
+//      Disp_PutStr(buf);
       Disp_PutStr(menu1);
       Disp_RC(1,11);
       Disp_CursOn();
@@ -358,6 +365,8 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
+//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
+//      Disp_PutStr(buf);
       Disp_PutStr(menu1);
       Disp_RC(0,0);
       Disp_CursOn();
@@ -378,6 +387,8 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
+//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
+//      Disp_PutStr(buf);
       Disp_PutStr(menu1);
       Disp_RC(0,11);
       Disp_CursOn();
@@ -398,6 +409,8 @@ void DoDisplay() {
         WriteGrate();
       }
       Disp_RC(3,0);
+//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
+//      Disp_PutStr(buf);
       Disp_PutStr(menu1);
       Disp_RC(1,0);
       Disp_CursOn();
@@ -442,6 +455,8 @@ void DoDisplay() {
         premix_valve_closed -= 1;
       }
       Disp_RC(3,0);
+//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
+//      Disp_PutStr(buf);
       Disp_PutStr(menu1);
       Disp_RC(0,0);
       Disp_CursOn();
@@ -457,6 +472,8 @@ void DoDisplay() {
         }
       }
       Disp_RC(3,0);
+//      strcpy_P(buf, (char*)pgm_read_word(&(menu1)));
+//      Disp_PutStr(buf);
       Disp_PutStr(menu1);
       Disp_RC(0,11);
       Disp_CursOn();
@@ -592,54 +609,8 @@ void DoDisplay() {
     Disp_RC(3,0);
     Disp_PutStr("NEXT            TEST");
     if (key == 3 and cur_item == 1) {  //only allow the button to be pressed once
-     #if defined(__AVR_ATmega1280__)
-     Serial.print("# __AVR_ATmega1280_ defined as");
-     Serial.println(__AVR_ATmega1280__);
-     #endif 
-      //Serial.print("SDA_PIN = ");
-      //Serial.println(int(SDA_PIN));
-      //Serial.print("SCL_PIN = ");
-      //Serial.println(int(SCL_PIN));
-      Serial.print("SS_PIN = ");
-      Serial.println(int(SS_PIN));
-      Serial.print("MOSI_PIN = ");
-      Serial.println(int(MOSI_PIN));
-      Serial.print("MISO_PIN = ");
-      Serial.println(int(MISO_PIN));
-      Serial.print("SCK_PIN = ");
-      Serial.println(int(SCK_PIN));
-
-//      for (int i = 50; i < 90; i++){
-//        ss_PIN = i;
-//        Serial.print("# Setting ss_pin to ");
-//        Serial.println(ss_PIN);
-//        testSD();
-//      }
       testSD();
       cur_item++;  
-    }
-    if (key == 2) {
-      for (int t = 1; t<10; t++){
-//        digitalWrite(SS_PIN, HIGH); 
-//        digitalWrite(MOSI_PIN, HIGH); 
-//        digitalWrite(MISO_PIN, HIGH); 
-//        digitalWrite(SCK_PIN, HIGH); 
-        //digitalWrite(70, HIGH);
-        //digitalWrite(71, LOW);
-//        Serial.println("#HIGH");
-        Serial.println("#70 ON, 71 OFF");
-        delay(100);
-//        digitalWrite(SS_PIN, LOW); 
-//        digitalWrite(MOSI_PIN, LOW); 
-//        digitalWrite(MISO_PIN, LOW); 
-//        digitalWrite(SCK_PIN, LOW); 
-        digitalWrite(70, LOW);
-        digitalWrite(71, HIGH);
-       Serial.println("#70 OFF, 71 ON");
-//        Serial.println("#LOW");
-        delay(500);
-      }
-      //DDRJ |= _BV(PJ2) | _BV(PJ3);
     }
     break;
 //  case DISPLAY_PHIDGET:
@@ -785,7 +756,6 @@ void DoKeyInput() {
       config_changed = false;
     }
     cur_item++;
-    //Serial.println("cur_item++");
     if (cur_item>item_count) {
       if (display_state == DISPLAY_CONFIG){
         cur_item = 0;

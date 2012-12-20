@@ -75,7 +75,7 @@ void LoadGrate() {
   maxg = EEPROM.read(19)*3;
   gon= EEPROM.read(21);
   if (check == 128) { //check to see if grate has been set
-    Serial.println("#Loading grate from EEPROM");
+    putstring("#Loading grate from EEPROM\n");
     grate_min_interval = ming;
     grate_max_interval = maxg;
     grate_on_interval = gon;
@@ -85,7 +85,7 @@ void LoadGrate() {
 }
 
 void WriteGrate() {
-  Serial.println("#Writing grate to EEPROM");
+  putstring("#Writing grate to EEPROM\n");
   EEPROM.write(16,128);
   EEPROM.write(17,constrain(grate_min_interval/3,0,255));
   EEPROM.write(19,constrain(grate_max_interval/3,0,255));

@@ -13,13 +13,13 @@ void DoAuger() {
       auger_state_entered = millis(); //reset to zero if no vacuum and auger off
     }
     if (millis() - auger_state_entered > shutdown[ALARM_AUGER_OFF_LONG] && engine_state == ENGINE_ON){
-      Serial.print("# Auger off too long, Engine Shutdown at: ");
+      putstring("# Auger off too long, Engine Shutdown at: ");
       Serial.println((millis() - auger_state_entered));
       TransitionEngine(ENGINE_SHUTDOWN);
       TransitionAuger(AUGER_ALARM);
     } 
     if ((millis() - auger_state_entered) % 60000 > 59000) {  //pulse every minute of auger off
-      Serial.println("# Pulsing Auger");
+      putstring("# Pulsing Auger\n");
       TransitionAuger(AUGER_PULSE);
     } 
     break;
@@ -33,7 +33,7 @@ void DoAuger() {
     if ((millis() - auger_state_entered) > shutdown[ALARM_AUGER_LOW_CURRENT]){  //turn engine and auger off if auger current low for 3 minutes
       TransitionAuger(AUGER_ALARM);
       if (engine_state == ENGINE_ON){
-        Serial.print("# Low Auger Current for too long, Engine Shutdown at");
+        putstring("# Low Auger Current for too long, Engine Shutdown at");
         Serial.println((millis() - auger_state_entered));
         TransitionEngine(ENGINE_SHUTDOWN);
       }
@@ -57,7 +57,7 @@ void DoAuger() {
     if ((millis() - auger_state_entered) > shutdown[ALARM_AUGER_ON_LONG]){  //turn engine and auger off if auger runs none stop for too long
       TransitionAuger(AUGER_ALARM);
       if (engine_state == ENGINE_ON){
-        Serial.print("# Auger on too long, Engine Shutdown at:");
+        putstring("# Auger on too long, Engine Shutdown at:");
         Serial.println((millis() - auger_state_entered));
         TransitionEngine(ENGINE_SHUTDOWN);
       }
@@ -85,10 +85,10 @@ void DoAuger() {
       TransitionAuger(AUGER_FORWARD);
     }
     if (auger_rev_count > 20){  //catch oscillating auger from broken Fuel Switch
-      Serial.println("# Auger Bound or broken Fuel Switch, stopping Auger");
+      putstring("# Auger Bound or broken Fuel Switch, stopping Auger\n");
       TransitionAuger(AUGER_ALARM);
       if (engine_state == ENGINE_ON){
-        Serial.print("# Auger Oscillations, Engine Shutdown at: ");
+        putstring("# Auger Oscillations, Engine Shutdown at: ");
         Serial.println((millis() - auger_state_entered));
         TransitionEngine(ENGINE_SHUTDOWN);
       }
@@ -135,19 +135,19 @@ void TransitionAuger(int new_state) {
   switch (new_state) {
   case AUGER_OFF:
     AugerOff();
-    Serial.println("# New Auger State: Off");
+    putstring("# New Auger State: Off\n");
     //TransitionMessage("Auger: Off         ");
     auger_rev_count = 0;
     auger_pulse_state = 0;
     break;
   case AUGER_STARTING:
     AugerReverse(); //start in reverse for a few moments to reduce bridging 
-    Serial.println("# New Auger State: Starting Forward");  
+    putstring("# New Auger State: Starting Forward\n");  
     //TransitionMessage("Auger: Starting      "); 
     break;
   case AUGER_FORWARD:
     AugerForward();
-    Serial.println("# New Auger State: Forward");
+    putstring("# New Auger State: Forward\n");
     //TransitionMessage("Auger: Forward      ");
     break;
   case AUGER_HIGH:
@@ -157,20 +157,20 @@ void TransitionAuger(int new_state) {
     //Serial.print(current_low_boundary);
     //Serial.print(" current_high_boundary:");
     //Serial.println(current_high_boundary);
-    Serial.println("# New Auger State: Forward, Current High");
+    putstring("# New Auger State: Forward, Current High\n");
     //TransitionMessage("Auger: Current High ");
     break;
   case AUGER_REVERSE:
     auger_reverse_entered = millis();
-    Serial.println("# New Auger State: Reverse");
+    putstring("# New Auger State: Reverse\n");
     AugerReverse();
     auger_rev_count++;
-    Serial.print("# Auger Rev Count Incremented to ");
+    putstring("# Auger Rev Count Incremented to ");
     Serial.println(auger_rev_count);
     //TransitionMessage("Auger: Reverse      ");
     break;
   case AUGER_REVERSE_HIGH:
-    Serial.println("# New Auger State: Reverse High Current"); 
+    putstring("# New Auger State: Reverse High Current\n"); 
     //TransitionMessage("Auger: Reverse High"); 
     break; 
   case AUGER_CURRENT_LOW:
@@ -180,16 +180,16 @@ void TransitionAuger(int new_state) {
     //Serial.print(current_low_boundary);
     //Serial.print(" current_high_boundary:");
     //Serial.println(current_high_boundary);
-    Serial.println("# New Auger State: Current Low");
+    putstring("# New Auger State: Current Low\n");
     //TransitionMessage("Auger: Low Current");
     break;
   case AUGER_ALARM:
     AugerOff();
-    Serial.println("# New Auger State: Alarmed, Off");
+    putstring("# New Auger State: Alarmed, Off\n");
     //TransitionMessage("Auger: Off          ");
     break; 
   case AUGER_PULSE:
-    Serial.println("# New Auger State: Pulse");
+    putstring("# New Auger State: Pulse\n");
     if (auger_pulse_state == 0){
       AugerReverse();
     } else {

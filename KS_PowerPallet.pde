@@ -19,12 +19,13 @@
 #include <util.h>           // part of KSlibs, utility functions, GCU_Setup
 #include <avr/io.h>         // advanced: provides port definitions for the microcontroller (ATmega1280, http://www.atmel.com/dyn/resources/prod_documents/doc2549.PDF)   
 #include <SD.h>             // SD card  
+#include <avr/pgmspace.h>
 //#include <MCP2515.h> 
 //#include <SPI.h>
 
 /*
 EEPROM bytes used of 4k space:
-0,1,2,3,4,5,6,7,8,9,10, 13,14,15,16,17,18,19,21, 33,34,35,36, 40-?,
+0,1,2,3,4,5,6,7,8,9,10, 13,14,15,16,17,18,19,21, 33,34,35,36, 40-50,
 500-999 DISPLAY_CONFIG states
 1000-4000 Sensor configuration
 */
@@ -40,7 +41,13 @@ EEPROM bytes used of 4k space:
 //#define putstring(x) SerialPrint_P(PSTR(x))
 //#define Disp_PutStr_P(str) (strcpy_P(buf, (char*)pgm_read_word(str))); 
 
-//const char HELP[] PROGMEM = "#p: add 0.02 to p/n#P: subtract 0.02 from p/n#i: add 0.02 to i/n#I: subtract 0.02 from i/n#d & D: reserved for d in PID (not implemented)/n#c: Calibrate Pressure Sensors/n#s: add 10 to Servo1 calibration/n#S: subtract 10  degrees from Servo1 position/n#l: add 0.01 to lambda_setpoint/n#L: subtract 0.01 from lambda_setpoint/n#t: subtract 100 ms from Sample Period (loopPeriod1)/n#T: add 100 ms from Sample Period (loopPeriod1)/n#g: Shake grate/n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)/n#m: add 5ms to grate shake interval/n#M: subtract 5 ms from grate shake interval/n#e: Engine Governor Tuning mode/n# h: Print Help Text";
+//const char HELP[] PROGMEM = "#p: add 0.02 to p\n#P: subtract 0.02 from p\n#i: add 0.02 to i\n#I: subtract 0.02 from i\n#d & D: reserved for d in PID (not implemented)\n#c: Calibrate Pressure Sensors\n#s: add 10 to Servo1 calibration\n#S: subtract 10  degrees from Servo1 position\n#l: add 0.01 to lambda_setpoint\n#L: subtract 0.01 from lambda_setpoint\n#t: subtract 100 ms from Sample Period (loopPeriod1)\n#T: add 100 ms from Sample Period (loopPeriod1)\n#g: Shake grate\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\n#m: add 5ms to grate shake interval\n#M: subtract 5 ms from grate shake interval\n#e: Engine Governor Tuning mode\n# h: Print Help Text";
+
+#define putstring(x) SerialPrint_P(PSTR(x))
+//void SerialPrint_P(PGM_P str) {
+//  for (uint8_t c; (c = pgm_read_byte(str)); str++) Serial.write(c);
+//}
+//putstring("This is a nice long string that takes no memory");
 
 // Analog Input Mapping
 #define ANA_LAMBDA ANA0
@@ -476,7 +483,7 @@ int alarm_shown = 0;
 #define ALARM_HIGH_PCOMB 11
 #define ALARM_HIGH_COOLANT_TEMP 12
 
-char* display_alarm[ALARM_NUM] = {  //line 1 on display
+char* display_alarm[ALARM_NUM] PROGMEM = {  //line 1 on display
   "Auger on too long   ",
   "Auger off too long  ",
   "Bad Reactor P_ratio ",
@@ -492,7 +499,7 @@ char* display_alarm[ALARM_NUM] = {  //line 1 on display
   "High Coolant Temp   "
 }; //20 char message for 4x20 display
 
-char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
+char* display_alarm2[ALARM_NUM] PROGMEM = {  //line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
   "Check Fuel          ",
   "Bridging?           ",
   "Reactor Fuel Issue  ",
@@ -511,15 +518,15 @@ char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is grea
 // SD Card
 boolean sd_loaded;
 
-int config_count = 20; //number of configurations in config.txt
-
-typedef struct{
-  char name[8];
-  int sensor_num;
-  int flag;
-  int show;
-} config_entry;
-//config_entry config[config_num];  //use config_entry struct
+//int config_count = 20; //number of configurations in config.txt
+//
+//typedef struct{
+//  char name[8];
+//  int sensor_num;
+//  int flag;
+//  int show;
+//} config_entry;
+////config_entry config[config_num];  //use config_entry struct
 
 Sd2Card sd_card;
 SdVolume sd_volume;

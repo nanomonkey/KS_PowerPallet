@@ -49,34 +49,34 @@ void DoSerialIn() {
       break;
     case 's':
       Servo_Calib.write(Servo_Calib.read()+10);
-      Serial.print("#Servo1 (degrees) now:");
+      putstring("#Servo1 (degrees) now:");
       Serial.println(Servo_Calib.read());
       break;
     case 'S':
       Servo_Calib.write(Servo_Calib.read()-10);
-      Serial.print("#Servo1 (degrees) now:");
+      putstring("#Servo1 (degrees) now:");
       Serial.println(Servo_Calib.read());
       break;
     case 'l':
       lambda_setpoint += 0.01;
-      Serial.print("#Lambda Setpoint now:");
+      putstring("#Lambda Setpoint now:");
       Serial.println(lambda_setpoint);
       WriteLambda();
       break;
     case 'L':
       lambda_setpoint -= 0.01;
-      Serial.print("#Lambda Setpoint now:");
+      putstring("#Lambda Setpoint now:");
       Serial.println(lambda_setpoint);
       WriteLambda();
       break;
     case 't':
       loopPeriod1 = max(loopPeriod1-100,100);
-      Serial.print("#Sample Period now:");
+      putstring("#Sample Period now:");
       Serial.println(loopPeriod1);
       break;
     case 'T':
       loopPeriod1 = min(loopPeriod1+100,10000);
-      Serial.print("#Sample Period now:");
+      putstring("#Sample Period now:");
       Serial.println(loopPeriod1);
       break;
     case 'g':  
@@ -102,17 +102,17 @@ void DoSerialIn() {
     case 'm':
       grate_max_interval += 5;
       grate_min_interval = grate_max_interval*0.5;
-      Serial.print("#Grate Max Interval now:");
+      putstring("#Grate Max Interval now:");
       Serial.println(grate_max_interval);
-      Serial.print("#Grate Min Interval now:");
+      putstring("#Grate Min Interval now:");
       Serial.println(grate_min_interval);
       break;
     case 'M':
       grate_max_interval -= 5;
       grate_min_interval = grate_max_interval*0.5;
-      Serial.print("#Grate Max Interval now:");
+      putstring("#Grate Max Interval now:");
       Serial.println(grate_max_interval);
-      Serial.print("#Grate Min Interval now:");
+      putstring("#Grate Min Interval now:");
       Serial.println(grate_min_interval);
       break;   
     case 'e':
@@ -135,7 +135,7 @@ void DoSerialIn() {
         SerialReadString(';');
         EEPROMWriteAlpha(40, 10, serial_buffer);
       }
-      Serial.print("# Serial number: ");
+      putstring("# Serial number: ");
       Serial.println(serial_num);
       break;
 //   case 'h' || 'H':
@@ -185,17 +185,17 @@ void SerialReadString(char endString){
 
 
 void PrintLambdaUpdate(double P, double I, double D, double nP, double nI, double nD) {
-  Serial.print("#Updating PID from [");
+  putstring("#Updating PID from [");
   Serial.print(P);
-  Serial.print(",");
+  putstring(",");
   Serial.print(I);
-  Serial.print(",");
+  putstring(",");
   Serial.print(D);
-  Serial.print("] to [");
+  putstring("] to [");
   Serial.print(nP);
-  Serial.print(",");
+  putstring(",");
   Serial.print(nI);
-  Serial.print(",");
+  putstring(",");
   Serial.print(nD);
   Serial.println("]");
 }

@@ -7,36 +7,36 @@ void DoEngine() {
       break;
     case ENGINE_ON:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
-        Serial.println("# Key switch turned off, Engine Shutdown.");
+        putstring("# Key switch turned off, Engine Shutdown.\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (control_state == CONTROL_START) {
         TransitionEngine(ENGINE_STARTING);
       }
       if (EngineOilPressureLevel == OIL_P_LOW  && millis() - oil_pressure_state > 500 && millis() - engine_state_entered > 3000){
-        Serial.print("# Low Oil Pressure, Shutting Down Engine at: ");
+        putstring("# Low Oil Pressure, Shutting Down Engine at: ");
         Serial.println(millis() - oil_pressure_state);
         setAlarm(ALARM_BAD_OIL_PRESSURE);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (P_reactorLevel == OFF & millis()-engine_state_entered > 2500) { //if reactor is at low vacuum after ten seconds, engine did not catch, so turn off
-        Serial.print("# Reactor Pressure Too Low, Engine Shutdown at :");
+        putstring("# Reactor Pressure Too Low, Engine Shutdown at :");
         Serial.println(millis()-engine_state_entered);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (Press[P_COMB] > 7472) {  
-        Serial.println("# Reactor Pressure too high (above 30 inch water), Engine Shutdown");
+        putstring("# Reactor Pressure too high (above 30 inch water), Engine Shutdown\n");
         setAlarm(ALARM_HIGH_PCOMB);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (alarm_on[ALARM_HIGH_COOLANT_TEMP] > shutdown[ALARM_HIGH_COOLANT_TEMP]){
-        Serial.println("# Engine coolant temp too high, Engine shutdown");
+        putstring("# Engine coolant temp too high, Engine shutdown\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       break;
     case ENGINE_STARTING:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
-        Serial.println("# Key switch turned off, Engine Shutdown.");
+        putstring("# Key switch turned off, Engine Shutdown.\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (control_state == CONTROL_ON) { // Use starter button in the standard manual control configuration (push button to start, release to stop cranking)
@@ -63,34 +63,34 @@ void TransitionEngine(int new_state) {
     case ENGINE_OFF:
       digitalWrite(FET_IGNITION,LOW);
       digitalWrite(FET_STARTER,LOW);
-      Serial.println("# New Engine State: Off");
-      TransitionMessage("Engine: Off         ");
+      putstring("# New Engine State: Off\n"); 
+      //TransitionMessage("Engine: Off         ");
       break;
     case ENGINE_ON:
       digitalWrite(FET_IGNITION,HIGH);
       digitalWrite(FET_STARTER,LOW);
-      Serial.println("# New Engine State: On");
-      TransitionMessage("Engine: Running    ");
+      putstring("# New Engine State: On\n"); 
+      //TransitionMessage("Engine: Running    ");
       break;
     case ENGINE_STARTING:
       digitalWrite(FET_IGNITION,HIGH);
       digitalWrite(FET_STARTER,HIGH);
-      Serial.println("# New Engine State: Starting");
-      TransitionMessage("Engine: Starting    ");
+      putstring("# New Engine State: Starting\n"); 
+      //TransitionMessage("Engine: Starting    ");
       break;
     case ENGINE_GOV_TUNING:
       digitalWrite(FET_IGNITION,HIGH);
       digitalWrite(FET_STARTER,LOW);
-      Serial.println("# New Engine State: Governor Tuning");
-      TransitionMessage("Engine: Gov Tuning  ");
+      putstring("# New Engine State: Governor Tuning\n"); 
+      //TransitionMessage("Engine: Gov Tuning  ");
       break;
     case ENGINE_SHUTDOWN:
 //      lambda_PID.SetMode(MANUAL);
 //      SetThrottleAngle(smoothedLambda);
 //      digitalWrite(FET_IGNITION,LOW);
 //      digitalWrite(FET_STARTER,LOW);
-      Serial.println("# New Engine State: SHUTDOWN");
-      TransitionMessage("Engine: Shutting down");   
+      putstring("# New Engine State: SHUTDOWN\n"); 
+      //TransitionMessage("Engine: Shutting down");   
       break;
   }
   engine_state=new_state;

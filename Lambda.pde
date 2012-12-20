@@ -95,7 +95,7 @@ void DoLambda() {
       case LAMBDA_RESTART:
         if (millis() - lambda_state_entered > 60000) {
           if (engine_state == ENGINE_ON){
-            Serial.print("# No O2 Signal, Shutting down Engine at: ");
+            putstring("# No O2 Signal, Shutting down Engine at: ");
             Serial.println(millis() - lambda_state_entered);
             TransitionEngine(ENGINE_SHUTDOWN);
           }
@@ -157,7 +157,7 @@ void TransitionLambda(int new_state) {
      case LAMBDA_SHUTDOWN:
        break;
    }
-  Serial.print("# Lambda switching from ");
+  putstring("# Lambda switching from ");
   Serial.print(lambda_state_name);
   
   //Enter
@@ -213,7 +213,7 @@ void TransitionLambda(int new_state) {
        lambda_PID.SetMode(MANUAL);
        break;
     }
-  Serial.print(" to ");  
+  putstring(" to ");  
   Serial.println(lambda_state_name);
 }
 
@@ -246,7 +246,7 @@ void WriteLambda(double setpoint) {
   EEPROM.write(13, val);
   EEPROM.write(14, p);
   EEPROM.write(15, i);
-  Serial.println("#Writing lambda settings to EEPROM");
+  putstring("#Writing lambda settings to EEPROM\n");
 }
 
 void LoadLambda() {
@@ -257,13 +257,13 @@ void LoadLambda() {
   p = EEPROM.read(14)*0.01;
   i = EEPROM.read(15)*0.1;
   if (check == 128 && val >= 0.5 && val <= 1.5) { //check to see if lambda has been set
-    Serial.println("#Loading lambda from EEPROM");
+    putstring("#Loading lambda from EEPROM\n");
     lambda_setpoint = val;
     lambda_PID.SetTunings(p,i,0);
     lambda_P[0] = p;
     lambda_I[0] = i;
   } else {
-    Serial.println("#Saving default lambda setpoint to EEPROM");
+    putstring("#Saving default lambda setpoint to EEPROM\n");
     val = lambda_setpoint_mode[0];
     WriteLambda(val);
   }

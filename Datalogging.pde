@@ -303,12 +303,12 @@ void LogReactor(boolean header=false) {
 }
 
 void DoTests() { //space to log testing of variables.  Normally not logged
-  Serial.print("#");
+  putstring("#");
   //smooth(int data, int smoothed, int filterval)
 
-  Serial.print("Smoothed Signal: ");
+  putstring("Smoothed Signal: ");
   Serial.print(smoothed[getAnaArray(ANA_OIL_PRESSURE)]);
-  Serial.print(" Smoothed PSI: ");
+  putstring(" Smoothed PSI: ");
   Serial.println(getPSI(smoothed[getAnaArray(ANA_OIL_PRESSURE)])); 
 }
 
@@ -373,6 +373,7 @@ void DoDatalogging() {
     DatalogSD(data_buffer, sd_data_file_name);
   }
 //  DoTests();
+  data_buffer = "";  //extra reset to try and clear up memory
   lineCount++;
 }
 

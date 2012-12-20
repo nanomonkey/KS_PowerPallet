@@ -3,12 +3,12 @@ boolean InitSD() {
   pinMode(MOSI_PIN, OUTPUT); 
   pinMode(MISO_PIN, INPUT); 
   pinMode(SCK_PIN, OUTPUT); 
-  Serial.print("#Initializing SD card...");
+  putstring("#Initializing SD card...");
   if(!SD.begin(SS_PIN)){
-    Serial.println("initialization failed. ");
+    putstring("initialization failed. \n");
       sd_loaded = false;
   } else {
-      Serial.println("card initialized.");
+      putstring("card initialized.\n");
       sd_loaded = true;
       int data_log_num = EEPROMReadInt(30); //reads from EEPROM bytes 30 and 31
       if (data_log_num == 32767){  //TODO: unsigned??  --> 65,535
@@ -17,7 +17,7 @@ boolean InitSD() {
         data_log_num++;
       }
       sprintf(sd_data_file_name, "log%05i.csv", data_log_num); 
-      Serial.print("#Writing data to ");
+      putstring("#Writing data to ");
       Serial.println(sd_data_file_name);
       EEPROMWriteInt(30, data_log_num); 
   }
@@ -33,7 +33,7 @@ void DatalogSD(String dataString, char file_name[13]) {    //file_name should be
     //Serial.println(dataString);
   }  
   else {
-    Serial.print("# Error loading ");
+    putstring("# Error loading ");
     Serial.println(file_name);
   } 
 }
@@ -45,7 +45,7 @@ String readSDline(char file_name[13], int line_num = 0){ //pass a filename in th
   int line_count = 0;
   File file = SD.open(file_name);
   while((c=file.read())>0 && line_count <= line_num){
-    if (c == '/n'){
+    if (c == '\n'){
       line_count++;
     }
     if (line_count == line_num && c != '\n'){
@@ -61,7 +61,7 @@ String readSDline(File file, int line_num = 0){ //pass an open file
   String SD_line = "";
   int line_count = 0;
   while((c=file.read())>0 && line_count <= line_num){
-    if (c == '/n'){
+    if (c == '\n'){
       line_count++;
     }
     if (line_count == line_num && c != '\n'){
@@ -71,22 +71,22 @@ String readSDline(File file, int line_num = 0){ //pass an open file
   return SD_line;
 }
 
-void checkSDconfig(){
-  int line = 0;  
-  if (SD.exists("config.ini")){
-    File config = SD.open("config.ini");
-    config_count = config.size() / sizeof(config_entry);
-    String SD_config_entry[config_count];
-    while (line <= config_count){
-      SD_config_entry[line] = readSDline(config, line);
-      Serial.print("# ");
-      Serial.println(SD_config_entry[line]);
-      line++;
-    }
-  } else {
-    Serial.println("# config.ini doesn't exist on SD card");
-  }
-}
+//void checkSDconfig(){
+//  int line = 0;  
+//  if (SD.exists("config.ini")){
+//    File config = SD.open("config.ini");
+//    config_count = config.size() / sizeof(config_entry);
+//    String SD_config_entry[config_count];
+//    while (line <= config_count){
+//      SD_config_entry[line] = readSDline(config, line);
+//      putstring("# ");
+//      Serial.println(SD_config_entry[line]);
+//      line++;
+//    }
+//  } else {
+//    Serial.println("# config.ini doesn't exist on SD card");
+//  }
+//}
 
 //config_entry Config2Struct(String config_line){
 //  string name
@@ -106,12 +106,12 @@ void checkSDconfig(){
 //  //char sensor_config[][][3];
 //  int line_count = 0;
 //  if(SD.begin() != 0){
-//    Serial.print("Problem loading SD card");
+//    putstring("Problem loading SD card");
 //    break;
 //  }
 //  file = SD.open(file_name)
 //  while((c = file.read())>0){
-//    if (c == '/n'){
+//    if (c == '\n'){
 //      sensor_config[line_count][index] = entry;
 //      entry = "";
 //      line_count++;
@@ -132,59 +132,59 @@ void checkSDconfig(){
 void testSD() {
   switch(sd_card.type()) {
     case SD_CARD_TYPE_SD1:
-      Serial.println("SD1");
+      putstring("SD1\n");
       break;
     case SD_CARD_TYPE_SD2:
-      Serial.println("SD2");
+      putstring("SD2\n");
       break;
     case SD_CARD_TYPE_SDHC:
-      Serial.println("SDHC");
+      putstring("SDHC\n");
       break;
     default:
-      Serial.println("Unknown");
+      putstring("Unknown\n");
     }
     if (!sd_volume.init(sd_card)) {
-      Serial.println("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card");
+      putstring("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card\n");
       return;
     }
     uint32_t volumesize;
-    Serial.print("\nVolume type is FAT");
+    putstring("\nVolume type is FAT");
     Serial.println(sd_volume.fatType(), DEC);
     Serial.println();
     
     volumesize = sd_volume.blocksPerCluster();    // clusters are collections of blocks
     volumesize *= sd_volume.clusterCount();       // we'll have a lot of clusters
     volumesize *= 512;                            // SD card blocks are always 512 bytes
-    Serial.print("Volume size (bytes): ");
+    putstring("Volume size (bytes): ");
     Serial.println(volumesize);
-    Serial.print("Volume size (Kbytes): ");
+    putstring("Volume size (Kbytes): ");
     volumesize /= 1024;
     Serial.println(volumesize);
-    Serial.print("Volume size (Mbytes): ");
+    putstring("Volume size (Mbytes): ");
     volumesize /= 1024;
     Serial.println(volumesize);
-    Serial.println("\nFiles found on the card (name, date and size in bytes): ");
+    putstring("\nFiles found on the card (name, date and size in bytes): \n");
     sd_root.openRoot(sd_volume);
     sd_root.ls(LS_R | LS_DATE | LS_SIZE);  // list all files in the card with date and size
   
   // print the type of card
-  Serial.print("#Card type: ");
+  putstring("#Card type: ");
   switch(sd_card.type()) {
     case SD_CARD_TYPE_SD1:
-      Serial.println("SD1");
+      putstring("SD1\n");
       break;
     case SD_CARD_TYPE_SD2:
-      Serial.println("SD2");
+      putstring("SD2\n");
       break;
     case SD_CARD_TYPE_SDHC:
-      Serial.println("SDHC");
+      putstring("SDHC\n");
       break;
     default:
-      Serial.println("Unknown");
+      putstring("Unknown\n");
   }
   
   if (!sd_volume.init(sd_card)) {
-    Serial.println("# Could not find FAT16/FAT32 partition.  Make sure you've formatted the card");
+    putstring("# Could not find FAT16/FAT32 partition.  Make sure you've formatted the card\n");
     return;
   }
 }
