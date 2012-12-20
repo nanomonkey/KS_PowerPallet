@@ -129,6 +129,16 @@ void DoSerialIn() {
       }
     }
       break;
+    case '-':
+      loopPeriod2 = max(loopPeriod2-100,100);
+      putstring("#Display Period (ms):");
+      Serial.println(loopPeriod2);
+      break;
+    case '+':
+      loopPeriod2 = min(loopPeriod2+100,1000);
+      putstring("#Display Period (ms):");
+      Serial.println(loopPeriod2);
+      break;
     case '#':
       if (serial_num[0] == '/0') {
         putstring("# No serial saved, set line ending to 'Newline' and enter one now: \n");

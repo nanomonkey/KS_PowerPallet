@@ -207,13 +207,14 @@ static char *TestingStateName[] = { "Off","Auger","Grate","Engine","Starter","Fl
 int lineCount = 0;
 
 //Configuration Variables
+#define CONFIG_COUNT 11
 int config_var;
 byte config_changed = false;
-static char *Configuration[] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Count?  ", "High Coolant T "};  //15 character Display prompt
-static char *Config_Choices[] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  "}; //8 char options for last two buttons
-int defaults[] = {0, 0, 1, 10, 35, 100, 6, 0, 100, 98};  //default values to be saved to EEPROM for the following getConfig variables
-int config_min[] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0};  //minimum values allowed 
-int config_max[] = {254, 254, 254, 254, 40, 135, 10, 254, 250, 250}; //maximum values allowed  
+static char *Configuration[CONFIG_COUNT] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Count?  ", "High Coolant T ", "Display Per(ms)"};  //15 character Display prompt
+static char *Config_Choices[CONFIG_COUNT] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  ", "+5  -5  "}; //8 char options for last two buttons
+int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 0, 20, 98, 20};  //default values to be saved to EEPROM for the following getConfig variables
+int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0, 10};  //minimum values allowed 
+int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 250, 250, 199}; //maximum values allowed  
 
 //Don't forget to add the following to update_config_var in Display!
 int engine_type = getConfig(1);  
@@ -225,7 +226,7 @@ int low_oil_psi = getConfig(6);
 int save_datalog_to_sd = getConfig(7);
 int pratio_max = getConfig(8)*5;
 int high_coolant_temp = getConfig(9)*5;
-
+int display_per = getConfig(10)*5;
 
 // Grate turning variables
 int grateMode = GRATE_SHAKE_PRATIO; //set default starting state
@@ -318,7 +319,7 @@ unsigned long oil_pressure_state = 0;
 
 int loopPeriod1 = 1000;
 unsigned long nextTime1;
-int loopPeriod2 = 100;
+int loopPeriod2 = display_per;
 unsigned long nextTime2;
 int loopPeriod3 = 10;
 unsigned long nextTime3;

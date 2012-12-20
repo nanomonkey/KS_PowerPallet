@@ -245,6 +245,7 @@ void DoDisplay() {
     }
     break;
   case DISPLAY_LAMBDA:
+    Disp_CursOff();
     double P,I;
     item_count = 4;
     P=lambda_PID.GetP_Param();
@@ -526,7 +527,7 @@ void DoDisplay() {
 //    break;
   case DISPLAY_CONFIG:
     Disp_CursOff();
-    item_count = sizeof(defaults)/sizeof(int);
+    item_count = CONFIG_COUNT - 1; //sizeof(defaults)/sizeof(int);
     if (config_changed == false){
       config_var = getConfig(cur_item);
     }
@@ -814,7 +815,7 @@ void update_config_var(int var_num){
   switch (var_num) {
     case 0:
       putstring("# Updating Configurations to Defaults\n");
-      for (int i=1; i<9; i++){
+      for (int i=1; i<CONFIG_COUNT; i++){
         update_config_var(i);
       }
       break;
@@ -856,6 +857,10 @@ void update_config_var(int var_num){
       break;
     case 9:
       high_coolant_temp = getConfig(9)*5;
+      break;
+    case 10:
+      display_per = getConfig(10)*5;
+      loopPeriod2 = display_per;
       break;
   }
 }
