@@ -34,6 +34,11 @@ void DoEngine() {
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       break;
+      if (alarm_on[ALARM_TRED_LOW] > shutdown[ALARM_TRED_LOW]){
+        putstring("# Reduction zone temp too low, Engine shutdown\n"); 
+        TransitionEngine(ENGINE_SHUTDOWN);
+      }
+      break;
     case ENGINE_STARTING:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
         putstring("# Key switch turned off, Engine Shutdown.\n"); 

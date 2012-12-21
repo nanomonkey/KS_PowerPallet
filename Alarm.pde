@@ -84,6 +84,11 @@ void DoAlarm() {
   }  else {
     removeAlarm(ALARM_HIGH_COOLANT_TEMP);
   }
+  if (engine_state = ENGINE_ON && Temp_Data[T_TRED] < tred_low_temp){
+    setAlarm(ALARM_TRED_LOW);
+  }  else {
+    removeAlarm(ALARM_TRED_LOW);
+  }
 //Low Oil Pressure alarm set in Engine state machine due to quick transition times.
 //#if ANA_OIL_PRESSURE != ABSENT
 //  if (engine_state == ENGINE_ON && P_reactorLevel != OFF && EngineOilPressureLevel == OIL_P_LOW && millis() - oil_pressure_state > 500  && millis() - engine_state_entered > 3000) {

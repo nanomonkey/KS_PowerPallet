@@ -853,6 +853,9 @@ void update_config_var(int var_num){
       display_per = getConfig(10)*5;
       loopPeriod2 = display_per;
       break;
+    case 11:
+      tred_low_temp = getConfig(11)*5;
+      break;
   }
 }
 
