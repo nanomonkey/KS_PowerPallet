@@ -206,8 +206,7 @@ unsigned int EEPROMReadInt(int p_address){
 }    
 
 void EEPROMReadAlpha(int address, int length, char* buffer){
-  int i=0;
-  while (i < length){
+  for (int i=0; i < length; i++){
     buffer[i] = EEPROM.read(address+i);
     buffer[i+1] = '\0';
   }
@@ -215,8 +214,7 @@ void EEPROMReadAlpha(int address, int length, char* buffer){
 }
 
 void EEPROMWriteAlpha(int address, int length, char* buffer){
-  int i=0;
-  while (i < length){
+  for (int i=0; i < length; i++){
     EEPROM.write(address+i, buffer[i]);
   }
 }

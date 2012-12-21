@@ -22,7 +22,7 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
-    sprintf(buf, "      %s  %i       ", serial_num, unique_number);
+    sprintf(buf, "%s  %i", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_CursOff();
     //Transition out after delay

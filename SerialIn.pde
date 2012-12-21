@@ -140,11 +140,12 @@ void DoSerialIn() {
       Serial.println(loopPeriod2);
       break;
     case '#':
-      if (serial_num[0] == '\0') {
-        putstring("# No serial saved, set line ending to 'Newline' and enter one now: \n");
-        SerialReadString(';');
+      serial_buffer[0] = '\0';
+      SerialReadString(';');
+      if (serial_buffer[0] != '\0'){
         EEPROMWriteAlpha(40, 10, serial_buffer);
       }
+      EEPROMReadAlpha(40, 10, serial_num);
       putstring("# Serial number: ");
       Serial.println(serial_num);
       break;
@@ -182,13 +183,14 @@ void SerialReadString(char endString){
   int charCount = 0;
   unsigned long serial_time = millis();
   while(charCount <= 20){
-    if (millis() - serial_time > 300) break;
+    //if (millis() - serial_time > 300) break;
     incomingByte = Serial.read();
     if (incomingByte == '\n' || incomingByte == endString) break;
     if (incomingByte == -1) continue;
     serial_buffer[charCount] = incomingByte;
     incomingByte++;
-    serial_buffer[charCount] = '\0';
+    serial_buffer[charCount+1] = '\0';
+    charCount += 1;
   }
 }
     
