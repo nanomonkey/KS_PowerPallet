@@ -38,16 +38,12 @@ EEPROM bytes used of 4k space:
 //PROGMEM string buffer
 char p_buffer[21];
 #define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
-//#define putstring(x) SerialPrint_P(PSTR(x))
-//#define Disp_PutStr_P(str) (strcpy_P(buf, (char*)pgm_read_word(str))); 
-
-//const char HELP[] PROGMEM = "#p: add 0.02 to p\n#P: subtract 0.02 from p\n#i: add 0.02 to i\n#I: subtract 0.02 from i\n#d & D: reserved for d in PID (not implemented)\n#c: Calibrate Pressure Sensors\n#s: add 10 to Servo1 calibration\n#S: subtract 10  degrees from Servo1 position\n#l: add 0.01 to lambda_setpoint\n#L: subtract 0.01 from lambda_setpoint\n#t: subtract 100 ms from Sample Period (loopPeriod1)\n#T: add 100 ms from Sample Period (loopPeriod1)\n#g: Shake grate\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\n#m: add 5ms to grate shake interval\n#M: subtract 5 ms from grate shake interval\n#e: Engine Governor Tuning mode\n# h: Print Help Text";
-
 #define putstring(x) SerialPrint_P(PSTR(x))
 //void SerialPrint_P(PGM_P str) {
 //  for (uint8_t c; (c = pgm_read_byte(str)); str++) Serial.write(c);
-//}
-//putstring("This is a nice long string that takes no memory");
+//} 
+
+//const char HELP[] PROGMEM = "#p: add 0.02 to p\n#P: subtract 0.02 from p\n#i: add 0.02 to i\n#I: subtract 0.02 from i\n#d & D: reserved for d in PID (not implemented)\n#c: Calibrate Pressure Sensors\n#s: add 10 to Servo1 calibration\n#S: subtract 10  degrees from Servo1 position\n#l: add 0.01 to lambda_setpoint\n#L: subtract 0.01 from lambda_setpoint\n#t: subtract 100 ms from Sample Period (loopPeriod1)\n#T: add 100 ms from Sample Period (loopPeriod1)\n#g: Shake grate\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\n#m: add 5ms to grate shake interval\n#M: subtract 5 ms from grate shake interval\n#e: Engine Governor Tuning mode\n# h: Print Help Text";
 
 // Analog Input Mapping
 #define ANA_LAMBDA ANA0
@@ -73,7 +69,6 @@ int smoothed_filters[8] = {0, 0, 0, 8, 0, 0, 0, 0};  //filter values for each an
 #define FET_ALARM FET6
 #define FET_AUGER_REV FET7
 #define FET_BLOWER ABSENT
-
 
 //Servo Mapping
 //TODO: Use these define
@@ -141,7 +136,6 @@ Servo Servo_Throttle;
 #define ENGINE_GOV_TUNING 3
 #define ENGINE_SHUTDOWN 4
 
-
 //Lambda
 #define LAMBDA_SIGNAL_CHECK TRUE
 
@@ -178,6 +172,7 @@ Servo Servo_Throttle;
 #define DISPLAY_SD 10
 
 const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
+const prog_char blank[] PROGMEM = "                    ";
 
 //Testing States
 #define TESTING_OFF 0
@@ -573,7 +568,7 @@ void setup() {
   //LoadLambda(); - must save lambda data first?
  
   Serial.begin(115200);
-  //EEPROMReadAlpha(40, 10, serial_num);
+  EEPROMReadAlpha(40, 10, serial_num);
  //Library initializations                    
   Disp_Init();
   Kpd_Init();
@@ -591,7 +586,7 @@ void setup() {
   ADC_Reset();
   Temp_Reset();
   Press_Reset();
-  //unique_number = uniqueNumber();
+  unique_number = uniqueNumber();
   Fet_Reset();
   //Servo_Reset();
   Timer_Reset();

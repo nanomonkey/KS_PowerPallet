@@ -140,7 +140,7 @@ void DoSerialIn() {
       Serial.println(loopPeriod2);
       break;
     case '#':
-      if (serial_num[0] == '/0') {
+      if (serial_num[0] == '\0') {
         putstring("# No serial saved, set line ending to 'Newline' and enter one now: \n");
         SerialReadString(';');
         EEPROMWriteAlpha(40, 10, serial_buffer);

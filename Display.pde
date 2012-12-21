@@ -21,10 +21,10 @@ void DoDisplay() {
     sprintf(buf, "       %s        ", CODE_VERSION);
     Disp_PutStr(buf);
     //Row 3
-//    Disp_RC(3,0);
-//    sprintf(buf, "       %s%i        ", serial_num, unique_number);
-//    Disp_PutStr(buf);
-//    Disp_CursOff();
+    Disp_RC(3,0);
+    sprintf(buf, "      %s  %i       ", serial_num, unique_number);
+    Disp_PutStr(buf);
+    Disp_CursOff();
     //Transition out after delay
     if (millis()-display_state_entered>2000) {
       TransitionDisplay(DISPLAY_REACTOR);
@@ -183,16 +183,19 @@ void DoDisplay() {
 #endif
     Disp_PutStr(buf);
     Disp_RC(0,11); 
-    Disp_PutStr("           ");
+    Disp_PutStr(P("           "));
     //Row 1
     Disp_RC(1,0); 
-    Disp_PutStr("                    ");
+    strcpy_P(buf, blank);
+    Disp_PutStr(buf);
     //Row 2
     Disp_RC(2,0); 
-    Disp_PutStr("                    ");
+    strcpy_P(buf, blank);
+    Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
-    Disp_PutStr("                    ");
+    strcpy_P(buf, blank);
+    Disp_PutStr(buf);
     Disp_CursOff();
     break;
   case DISPLAY_TESTING:

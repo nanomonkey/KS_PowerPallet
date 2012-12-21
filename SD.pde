@@ -208,8 +208,8 @@ unsigned int EEPROMReadInt(int p_address){
 void EEPROMReadAlpha(int address, int length, char* buffer){
   int i=0;
   while (i < length){
-    buffer[i] = int(EEPROM.read(address+i));
-    buffer[i+1] = '/0';
+    buffer[i] = EEPROM.read(address+i);
+    buffer[i+1] = '\0';
   }
   //return i;
 }
@@ -235,7 +235,7 @@ void EEPROMWriteAlpha(int address, int length, char* buffer){
 //  }
 
 int uniqueNumber(){
-  if (EEPROMReadInt(35) != 0){
+  if (EEPROMReadInt(35) == 0){
     for (int y=0; y<=1; y++){
       byte uniqueByte;
       for (int x=0; x<8; x++){
