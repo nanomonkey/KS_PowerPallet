@@ -42,7 +42,8 @@ void DoDisplay() {
       Disp_RC(0, 0);
       if (shutdown[alarm_shown]> 0){
         sprintf(buf, "SHUTDOWN ALARM %2i/%2i", cur_item, alarm_count); 
-      } else {
+      } 
+      else {
         sprintf(buf, "      ALARM   %2i/%2i ", cur_item, alarm_count); 
       }
       Disp_PutStr(buf);
@@ -64,16 +65,19 @@ void DoDisplay() {
         Disp_RC(3, 15);
         Disp_PutStr(P("RESET"));
       }
-    } else {
+    } 
+    else {
       //Row 0
       Disp_RC(0, 0);
       if (millis()-transition_entered<2000) {
-      transition_message.toCharArray(buf,21);
-      Disp_PutStr(buf);
-      } else {
+        transition_message.toCharArray(buf,21);
+        Disp_PutStr(buf);
+      } 
+      else {
         if (disp_alt) {
           sprintf(buf, "Ttred%4i  ", Temp_Data[T_TRED]);
-        } else {
+        } 
+        else {
           sprintf(buf, "Ttred%s", T_tredLevel[TempLevelName]);
         }
         Disp_PutStr(buf);
@@ -100,7 +104,8 @@ void DoDisplay() {
         //the value only means anything if the pressures are high enough, otherwise it is just noise
         sprintf(buf, "Pratio%3i  ", int(pRatioReactor*100)); //pressure ratio
         Disp_PutStr(buf);
-      } else {
+      } 
+      else {
         Disp_PutStr(P("Pratio --  "));
       }
       Disp_RC(2, 11);
@@ -126,7 +131,8 @@ void DoDisplay() {
       case AUGER_OFF:
         if (P_reactorLevel == OFF) {
           sprintf(buf, "AugOff%s  ", " --"); 
-        } else {
+        } 
+        else {
           sprintf(buf, "AugOff%3i  ", (millis() - auger_state_entered)/1000);  
         }  
         break;
@@ -151,7 +157,8 @@ void DoDisplay() {
       }
       Disp_PutStr(buf);
       Disp_RC(3, 11);
-      sprintf(buf, "   %6i", millis()/1000);
+      strcpy_P(buf, half_blank);
+      //sprintf(buf, "   %6i", millis()/1000);
       //if (disp_alt) {
       //  sprintf(buf, "Hz   %4i", int(CalculatePeriodHertz()));
       //} else {
@@ -165,7 +172,7 @@ void DoDisplay() {
         alarm = false;
       }
       if (millis() - alarm_on[alarm_shown] > 4000){ //wait until RESET button shows up, a wait of 4 seconds is given so that 
-       if (key == 3) {
+        if (key == 3) {
           removeAlarm(alarm_shown);
           resetAlarm(alarm_shown);
           cur_item = 1; //start at beginning of alarm queue
@@ -223,8 +230,8 @@ void DoDisplay() {
     case TESTING_ANA_OIL_PRESSURE:
       sprintf(buf, "Value: %4i         ", int(analogRead(ANA_OIL_PRESSURE)));
       break;
-    case TESTING_GOV_TUNING:
-      break;
+      //    case TESTING_GOV_TUNING:
+      //      break;
     default:
       sprintf(buf,"                   ");
     }
@@ -416,7 +423,7 @@ void DoDisplay() {
         grate_motor_state = GRATE_MOTOR_OFF;
       }
       if (key == 3) {
-      grate_val = GRATE_SHAKE_CROSS;
+        grate_val = GRATE_SHAKE_CROSS;
       }
       Disp_RC(3,0);
       Disp_PutStr(P("NEXT  ADV  OFF   ON "));
@@ -424,6 +431,20 @@ void DoDisplay() {
       Disp_CursOn();
       break; 
     }
+    break;
+  case DISPLAY_INFO:
+    Disp_CursOff();
+    Disp_RC(0,0);
+    sprintf(buf, "PP%s PCU%i", serial_num, unique_number);
+    Disp_PutStr(buf);
+    Disp_RC(1,0);
+    sprintf(buf, "       Time:%8i", millis()/1000);
+    Disp_PutStr(buf);
+    Disp_RC(2,0);
+    sprintf(buf, "    %s   ", sd_data_file_name);
+    Disp_PutStr(buf);
+    Disp_RC(3,0);
+    Disp_PutStr(P("NEXT                "));
     break;
   case DISPLAY_SERVO:   //need to add constraints for min and max?
     item_count = 2;
@@ -492,30 +513,30 @@ void DoDisplay() {
       Disp_PutStr(P("   CALIBRATED!      "));
     }
     break;
-//  case DISPLAY_RELAY:
-//    Disp_CursOff();
-//    item_count = 8;
-//    testing_state = TESTING_SERVO;
-//    Disp_RC(0,0);
-//    sprintf(buf, "Test Relay: %1i       ", cur_item);
-//    Disp_PutStr(buf);
-//    Disp_RC(1,0);
-//    Disp_PutStr("                    ");
-//    Disp_RC(2,0);
-//    Disp_PutStr("                    ");
-//    Disp_RC(3,0);
-//    Disp_PutStr("NEXT  ADV   ON   OFF");
-//    if (key == 2) {
-//      relayOn(cur_item);
-//      Disp_RC(1,0);
-//      Disp_PutStr("           ON       ");
-//    }
-//    if (key == 3) {
-//      relayOff(cur_item);
-//      Disp_RC(1,0);
-//    Disp_PutStr("           OFF        ");
-//    }
-//    break;
+    //  case DISPLAY_RELAY:
+    //    Disp_CursOff();
+    //    item_count = 8;
+    //    testing_state = TESTING_SERVO;
+    //    Disp_RC(0,0);
+    //    sprintf(buf, "Test Relay: %1i       ", cur_item);
+    //    Disp_PutStr(buf);
+    //    Disp_RC(1,0);
+    //    Disp_PutStr("                    ");
+    //    Disp_RC(2,0);
+    //    Disp_PutStr("                    ");
+    //    Disp_RC(3,0);
+    //    Disp_PutStr("NEXT  ADV   ON   OFF");
+    //    if (key == 2) {
+    //      relayOn(cur_item);
+    //      Disp_RC(1,0);
+    //      Disp_PutStr("           ON       ");
+    //    }
+    //    if (key == 3) {
+    //      relayOff(cur_item);
+    //      Disp_RC(1,0);
+    //    Disp_PutStr("           OFF        ");
+    //    }
+    //    break;
   case DISPLAY_CONFIG:
     Disp_CursOff();
     item_count = CONFIG_COUNT - 1; //sizeof(defaults)/sizeof(int);
@@ -533,15 +554,18 @@ void DoDisplay() {
     Disp_RC(1,0);
     if (Config_Choices[cur_item] == "+    -  "){
       sprintf(buf, "%s:%3i", Configuration[cur_item], config_var);
-    } else if (Config_Choices[cur_item] == "+5  -5  "){
+    } 
+    else if (Config_Choices[cur_item] == "+5  -5  "){
       sprintf(buf, "%s:%3i", Configuration[cur_item], 5*config_var);
-    } else {
+    } 
+    else {
       if (config_var == 0){
-      choice[0] = Config_Choices[cur_item][0];
-      choice[1] = Config_Choices[cur_item][1];
-      choice[2] = Config_Choices[cur_item][2];
-      choice[3] = Config_Choices[cur_item][3];
-      } else {
+        choice[0] = Config_Choices[cur_item][0];
+        choice[1] = Config_Choices[cur_item][1];
+        choice[2] = Config_Choices[cur_item][2];
+        choice[3] = Config_Choices[cur_item][3];
+      } 
+      else {
         choice[0] = Config_Choices[cur_item][4];
         choice[1] = Config_Choices[cur_item][5];
         choice[2] = Config_Choices[cur_item][6];
@@ -568,7 +592,8 @@ void DoDisplay() {
           config_changed = true;
         }
       }
-    } else if (Config_Choices[cur_item] == "+5  -5  "){
+    } 
+    else if (Config_Choices[cur_item] == "+5  -5  "){
       if (key == 2) {
         if (config_max[cur_item] >= config_var + 1){
           config_var += 1;
@@ -581,7 +606,8 @@ void DoDisplay() {
           config_changed = true;
         }
       }
-    } else {
+    } 
+    else {
       if (key == 2) {  
         config_var = 0;
         config_changed = true;
@@ -592,47 +618,47 @@ void DoDisplay() {
       }
     }
     break;
-//  case DISPLAY_SD:
-//    Disp_CursOff();
-//    Disp_RC(0,0);
-//    Disp_PutStr("   Test SD Card     ");
-//    Disp_RC(1,0);
-//    Disp_PutStr("See Serial Monitor  ");
-//    Disp_RC(2,0);
-//    Disp_PutStr("for more information");
-//    Disp_RC(3,0);
-//    Disp_PutStr("NEXT            TEST");
-//    if (key == 3 and cur_item == 1) {  //only allow the button to be pressed once
-//      testSD();
-//      cur_item++;  
-//    }
-//    break;
-//  case DISPLAY_PHIDGET:
-//      Disp_CursOff();
-////    Disp_RC(0,0);
-////    sprintf(buf, "O2%4i Fu%4iKey%4i", analogRead(ANA0),analogRead(ANA1),analogRead(ANA2));
-////    Disp_PutStr(buf);
-////    Disp_RC(1,0);
-////    sprintf(buf, "Oil%4iAug%4iTh%4i", analogRead(ANA3),analogRead(ANA4),analogRead(ANA5));
-////    Disp_PutStr(buf);
-////    Disp_RC(2,0);
-////    sprintf(buf, "CoolT%4i Aux%4i   ", analogRead(ANA6),analogRead(ANA7));
-////    Disp_PutStr(buf);  
-////    Disp_RC(3,0);
-////    Disp_PutStr("NEXT                ");
-//    Disp_RC(0,0);
-//    sprintf(buf, "Phidgits:     0:%4i", analogRead(ANA0));
-//    Disp_PutStr(buf);
-//    Disp_RC(1,0);
-//    sprintf(buf, "1:%4i 2:%4i 3:%4i", analogRead(ANA1),analogRead(ANA2),analogRead(ANA3));
-//    Disp_PutStr(buf);
-//    Disp_RC(2,0);
-//    sprintf(buf, "4:%4i 5:%4i 6:%4i", analogRead(ANA4),analogRead(ANA5),analogRead(ANA6));
-//    Disp_PutStr(buf);  
-//    Disp_RC(3,0);
-//    sprintf(buf, "NEXT          7:%4i", analogRead(ANA7));
-//    Disp_PutStr(buf);
-//    break;
+    //  case DISPLAY_SD:
+    //    Disp_CursOff();
+    //    Disp_RC(0,0);
+    //    Disp_PutStr("   Test SD Card     ");
+    //    Disp_RC(1,0);
+    //    Disp_PutStr("See Serial Monitor  ");
+    //    Disp_RC(2,0);
+    //    Disp_PutStr("for more information");
+    //    Disp_RC(3,0);
+    //    Disp_PutStr("NEXT            TEST");
+    //    if (key == 3 and cur_item == 1) {  //only allow the button to be pressed once
+    //      testSD();
+    //      cur_item++;  
+    //    }
+    //    break;
+    //  case DISPLAY_PHIDGET:
+    //      Disp_CursOff();
+    ////    Disp_RC(0,0);
+    ////    sprintf(buf, "O2%4i Fu%4iKey%4i", analogRead(ANA0),analogRead(ANA1),analogRead(ANA2));
+    ////    Disp_PutStr(buf);
+    ////    Disp_RC(1,0);
+    ////    sprintf(buf, "Oil%4iAug%4iTh%4i", analogRead(ANA3),analogRead(ANA4),analogRead(ANA5));
+    ////    Disp_PutStr(buf);
+    ////    Disp_RC(2,0);
+    ////    sprintf(buf, "CoolT%4i Aux%4i   ", analogRead(ANA6),analogRead(ANA7));
+    ////    Disp_PutStr(buf);  
+    ////    Disp_RC(3,0);
+    ////    Disp_PutStr("NEXT                ");
+    //    Disp_RC(0,0);
+    //    sprintf(buf, "Phidgits:     0:%4i", analogRead(ANA0));
+    //    Disp_PutStr(buf);
+    //    Disp_RC(1,0);
+    //    sprintf(buf, "1:%4i 2:%4i 3:%4i", analogRead(ANA1),analogRead(ANA2),analogRead(ANA3));
+    //    Disp_PutStr(buf);
+    //    Disp_RC(2,0);
+    //    sprintf(buf, "4:%4i 5:%4i 6:%4i", analogRead(ANA4),analogRead(ANA5),analogRead(ANA6));
+    //    Disp_PutStr(buf);  
+    //    Disp_RC(3,0);
+    //    sprintf(buf, "NEXT          7:%4i", analogRead(ANA7));
+    //    Disp_PutStr(buf);
+    //    break;
     //    case DISPLAY_TEMP2:
     //      break;
     //    case DISPLAY_FETS:
@@ -661,21 +687,23 @@ void TransitionDisplay(int new_state) {
   case DISPLAY_TESTING:
     cur_item = 1;
     break;
+  case DISPLAY_INFO:
+    break;
   case DISPLAY_SERVO:
     cur_item = 1;
     break;
   case DISPLAY_CALIBRATE_PRESSURE:
     cur_item = 1;
     break;
-//  case DISPLAY_RELAY:
-//    cur_item = 1;
-//    break; 
+    //  case DISPLAY_RELAY:
+    //    cur_item = 1;
+    //    break; 
   case DISPLAY_CONFIG: 
     cur_item = 0;
     config_changed = false;
     break;
-//  case DISPLAY_PHIDGET: 
-//    break;
+    //  case DISPLAY_PHIDGET: 
+    //    break;
   case DISPLAY_SD:
     cur_item = 1;
     break;
@@ -704,6 +732,9 @@ void DoKeyInput() {
       TransitionDisplay(DISPLAY_GRATE);
       break;
     case DISPLAY_GRATE:
+      TransitionDisplay(DISPLAY_INFO);
+      break;
+    case DISPLAY_INFO:
       if (engine_state == ENGINE_OFF) {
         TransitionDisplay(DISPLAY_TESTING);
       } 
@@ -714,9 +745,10 @@ void DoKeyInput() {
     case DISPLAY_TESTING:
       if (engine_state == ENGINE_OFF){
         TransitionDisplay(DISPLAY_SERVO);
-      } else {
-      TransitionDisplay(DISPLAY_REACTOR);
-      TransitionTesting(TESTING_OFF);
+      } 
+      else {
+        TransitionDisplay(DISPLAY_REACTOR);
+        TransitionTesting(TESTING_OFF);
       }
       break;
     case DISPLAY_SERVO:
@@ -725,19 +757,19 @@ void DoKeyInput() {
       TransitionTesting(TESTING_OFF);
       break;
     case DISPLAY_CALIBRATE_PRESSURE:                 //assume that engine state is off
-//      TransitionDisplay(DISPLAY_RELAY);
-//      break;
-//    case DISPLAY_RELAY:
+      //      TransitionDisplay(DISPLAY_RELAY);
+      //      break;
+      //    case DISPLAY_RELAY:
       TransitionDisplay(DISPLAY_CONFIG);
       TransitionTesting(TESTING_OFF);
       break;
     case DISPLAY_CONFIG:
-//      TransitionDisplay(DISPLAY_PHIDGET);
-//      break;
-//    case DISPLAY_PHIDGET:
-//      TransitionDisplay(DISPLAY_SD);
-//      break;
-//    case DISPLAY_SD:
+      //      TransitionDisplay(DISPLAY_PHIDGET);
+      //      break;
+      //    case DISPLAY_PHIDGET:
+      //      TransitionDisplay(DISPLAY_SD);
+      //      break;
+      //    case DISPLAY_SD:
       TransitionDisplay(DISPLAY_REACTOR);
       break;
     }
@@ -753,8 +785,9 @@ void DoKeyInput() {
     if (cur_item > item_count) {
       if (display_state == DISPLAY_CONFIG){
         cur_item = 0;
-      } else {
-      cur_item = 1;
+      } 
+      else {
+        cur_item = 1;
       }
     } 
     key = -1; //key caught
@@ -804,58 +837,58 @@ int getConfig(int item){
 
 void update_config_var(int var_num){
   switch (var_num) {
-    case 0:
-      putstring("# Updating Configurations to Defaults\n");
-      for (int i=1; i<CONFIG_COUNT; i++){
-        update_config_var(i);
-      }
-      break;
-    case 1:
-      engine_type = getConfig(1);
-      //Serial.println("Updating engine_type");
-      break;
-    case 2:
-      relay_board = getConfig(2);
-      //Serial.println("Updating relay_board");
-      break;
-    case 3:
-      aug_rev_time = getConfig(3)*100;
-      //Serial.println("Updating aug_rev_time");
-      break;
-    case 4:
-      current_low_boundary = getConfig(4); 
-      //{ { -140, 10}, {10, current_low_boundary}, {current_low_boundary+5, current_high_boundary-5}, {current_high_boundary, 750} }
-      AugerCurrentLevelBoundary[CURRENT_LOW][1] = current_low_boundary; 
-      AugerCurrentLevelBoundary[CURRENT_ON][0] = current_low_boundary+5;
-      //Serial.print("#Updating current_low_boundary: "); 
-      //Serial.println(current_low_boundary); 
-      break;
-    case 5:
-      current_high_boundary = getConfig(5);
-      AugerCurrentLevelBoundary[CURRENT_ON][1] = current_high_boundary - 5; 
-      AugerCurrentLevelBoundary[CURRENT_HIGH][0] = current_high_boundary;
-      //Serial.print("# Updating current_high_boundary: ");
-      //Serial.println(current_high_boundary);
-      break;
-    case 6:
-      low_oil_psi = getConfig(6);
-      break;
-    case 7:
-      save_datalog_to_sd = getConfig(7);
-      break;
-    case 8:
-      pratio_max = getConfig(8)*5;
-      break;
-    case 9:
-      high_coolant_temp = getConfig(9)*5;
-      break;
-    case 10:
-      display_per = getConfig(10)*5;
-      loopPeriod2 = display_per;
-      break;
-    case 11:
-      tred_low_temp = getConfig(11)*5;
-      break;
+  case 0:
+    putstring("# Updating Configurations to Defaults\n");
+    for (int i=1; i<CONFIG_COUNT; i++){
+      update_config_var(i);
+    }
+    break;
+  case 1:
+    engine_type = getConfig(1);
+    //Serial.println("Updating engine_type");
+    break;
+  case 2:
+    relay_board = getConfig(2);
+    //Serial.println("Updating relay_board");
+    break;
+  case 3:
+    aug_rev_time = getConfig(3)*100;
+    //Serial.println("Updating aug_rev_time");
+    break;
+  case 4:
+    current_low_boundary = getConfig(4); 
+    //{ { -140, 10}, {10, current_low_boundary}, {current_low_boundary+5, current_high_boundary-5}, {current_high_boundary, 750} }
+    AugerCurrentLevelBoundary[CURRENT_LOW][1] = current_low_boundary; 
+    AugerCurrentLevelBoundary[CURRENT_ON][0] = current_low_boundary+5;
+    //Serial.print("#Updating current_low_boundary: "); 
+    //Serial.println(current_low_boundary); 
+    break;
+  case 5:
+    current_high_boundary = getConfig(5);
+    AugerCurrentLevelBoundary[CURRENT_ON][1] = current_high_boundary - 5; 
+    AugerCurrentLevelBoundary[CURRENT_HIGH][0] = current_high_boundary;
+    //Serial.print("# Updating current_high_boundary: ");
+    //Serial.println(current_high_boundary);
+    break;
+  case 6:
+    low_oil_psi = getConfig(6);
+    break;
+  case 7:
+    save_datalog_to_sd = getConfig(7);
+    break;
+  case 8:
+    pratio_max = getConfig(8)*5;
+    break;
+  case 9:
+    high_coolant_temp = getConfig(9)*5;
+    break;
+  case 10:
+    display_per = getConfig(10)*5;
+    loopPeriod2 = display_per;
+    break;
+  case 11:
+    tred_low_temp = getConfig(11)*5;
+    break;
   }
 }
 
@@ -865,4 +898,5 @@ void resetConfig() {  //sets EEPROM configs back to untouched state...
     EEPROM.write(499+i, defaults[i]);
   }
 }
+
 

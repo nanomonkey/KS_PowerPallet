@@ -165,14 +165,16 @@ Servo Servo_Throttle;
 #define DISPLAY_TEST 3
 #define DISPLAY_LAMBDA 4
 #define DISPLAY_GRATE 5
-#define DISPLAY_TESTING 6
-#define DISPLAY_SERVO 7
-#define DISPLAY_CALIBRATE_PRESSURE 8
-#define DISPLAY_CONFIG 9
-#define DISPLAY_SD 10
+#define DISPLAY_INFO 6
+#define DISPLAY_TESTING 7
+#define DISPLAY_SERVO 8
+#define DISPLAY_CALIBRATE_PRESSURE 9
+#define DISPLAY_CONFIG 10
+#define DISPLAY_SD 11
 
 const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
 const prog_char blank[] PROGMEM = "                    ";
+const prog_char half_blank[] PROGMEM = "          ";
 
 //Testing States
 #define TESTING_OFF 0
@@ -534,7 +536,7 @@ SdVolume sd_volume;
 SdFile sd_root;
 SdFile sd_file;
 
-char sd_data_file_name[] = "datalog1.txt";     //Create an array that contains the name of our datalog file, updated upon 
+char sd_data_file_name[] = "No SD Card  ";  //Create an array that contains the name of our datalog file, updated upon reboot
 char sd_in_char=0;
 int sd_index=0;  
 
