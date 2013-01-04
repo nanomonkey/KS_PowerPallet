@@ -878,6 +878,7 @@ void update_config_var(int var_num){
     break;
   case 8:
     pratio_max = getConfig(8)*5;
+    alarm_start[ALARM_BAD_REACTOR] = pratio_max;
     break;
   case 9:
     high_coolant_temp = getConfig(9)*5;
@@ -888,6 +889,10 @@ void update_config_var(int var_num){
     break;
   case 11:
     tred_low_temp = getConfig(11)*5;
+    break;
+  case 12:
+    pfilter_alarm = getConfig(12);
+    alarm_start[ALARM_BAD_FILTER] = pfilter_alarm;
     break;
   }
 }

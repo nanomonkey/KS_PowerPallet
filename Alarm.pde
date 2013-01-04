@@ -53,12 +53,12 @@ void DoAlarm() {
   else {
     removeAlarm(ALARM_BAD_REACTOR);
   }
-//  if (P_reactorLevel != OFF && filter_pratio_accumulator > alarm_start[ALARM_BAD_FILTER]) {
-//    setAlarm(ALARM_BAD_FILTER);
-//  } 
-//  else {
-//    removeAlarm(ALARM_BAD_FILTER);
-//  }
+  if (P_reactorLevel != OFF && filter_pratio_accumulator > alarm_start[ALARM_BAD_FILTER]) {
+    setAlarm(ALARM_BAD_FILTER);
+  } 
+  else {
+    removeAlarm(ALARM_BAD_FILTER);
+  }
 #if T_LOW_FUEL != ABSENT
   if (P_reactorLevel != OFF && Temp_Data[T_LOW_FUEL] > alarm_start[ALARM_LOW_FUEL_REACTOR]) {
     setAlarm(ALARM_LOW_FUEL_REACTOR);
