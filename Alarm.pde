@@ -84,7 +84,7 @@ void DoAlarm() {
   }  else {
     removeAlarm(ALARM_HIGH_COOLANT_TEMP);
   }
-  if (engine_state = ENGINE_ON && Temp_Data[T_TRED] < tred_low_temp){
+  if (engine_state == ENGINE_ON && Temp_Data[T_TRED] < tred_low_temp){
     setAlarm(ALARM_TRED_LOW);
   }  else {
     removeAlarm(ALARM_TRED_LOW);
