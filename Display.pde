@@ -156,7 +156,7 @@ void DoDisplay() {
         break;
       }
       Disp_PutStr(buf);
-      Disp_RC(3, 11);
+      Disp_RC(3, 10);
       strcpy_P(buf, half_blank);
       //sprintf(buf, "   %6i", millis()/1000);
       //if (disp_alt) {
