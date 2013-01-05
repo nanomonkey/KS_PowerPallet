@@ -184,5 +184,8 @@ void resetAlarm(int alarm_num){
     break;
   case ALARM_HIGH_COOLANT_TEMP:
     break;
+  case ALARM_TRED_LOW:
+    break;
   }
 }
+
