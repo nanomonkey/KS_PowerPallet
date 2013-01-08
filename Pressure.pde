@@ -8,7 +8,7 @@ void CalibratePressureSensors() {
   int P_sum[6] = {0,0,0,0};
   int P_ave;
   byte lowbyte,highbyte;
-  putstring("#Calibrating Pressure Sensors\n");
+  putstring("#Calibrating Pressure Sensors\r\n");
   for (int i=0; i<10; i++) {
     Press_ReadAll();
     for (int j=0; j<6; j++) {
@@ -29,7 +29,7 @@ void CalibratePressureSensors() {
 void LoadPressureSensorCalibration() {
   int calib;
   byte lowbyte,highbyte;
-  putstring("#Loading Pressure Sensor Calibrations:\n");
+  putstring("#Loading Pressure Sensor Calibrations:\r\n");
   for (int i=0; i<6; i++) {
     byte lowByte = EEPROM.read(i*2);
     byte highByte = EEPROM.read(i*2 + 1);

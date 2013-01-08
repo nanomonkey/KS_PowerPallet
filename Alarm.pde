@@ -149,7 +149,7 @@ void setAlarmQueue(){
 }
 
 void resetAlarm(int alarm_num){
-  putstring("# Alarm Reset by User\n");
+  putstring("# Alarm Reset by User\r\n");
   switch (alarm_num) {  //reset faults that kicked off alarm state.  Seperate function only for user intervention??
   case ALARM_AUGER_ON_LONG:
     TransitionAuger(AUGER_OFF);

@@ -886,7 +886,7 @@ int getConfig(int item){
 void update_config_var(int var_num){
   switch (var_num) {
   case 0:
-    putstring("# Updating Configurations to Defaults\n");
+    putstring("# Updating Configurations to Defaults\r\n");
     for (int i=1; i<CONFIG_COUNT; i++){
       update_config_var(i);
     }

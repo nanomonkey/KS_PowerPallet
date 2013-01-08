@@ -246,7 +246,7 @@ void WriteLambda(double setpoint) {
   EEPROM.write(13, val);
   EEPROM.write(14, p);
   EEPROM.write(15, i);
-  putstring("#Writing lambda settings to EEPROM\n");
+  putstring("#Writing lambda settings to EEPROM\r\n");
 }
 
 void LoadLambda() {
@@ -257,13 +257,13 @@ void LoadLambda() {
   p = EEPROM.read(14)*0.01;
   i = EEPROM.read(15)*0.1;
   if (check == 128 && val >= 0.5 && val <= 1.5) { //check to see if lambda has been set
-    putstring("#Loading lambda from EEPROM\n");
+    putstring("#Loading lambda from EEPROM\r\n");
     lambda_setpoint = val;
     lambda_PID.SetTunings(p,i,0);
     lambda_P[0] = p;
     lambda_I[0] = i;
   } else {
-    putstring("#Saving default lambda setpoint to EEPROM\n");
+    putstring("#Saving default lambda setpoint to EEPROM\r\n");
     val = lambda_setpoint_mode[0];
     WriteLambda(val);
   }

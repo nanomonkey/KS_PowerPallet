@@ -7,7 +7,7 @@ void DoEngine() {
       break;
     case ENGINE_ON:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
-        putstring("# Key switch turned off, Engine Shutdown.\n"); 
+        putstring("# Key switch turned off, Engine Shutdown.\r\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (control_state == CONTROL_START) {
@@ -25,23 +25,23 @@ void DoEngine() {
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (Press[P_COMB] > 7472) {  
-        putstring("# Reactor Pressure too high (above 30 inch water), Engine Shutdown\n");
+        putstring("# Reactor Pressure too high (above 30 inch water), Engine Shutdown\r\n");
         setAlarm(ALARM_HIGH_PCOMB);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (alarm_on[ALARM_HIGH_COOLANT_TEMP] > shutdown[ALARM_HIGH_COOLANT_TEMP]){
-        putstring("# Engine coolant temp too high, Engine shutdown\n"); 
+        putstring("# Engine coolant temp too high, Engine shutdown\r\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       break;
       if (alarm_on[ALARM_TRED_LOW] > shutdown[ALARM_TRED_LOW]){
-        putstring("# Reduction zone temp too low, Engine shutdown\n"); 
+        putstring("# Reduction zone temp too low, Engine shutdown\r\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       break;
     case ENGINE_STARTING:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
-        putstring("# Key switch turned off, Engine Shutdown.\n"); 
+        putstring("# Key switch turned off, Engine Shutdown.\r\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (control_state == CONTROL_ON) { // Use starter button in the standard manual control configuration (push button to start, release to stop cranking)
@@ -68,25 +68,25 @@ void TransitionEngine(int new_state) {
     case ENGINE_OFF:
       digitalWrite(FET_IGNITION,LOW);
       digitalWrite(FET_STARTER,LOW);
-      putstring("# New Engine State: Off\n"); 
+      putstring("# New Engine State: Off\r\n"); 
       //TransitionMessage("Engine: Off         ");
       break;
     case ENGINE_ON:
       digitalWrite(FET_IGNITION,HIGH);
       digitalWrite(FET_STARTER,LOW);
-      putstring("# New Engine State: On\n"); 
+      putstring("# New Engine State: On\r\n"); 
       //TransitionMessage("Engine: Running    ");
       break;
     case ENGINE_STARTING:
       digitalWrite(FET_IGNITION,HIGH);
       digitalWrite(FET_STARTER,HIGH);
-      putstring("# New Engine State: Starting\n"); 
+      putstring("# New Engine State: Starting\r\n"); 
       //TransitionMessage("Engine: Starting    ");
       break;
     case ENGINE_GOV_TUNING:
       digitalWrite(FET_IGNITION,HIGH);
       digitalWrite(FET_STARTER,LOW);
-      putstring("# New Engine State: Governor Tuning\n"); 
+      putstring("# New Engine State: Governor Tuning\r\n"); 
       //TransitionMessage("Engine: Gov Tuning  ");
       break;
     case ENGINE_SHUTDOWN:
@@ -94,7 +94,7 @@ void TransitionEngine(int new_state) {
 //      SetThrottleAngle(smoothedLambda);
 //      digitalWrite(FET_IGNITION,LOW);
 //      digitalWrite(FET_STARTER,LOW);
-      putstring("# New Engine State: SHUTDOWN\n"); 
+      putstring("# New Engine State: SHUTDOWN\r\n"); 
       //TransitionMessage("Engine: Shutting down");   
       break;
   }

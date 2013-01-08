@@ -5,10 +5,10 @@ boolean InitSD() {
   pinMode(SCK_PIN, OUTPUT); 
   putstring("#Initializing SD card...");
   if(!SD.begin(SS_PIN)){
-    putstring("initialization failed. \n");
+    putstring("initialization failed. \r\n");
       sd_loaded = false;
   } else {
-      putstring("card initialized.\n");
+      putstring("card initialized.\r\n");
       sd_loaded = true;
       int data_log_num = EEPROMReadInt(30); //reads from EEPROM bytes 30 and 31
       if (data_log_num == 32767){  //TODO: unsigned??  --> 65,535
