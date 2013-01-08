@@ -123,6 +123,11 @@ void DoAuger() {
       }
     }  
     break;
+  case AUGER_MANUAL_FORWARD:
+    if (AugerCurrentLevel == CURRENT_HIGH  && millis() - auger_state_entered > 500){
+      TransitionAuger(AUGER_HIGH);
+    }
+    break;
   }
 }
 

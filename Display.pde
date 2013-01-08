@@ -432,6 +432,51 @@ void DoDisplay() {
       break; 
     }
     break;
+  case DISPLAY_MANUAL:
+    Disp_RC(0,0);
+    Disp_PutStr(P("   Manual Control   ")); 
+    Disp_RC(1,0);
+    Disp_PutStr(P("Auger:              "));
+    Disp_RC(1,11);
+    if (auger_state == AUGER_ALARM){
+      Disp_PutStr(P("OFF"));
+//    } else if (auger_state == AUGER_MANUAL){
+//      Disp_PutStr(P("ON"));
+    } else {
+      Disp_PutStr(P("AUTO"));
+    }
+    Disp_RC(2,0);
+    Disp_PutStr(P("Grate:              "));
+    Disp_RC(2,11);
+    if (grate_motor_state == GRATE_MOTOR_OFF){
+      Disp_PutStr(P("OFF"));
+    } else if (grate_motor_state == GRATE_MOTOR_LOW){
+      Disp_PutStr(P("ON"));
+    } else {
+      Disp_PutStr(P("AUTO"));
+    }
+    Disp_RC(3,0);
+    Disp_PutStr(P("Next     Aug   Grate")); 
+    if (key == 2) {
+      Disp_RC(1,11);
+      if (auger_state == AUGER_ALARM){
+        TransitionAuger(AUGER_OFF);
+//      } else if (auger_state == AUGER_OFF){
+//        TransitionAuger(AUGER_MANUAL);
+      } else {
+        TransitionAuger(AUGER_ALARM);
+      }
+    }
+    if (key == 3) {
+      if (grate_motor_state == GRATE_MOTOR_OFF){
+        grateMode = GRATE_SHAKE_PRATIO;
+      } else if (grate_motor_state == GRATE_SHAKE_PRATIO){
+        grateMode = GRATE_SHAKE_OFF;
+      } else {
+        grateMode = GRATE_SHAKE_ON;
+      }
+    }
+    break;
   case DISPLAY_INFO:
     Disp_CursOff();
     Disp_RC(0,0);
@@ -684,6 +729,8 @@ void TransitionDisplay(int new_state) {
   case DISPLAY_GRATE:
     cur_item = 1;
     break;
+  case DISPLAY_MANUAL:
+    break;
   case DISPLAY_TESTING:
     cur_item = 1;
     break;
@@ -733,6 +780,11 @@ void DoKeyInput() {
       break;
     case DISPLAY_GRATE:
       TransitionDisplay(DISPLAY_INFO);
+      break;
+    case DISPLAY_MANUAL:
+      if (grate_motor_state != GRATE_SHAKE_PRATIO){
+        grate_motor_state = GRATE_SHAKE_PRATIO;
+      }
       break;
     case DISPLAY_INFO:
       if (engine_state == ENGINE_OFF) {
@@ -893,6 +945,15 @@ void update_config_var(int var_num){
   case 12:
     pfilter_alarm = getConfig(12);
     alarm_start[ALARM_BAD_FILTER] = pfilter_alarm;
+    break;
+  case 13:
+    grate_max_interval = getConfig(13)*5;  //longest total interval in seconds
+    break;
+  case 14:
+    grate_min_interval = getConfig(14)*5;
+    break;
+  case 15:
+    grate_on_interval = getConfig(15); 
     break;
   }
 }
