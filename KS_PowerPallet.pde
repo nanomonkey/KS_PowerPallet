@@ -171,7 +171,6 @@ Servo Servo_Throttle;
 #define DISPLAY_CALIBRATE_PRESSURE 9
 #define DISPLAY_CONFIG 10
 #define DISPLAY_SD 11
-#define DISPLAY_MANUAL 12
 
 const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
 const prog_char blank[] PROGMEM = "                    ";

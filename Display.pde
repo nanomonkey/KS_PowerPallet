@@ -332,107 +332,107 @@ void DoDisplay() {
     }
     break;
   case DISPLAY_GRATE: 
-    int vmin,vmax;
-    item_count = 4;
-    Disp_RC(0,0);
-    sprintf(buf, "GraMin%3i  ", grate_min_interval);
-    Disp_PutStr(buf);
-    Disp_RC(0,11);
-    sprintf(buf, "GraMax%3i", grate_max_interval);
-    Disp_PutStr(buf);
-    //Row 1
-    Disp_RC(1,0);
-    sprintf(buf, "GraLen%3i  ", grate_on_interval);
-    Disp_PutStr(buf);
-    Disp_RC(1,11);
-    if (grate_motor_state == GRATE_MOTOR_OFF) {  
-      Disp_PutStr(P("Grate Off"));
-    } 
-    else {
-      Disp_PutStr(P("Grate  On"));
-    }
-    Disp_RC(2,0);
-    Disp_PutStr("                    ");
-    switch (cur_item) {
-    case 1: // Grate Min Interval
-      vmin = max(0,grate_on_interval);
-      vmax = grate_max_interval;
-      if (key == 2) {
+//    int vmin,vmax;
+//    item_count = 4;
+//    Disp_RC(0,0);
+//    sprintf(buf, "GraMin%3i  ", grate_min_interval);
+//    Disp_PutStr(buf);
+//    Disp_RC(0,11);
+//    sprintf(buf, "GraMax%3i", grate_max_interval);
+//    Disp_PutStr(buf);
+//    //Row 1
+//    Disp_RC(1,0);
+//    sprintf(buf, "GraLen%3i  ", grate_on_interval);
+//    Disp_PutStr(buf);
+//    Disp_RC(1,11);
+//    if (grate_motor_state == GRATE_MOTOR_OFF) {  
+//      Disp_PutStr(P("Grate Off"));
+//    } 
+//    else {
+//      Disp_PutStr(P("Grate  On"));
+//    }
+//    Disp_RC(2,0);
+//    Disp_PutStr("                    ");
+//    switch (cur_item) {
+//    case 1: // Grate Min Interval
+//      vmin = max(0,grate_on_interval);
+//      vmax = grate_max_interval;
+//      if (key == 2) {
+//
+//        grate_min_interval += 3;
+//        grate_min_interval = constrain(grate_min_interval,vmin,vmax);
+//        CalculateGrate();
+//        WriteGrate();
+//      }
+//      if (key == 3) {
+//        grate_min_interval -= 3;
+//        grate_min_interval = constrain(grate_min_interval,vmin,vmax);
+//        CalculateGrate();
+//        WriteGrate();
+//      }
+//      Disp_RC(3,0);
+//      strcpy_P(buf, menu1);
+//      Disp_PutStr(buf);
+//      Disp_RC(0,0);
+//      Disp_CursOn();
+//      break;
+//    case 2: //Grate Interval
+//      vmin = max(grate_on_interval,grate_min_interval);
+//      vmax = 255*3;
+//      if (key == 2) {
+//        grate_max_interval += 3;
+//        grate_max_interval = constrain(grate_max_interval,vmin,vmax);
+//        CalculateGrate();
+//        WriteGrate();
+//      }
+//      if (key == 3) {
+//        grate_max_interval -= 3;
+//        grate_max_interval = constrain(grate_max_interval,vmin,vmax);
+//        CalculateGrate();
+//        WriteGrate();
+//      }
+//      Disp_RC(3,0);
+//      strcpy_P(buf, menu1);
+//      Disp_PutStr(buf);
+//      Disp_RC(0,11);
+//      Disp_CursOn();
+//      break;
+//    case 3: //Grate On Interval
+//      vmin = 0;
+//      vmax = min(grate_min_interval,255);
+//      if (key == 2) {
+//        grate_on_interval += 1;
+//        grate_on_interval = constrain(grate_on_interval,vmin,vmax);
+//        CalculateGrate();
+//        WriteGrate();
+//      }
+//      if (key == 3) {
+//        grate_on_interval -= 1;
+//        grate_on_interval = constrain(grate_on_interval,vmin,vmax);
+//        CalculateGrate();
+//        WriteGrate();
+//      }
+//      Disp_RC(3,0);
+//      strcpy_P(buf, menu1);
+//      Disp_PutStr(buf);
+//      Disp_RC(1,0);
+//      Disp_CursOn();
+//      break;
+//    case 4: //Grate
+//      if (key == 2) {
+//        grate_motor_state = GRATE_MOTOR_OFF;
+//      }
+//      if (key == 3) {
+//        grate_val = GRATE_SHAKE_CROSS;
+//      }
+//      Disp_RC(3,0);
+//      Disp_PutStr(P("NEXT  ADV  OFF   ON "));
+//      Disp_RC(1,11);
+//      Disp_CursOn();
+//      break; 
+//    }
+//    break;
 
-        grate_min_interval += 3;
-        grate_min_interval = constrain(grate_min_interval,vmin,vmax);
-        CalculateGrate();
-        WriteGrate();
-      }
-      if (key == 3) {
-        grate_min_interval -= 3;
-        grate_min_interval = constrain(grate_min_interval,vmin,vmax);
-        CalculateGrate();
-        WriteGrate();
-      }
-      Disp_RC(3,0);
-      strcpy_P(buf, menu1);
-      Disp_PutStr(buf);
-      Disp_RC(0,0);
-      Disp_CursOn();
-      break;
-    case 2: //Grate Interval
-      vmin = max(grate_on_interval,grate_min_interval);
-      vmax = 255*3;
-      if (key == 2) {
-        grate_max_interval += 3;
-        grate_max_interval = constrain(grate_max_interval,vmin,vmax);
-        CalculateGrate();
-        WriteGrate();
-      }
-      if (key == 3) {
-        grate_max_interval -= 3;
-        grate_max_interval = constrain(grate_max_interval,vmin,vmax);
-        CalculateGrate();
-        WriteGrate();
-      }
-      Disp_RC(3,0);
-      strcpy_P(buf, menu1);
-      Disp_PutStr(buf);
-      Disp_RC(0,11);
-      Disp_CursOn();
-      break;
-    case 3: //Grate On Interval
-      vmin = 0;
-      vmax = min(grate_min_interval,255);
-      if (key == 2) {
-        grate_on_interval += 1;
-        grate_on_interval = constrain(grate_on_interval,vmin,vmax);
-        CalculateGrate();
-        WriteGrate();
-      }
-      if (key == 3) {
-        grate_on_interval -= 1;
-        grate_on_interval = constrain(grate_on_interval,vmin,vmax);
-        CalculateGrate();
-        WriteGrate();
-      }
-      Disp_RC(3,0);
-      strcpy_P(buf, menu1);
-      Disp_PutStr(buf);
-      Disp_RC(1,0);
-      Disp_CursOn();
-      break;
-    case 4: //Grate
-      if (key == 2) {
-        grate_motor_state = GRATE_MOTOR_OFF;
-      }
-      if (key == 3) {
-        grate_val = GRATE_SHAKE_CROSS;
-      }
-      Disp_RC(3,0);
-      Disp_PutStr(P("NEXT  ADV  OFF   ON "));
-      Disp_RC(1,11);
-      Disp_CursOn();
-      break; 
-    }
-    break;
-  case DISPLAY_MANUAL:
     Disp_RC(0,0);
     Disp_PutStr(P("   Manual Control   ")); 
     Disp_RC(1,0);
@@ -727,9 +727,7 @@ void TransitionDisplay(int new_state) {
     cur_item = 1;
     break;
   case DISPLAY_GRATE:
-    cur_item = 1;
-    break;
-  case DISPLAY_MANUAL:
+    //cur_item = 1;
     break;
   case DISPLAY_TESTING:
     cur_item = 1;
@@ -779,12 +777,10 @@ void DoKeyInput() {
       TransitionDisplay(DISPLAY_GRATE);
       break;
     case DISPLAY_GRATE:
-      TransitionDisplay(DISPLAY_INFO);
-      break;
-    case DISPLAY_MANUAL:
       if (grate_motor_state != GRATE_SHAKE_PRATIO){
         grate_motor_state = GRATE_SHAKE_PRATIO;
       }
+      TransitionDisplay(DISPLAY_INFO);
       break;
     case DISPLAY_INFO:
       if (engine_state == ENGINE_OFF) {
