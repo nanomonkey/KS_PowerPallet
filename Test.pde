@@ -130,8 +130,15 @@ void GoToNextTestingState() {
   }
 }
 
-
-
+void turnAllOff(){
+      digitalWrite(FET_AUGER,LOW);
+    digitalWrite(FET_GRATE,LOW);
+    digitalWrite(FET_IGNITION,LOW);
+    digitalWrite(FET_STARTER,LOW);
+    digitalWrite(FET_FLARE_IGNITOR,LOW);
+    digitalWrite(FET_O2_RESET,LOW);
+    digitalWrite(FET_ALARM,LOW); // FET6 can't generate PWM due to Servo library using the related timer
+}
 
 
 

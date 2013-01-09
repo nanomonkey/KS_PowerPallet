@@ -810,6 +810,7 @@ void DoKeyInput() {
       }
       break;
     case DISPLAY_TESTING:
+      turnAllOff();
       if (engine_state == ENGINE_OFF){
         TransitionDisplay(DISPLAY_SERVO);
       } 
