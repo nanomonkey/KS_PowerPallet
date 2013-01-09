@@ -337,12 +337,12 @@ void PrintColumnInt(int str) {
 void DoDatalogging() {
   data_buffer = "";
   boolean header = false;
-  Serial.begin(115200);
+  //Serial.begin(115200);
   if (lineCount == 0) {
     if (serial_num[0] != '#'){
-      data_buffer = "# Power Pallet ";
+      data_buffer = "# ";
       data_buffer += serial_num;
-      data_buffer += "PCU #";
+      data_buffer += " PCU #";
       data_buffer += uniqueNumber();
       Serial.println(data_buffer);
       DatalogSD(data_buffer, sd_data_file_name);

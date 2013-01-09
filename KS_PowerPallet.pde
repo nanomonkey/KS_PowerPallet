@@ -189,8 +189,9 @@ const prog_char half_blank[] PROGMEM = "          ";
 #define TESTING_ANA_ENGINE_SWITCH 9
 #define TESTING_ANA_FUEL_SWITCH 10
 #define TESTING_ANA_OIL_PRESSURE 11
-#define TESTING_SERVO 12     //used in Display to defeat any other writes to servo
-#define TESTING_GOV_TUNING 13
+#define TESTING_GOV_TUNING 12
+#define TESTING_SERVO 13     //used in Display to defeat any other writes to servo.  Must be last testing state!!!
+
 
 //Datalogging Buffer
 String data_buffer = "";
@@ -199,7 +200,7 @@ char float_buf[15] = "";
 //Test Variables
 int testing_state = TESTING_OFF;
 unsigned long testing_state_entered = 0;
-static char *TestingStateName[] = { "Off","Auger","Grate","Engine","Starter","Flare","O2 Reset","Alarm","ANA_Lambda","ANA_Eng_Switch","ANA_Fuel_Switch","ANA_Oil", "Gov Tuning"};
+static char *TestingStateName[] = { "Off","FET0 Auger","FET1 Grate","FET2 Engine","FET3 Starter","FET4 Flare","FET5 O2 Reset","FET6 Alarm","ANA0 ANA_Lambda","ANA2 ANA_Eng_Switch","ANA1 ANA_Fuel_Switch","ANA3 ANA_Oil", "Gov Tuning"};
 
 // Datalogging variables
 int lineCount = 0;
@@ -208,13 +209,16 @@ int lineCount = 0;
 #define CONFIG_COUNT 16
 int config_var;
 byte config_changed = false;
-static char *Configuration[CONFIG_COUNT] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Count?  ", "High Coolant T ", "Display Per(ms)", "Tred low temp? ", "Pfilter Accum# ", "Grate Max Inter", "Grate Min Inter", "Grate On Interv"};  //15 character Display prompt
+static char *Configuration[CONFIG_COUNT] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Accum#  ", "High Coolant T ", "Display Per(ms)", "Tred low temp? ", "Pfilter Accum# ", "Grate Max Inter", "Grate Min Inter", "Grate On Interv"};  //15 character Display prompt
 static char *Config_Choices[CONFIG_COUNT] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  "}; //8 char options for last two buttons
 int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 0, 20, 98, 20, 130, 50, 60, 12, 3};  //default values to be saved to EEPROM for the following getConfig variables
 int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 20, 0, 0, 0};  //minimum values allowed 
 int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254}; //maximum values allowed  
 
-//Don't forget to add the following to update_config_var in Display!
+/* Don't forget to add the following to update_config_var in Display!
+   The first Configuration, Reset Defaults, is skipped, so these start at 1, not 0.
+ */
+ 
 int engine_type = getConfig(1);  
 int relay_board = getConfig(2);
 int aug_rev_time = getConfig(3)*100;

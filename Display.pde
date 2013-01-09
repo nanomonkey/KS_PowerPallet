@@ -213,7 +213,7 @@ void DoDisplay() {
     Disp_PutStr(P("Testing             ")); 
     //Row 1			
     Disp_RC(1,0);
-    sprintf(buf, "Test:%-15s", TestingStateName[testing_state]);
+    sprintf(buf, "%-15s", TestingStateName[testing_state]);
     Disp_PutStr(buf);
     //Row 2
     Disp_RC(2,0);
@@ -235,7 +235,6 @@ void DoDisplay() {
     default:
       sprintf(buf,"                   ");
     }
-    Disp_PutStr(buf);
     //Row 3
     switch (cur_item) {
     case 1: // Testing 
@@ -433,6 +432,7 @@ void DoDisplay() {
 //    }
 //    break;
 
+    Disp_CursOff();
     Disp_RC(0,0);
     Disp_PutStr(P("   Manual Control   ")); 
     Disp_RC(1,0);
@@ -448,12 +448,12 @@ void DoDisplay() {
     Disp_RC(2,0);
     Disp_PutStr(P("Grate:              "));
     Disp_RC(2,11);
-    if (grate_motor_state == GRATE_MOTOR_OFF){
+    if (grateMode == GRATE_SHAKE_OFF){
       Disp_PutStr(P("OFF"));
-    } else if (grate_motor_state == GRATE_MOTOR_LOW){
-      Disp_PutStr(P("ON"));
-    } else {
+    } else if (grateMode == GRATE_SHAKE_PRATIO){
       Disp_PutStr(P("AUTO"));
+    } else {
+      Disp_PutStr(P("ON"));
     }
     Disp_RC(3,0);
     Disp_PutStr(P("Next     Aug   Grate")); 
@@ -468,19 +468,26 @@ void DoDisplay() {
       }
     }
     if (key == 3) {
-      if (grate_motor_state == GRATE_MOTOR_OFF){
-        grateMode = GRATE_SHAKE_PRATIO;
-      } else if (grate_motor_state == GRATE_SHAKE_PRATIO){
-        grateMode = GRATE_SHAKE_OFF;
-      } else {
+      switch (grateMode) {
+      case GRATE_SHAKE_OFF:
         grateMode = GRATE_SHAKE_ON;
+        Serial.println("#Grate Mode: On");
+        break;
+      case GRATE_SHAKE_ON:
+        grateMode = GRATE_SHAKE_PRATIO;
+        Serial.println("#Grate Mode: Pressure Ratio");
+        break;
+      case GRATE_SHAKE_PRATIO:
+        grateMode = GRATE_SHAKE_OFF;
+        Serial.println("#Grate Mode: Off");
+        break;
       }
     }
     break;
   case DISPLAY_INFO:
     Disp_CursOff();
     Disp_RC(0,0);
-    sprintf(buf, "PP%s PCU%i", serial_num, unique_number);
+    sprintf(buf, "#%s  PCU%i", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_RC(1,0);
     sprintf(buf, "       Time:%8i", millis()/1000);
