@@ -462,6 +462,7 @@ void DoDisplay() {
     Disp_RC(3,0);
     Disp_PutStr(P("Next     Aug   Grate")); 
     if (key == 2) {
+      config_changed = true;
       Disp_RC(1,11);
       if (auger_state == AUGER_ALARM){
         TransitionAuger(AUGER_OFF);
@@ -473,6 +474,7 @@ void DoDisplay() {
       }
     }
     if (key == 3) {
+      config_changed = true;
       switch (grateMode) {
       case GRATE_SHAKE_OFF:
         grateMode = GRATE_SHAKE_ON;
@@ -739,6 +741,7 @@ void TransitionDisplay(int new_state) {
     cur_item = 1;
     break;
   case DISPLAY_GRATE:
+    config_changed = false;
     //cur_item = 1;
     break;
   case DISPLAY_TESTING:
@@ -789,10 +792,14 @@ void DoKeyInput() {
       TransitionDisplay(DISPLAY_GRATE);
       break;
     case DISPLAY_GRATE:
-      if (grate_motor_state != GRATE_SHAKE_PRATIO){
-        grate_motor_state = GRATE_SHAKE_PRATIO;
+      if (grateMode != GRATE_SHAKE_PRATIO){
+        grateMode = GRATE_SHAKE_PRATIO;
       }
-      TransitionDisplay(DISPLAY_INFO);
+      if (config_changed == true){
+        TransitionDisplay(DISPLAY_REACTOR);
+      } else {
+        TransitionDisplay(DISPLAY_INFO);
+      }
       break;
     case DISPLAY_INFO:
       if (engine_state == ENGINE_OFF) {
