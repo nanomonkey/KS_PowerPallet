@@ -150,7 +150,7 @@ void DoSerialIn() {
       Serial.println(serial_num);
       break;
 //   case 'h' || 'H':
-//      Serial.println(HELP);
+//      Serial.println(P(help));
 //      break; 
 //   case '$':
 //      SerialReadString(';');

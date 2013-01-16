@@ -43,7 +43,7 @@ char p_buffer[21];
 //  for (uint8_t c; (c = pgm_read_byte(str)); str++) Serial.write(c);
 //} 
 
-//const char HELP[] PROGMEM = "#p: add 0.02 to p\n#P: subtract 0.02 from p\n#i: add 0.02 to i\n#I: subtract 0.02 from i\n#d & D: reserved for d in PID (not implemented)\n#c: Calibrate Pressure Sensors\n#s: add 10 to Servo1 calibration\n#S: subtract 10  degrees from Servo1 position\n#l: add 0.01 to lambda_setpoint\n#L: subtract 0.01 from lambda_setpoint\n#t: subtract 100 ms from Sample Period (loopPeriod1)\n#T: add 100 ms from Sample Period (loopPeriod1)\n#g: Shake grate\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\n#m: add 5ms to grate shake interval\n#M: subtract 5 ms from grate shake interval\n#e: Engine Governor Tuning mode\n# h: Print Help Text";
+//const prog_char help[] PROGMEM = "#p: add 0.02 to p\r\n#P: subtract 0.02 from p\r\n#i: add 0.02 to i\r\n#I: subtract 0.02 from i\r\n#d & D: reserved for d in PID (not implemented)\r\n#c: Calibrate Pressure Sensors\r\n#s: add 10 to Servo1 calibration\r\n#S: subtract 10  degrees from Servo1 position\r\n#l: add 0.01 to lambda_setpoint\r\n#L: subtract 0.01 from lambda_setpoint\r\n#t: subtract 100 ms from Sample Period (loopPeriod1)\r\n#T: add 100 ms from Sample Period (loopPeriod1)\r\n#g: Shake grate\r\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\r\n#m: add 5ms to grate shake interval\r\n#M: subtract 5 ms from grate shake interval\r\n#e: Engine Governor Tuning mode\r\n# h: Print Help Text";
 
 // Analog Input Mapping
 #define ANA_LAMBDA ANA0
@@ -227,7 +227,7 @@ int current_high_boundary = getConfig(5);
 int low_oil_psi = getConfig(6);
 int save_datalog_to_sd = getConfig(7);
 int pratio_max = getConfig(8)*5;
-int high_coolant_temp = getConfig(9)*5;
+int high_coolant_temp = getConfig(9);
 int display_per = getConfig(10)*5;
 int tred_low_temp = getConfig(11)*5;
 int pfilter_alarm = getConfig(12);
@@ -391,8 +391,8 @@ volatile int energy_period;
 //PP20 Jewen Throttle - apparent variation in throttle angle to servo angle in this batch, need to add calibration/storage in EEPROM...
 
 byte servo_min,servo_max;
-double premix_valve_open = 133;
-double premix_valve_closed = 68;
+double premix_valve_open = 95;
+double premix_valve_closed = 5;
 
  //premix_valve_closed
  //premix_valve_open

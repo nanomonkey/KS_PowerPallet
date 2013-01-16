@@ -949,7 +949,7 @@ void update_config_var(int var_num){
     alarm_start[ALARM_BAD_REACTOR] = pratio_max;
     break;
   case 9:
-    high_coolant_temp = getConfig(9)*5;
+    high_coolant_temp = getConfig(9);
     break;
   case 10:
     display_per = getConfig(10)*5;

@@ -33,7 +33,6 @@ void DoEngine() {
         putstring("# Engine coolant temp too high, Engine shutdown\r\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
-      break;
       if (alarm_on[ALARM_TRED_LOW] > shutdown[ALARM_TRED_LOW]){
         putstring("# Reduction zone temp too low, Engine shutdown\r\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
