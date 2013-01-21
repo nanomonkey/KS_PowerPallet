@@ -206,14 +206,14 @@ static char *TestingStateName[] = { "Off","FET0 Auger","FET1 Grate","FET2 Engine
 int lineCount = 0;
 
 //Configuration Variables
-#define CONFIG_COUNT 16
+#define CONFIG_COUNT 18
 int config_var;
 byte config_changed = false;
-static char *Configuration[CONFIG_COUNT] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Accum#  ", "High Coolant T ", "Display Per(ms)", "Tred low temp? ", "Pfilter Accum# ", "Grate Max Inter", "Grate Min Inter", "Grate On Interv"};  //15 character Display prompt
-static char *Config_Choices[CONFIG_COUNT] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  "}; //8 char options for last two buttons
-int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 0, 20, 98, 20, 130, 50, 60, 12, 3};  //default values to be saved to EEPROM for the following getConfig variables
-int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 20, 0, 0, 0};  //minimum values allowed 
-int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254}; //maximum values allowed  
+static char *Configuration[CONFIG_COUNT] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Accum#  ", "High Coolant T ", "Display Per(ms)", "Ttred low temp?", "Pfilter Accum# ", "Grate Max Inter", "Grate Min Inter", "Grate On Interv", "Ttred High Temp", "Tbred High Temp"};  //15 character Display prompt
+static char *Config_Choices[CONFIG_COUNT] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  "}; //8 char options for last two buttons
+int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 0, 20, 98, 20, 130, 50, 60, 12, 3, 200, 200};  //default values to be saved to EEPROM for the following getConfig variables
+int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 20, 0, 0, 0, 0};  //minimum values allowed 
+int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254}; //maximum values allowed  
 
 /* Don't forget to add the following to update_config_var in Display!
    The first Configuration, Reset Defaults, is skipped, so these start at 1, not 0.
@@ -233,7 +233,9 @@ int tred_low_temp = getConfig(11)*5;
 int pfilter_alarm = getConfig(12);
 int grate_max_interval = getConfig(13)*5;  //longest total interval in seconds
 int grate_min_interval = getConfig(14)*5;
-int grate_on_interval = getConfig(15);  
+int grate_on_interval = getConfig(15);
+int ttred_high = getConfig(16)*5;
+int tbred_high = getConfig(17)*5;
 
 // Grate turning variables
 int grateMode = GRATE_SHAKE_PRATIO; //set default starting state
@@ -468,10 +470,10 @@ int clockPin = 52; //To SRCLK on Relay Board, Second Pin from Bottom on Left han
 boolean alarm = false;
 int pressureRatioAccumulator = 0;
 
-#define ALARM_NUM 14
-unsigned long alarm_on[ALARM_NUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, pfilter_alarm, 230, 0, 0, 0, 30000, 60000, 10, 0, 0, 0};  //count or time in milliseconds when alarm goes off
-unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 0, 0, 0, 0, 180000, 0, 0, 3000, 7000};  //time when engine will be shutdown
+#define ALARM_NUM 16
+unsigned long alarm_on[ALARM_NUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, pfilter_alarm, 230, 0, 0, 0, 30000, 60000, 10, 0, 0, 0, 15000};  //count or time in milliseconds when alarm goes off
+unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 0, 0, 0, 0, 180000, 0, 0, 3000, 7000, 15000};  //time when engine will be shutdown
 int alarm_count = 0;
 int alarm_queue[ALARM_NUM] = {};
 int alarm_shown = 0;
@@ -490,6 +492,8 @@ int alarm_shown = 0;
 #define ALARM_HIGH_PCOMB 11
 #define ALARM_HIGH_COOLANT_TEMP 12
 #define ALARM_TRED_LOW 13 
+#define ALARM_TTRED_HIGH 14
+#define ALARM_TBRED_HIGH 15
 
 char* display_alarm[ALARM_NUM] = {  //line 1 on display
   "Auger on too long   ",
@@ -505,7 +509,9 @@ char* display_alarm[ALARM_NUM] = {  //line 1 on display
   "FuelSwitch/Auger Jam",
   "High P_comb         ",
   "High Coolant Temp   ",
-  "Reduction Temp Low  "
+  "Reduction Temp Low  ",
+  "Reduction Temp High ",
+  "Reduction Temp High "
 }; //20 char message for 4x20 display
 
 char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
@@ -522,7 +528,9 @@ char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is grea
   "Check Fuel & Switch ",
   "Check Air Intake    ",
   "                    ",
-  "                    "
+  "                    ",
+  "Reduce Load         ",
+  "Reduce Load         "
 };
 
 // SD Card

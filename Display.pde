@@ -971,6 +971,12 @@ void update_config_var(int var_num){
   case 15:
     grate_on_interval = getConfig(15); 
     break;
+  case 16:
+    ttred_high = getConfig(16)*5;
+    break;
+  case 17:
+    tbred_high = getConfig(17)*5;
+    break;
   }
 }
 

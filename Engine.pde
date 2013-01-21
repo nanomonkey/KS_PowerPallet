@@ -37,6 +37,14 @@ void DoEngine() {
         putstring("# Reduction zone temp too low, Engine shutdown\r\n"); 
         TransitionEngine(ENGINE_SHUTDOWN);
       }
+      if (alarm_on[ALARM_TTRED_HIGH] > shutdown[ALARM_TTRED_HIGH]){
+        putstring("# Top of reduction zone temp too high, Engine shutdown\r\n"); 
+        TransitionEngine(ENGINE_SHUTDOWN);
+      }
+      if (alarm_on[ALARM_TBRED_HIGH] > shutdown[ALARM_TBRED_HIGH]){
+        putstring("# Bottom of reduction zone temp too high, Engine shutdown\r\n"); 
+        TransitionEngine(ENGINE_SHUTDOWN);
+      }
       break;
     case ENGINE_STARTING:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
