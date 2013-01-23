@@ -211,7 +211,7 @@ int config_var;
 byte config_changed = false;
 static char *Configuration[CONFIG_COUNT] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Accum#  ", "High Coolant T ", "Display Per(ms)", "Ttred low temp?", "Pfilter Accum# ", "Grate Max Inter", "Grate Min Inter", "Grate On Interv", "Ttred High Temp", "Tbred High Temp"};  //15 character Display prompt
 static char *Config_Choices[CONFIG_COUNT] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  "}; //8 char options for last two buttons
-int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 0, 20, 98, 20, 130, 50, 60, 12, 3, 200, 200};  //default values to be saved to EEPROM for the following getConfig variables
+int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 0, 20, 98, 20, 130, 50, 60, 12, 3, 210, 195};  //default values to be saved to EEPROM for the following getConfig variables
 int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 20, 0, 0, 0, 0};  //minimum values allowed 
 int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254}; //maximum values allowed  
 
