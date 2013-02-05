@@ -2,7 +2,7 @@ void DoDisplay() {
   boolean disp_alt; // Var for alternating value display
   char choice[5] = "    ";
   char buf[20];
-  if (millis() % display_per > 1000) {    //  if (millis() % 2000 > 1000) {
+  if (millis() % (display_per*200) > (display_per*100) ) {    //  if (millis() % 2000 > 1000) {
     disp_alt = false;
   } 
   else {
@@ -952,8 +952,7 @@ void update_config_var(int var_num){
     high_coolant_temp = getConfig(9);
     break;
   case 10:
-    display_per = getConfig(10)*5;
-    loopPeriod2 = display_per;
+    display_per = getConfig(10);
     break;
   case 11:
     tred_low_temp = getConfig(11)*5;
