@@ -125,8 +125,10 @@ void DoSerialIn() {
     { //extra bracket necessary for scope of memorySpace declaration:
       int memorySpace = SerialReadInt();
       if (memorySpace<4000){
-        EEPROM.write(255, memorySpace);
+        EEPROM.write(memorySpace, 255);
       }
+      putstring("# Rewriting eeprom space "); Serial.println(memorySpace);
+      putstring("# Changed to "); Serial.println(int(EEPROM.read(memorySpace)));
     }
       break;
     case '-':

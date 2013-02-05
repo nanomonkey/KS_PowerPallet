@@ -2,7 +2,7 @@ void DoDisplay() {
   boolean disp_alt; // Var for alternating value display
   char choice[5] = "    ";
   char buf[20];
-  if (millis() % 2000 > 1000) {
+  if (millis() % display_per > 1000) {    //  if (millis() % 2000 > 1000) {
     disp_alt = false;
   } 
   else {
@@ -494,7 +494,7 @@ void DoDisplay() {
   case DISPLAY_INFO:
     Disp_CursOff();
     Disp_RC(0,0);
-    sprintf(buf, "#%s  PCU%i", serial_num, unique_number);
+    sprintf(buf, "%s   %i ", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_RC(1,0);
     sprintf(buf, "       Time:%8i", millis()/1000);
@@ -612,10 +612,10 @@ void DoDisplay() {
     Disp_PutStr(P("   Configurations   "));
     Disp_RC(1,0);
     if (Config_Choices[cur_item] == "+    -  "){
-      sprintf(buf, "%s:%3i", Configuration[cur_item], config_var);
+      sprintf(buf, "%s:%3i ", Configuration[cur_item], config_var);
     } 
     else if (Config_Choices[cur_item] == "+5  -5  "){
-      sprintf(buf, "%s:%3i", Configuration[cur_item], 5*config_var);
+      sprintf(buf, "%s:%4i", Configuration[cur_item], 5*config_var);
     } 
     else {
       if (config_var == 0){
@@ -959,23 +959,23 @@ void update_config_var(int var_num){
     tred_low_temp = getConfig(11)*5;
     break;
   case 12:
+    ttred_high = getConfig(16)*5;
+    break;
+  case 13:
+    tbred_high = getConfig(17)*5;
+    break;
+  case 14:
     pfilter_alarm = getConfig(12);
     alarm_start[ALARM_BAD_FILTER] = pfilter_alarm;
     break;
-  case 13:
+  case 15:
     grate_max_interval = getConfig(13)*5;  //longest total interval in seconds
     break;
-  case 14:
+  case 16:
     grate_min_interval = getConfig(14)*5;
     break;
-  case 15:
-    grate_on_interval = getConfig(15); 
-    break;
-  case 16:
-    ttred_high = getConfig(16)*5;
-    break;
   case 17:
-    tbred_high = getConfig(17)*5;
+    grate_on_interval = getConfig(15); 
     break;
   }
 }

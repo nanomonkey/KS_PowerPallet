@@ -63,6 +63,10 @@ void DoGrate() { // call once per second
       grate_motor_state = GRATE_MOTOR_OFF;
       digitalWrite(FET_GRATE,LOW);
     }
+    else {
+      digitalWrite(FET_GRATE, LOW);
+      grate_motor_state = GRATE_MOTOR_OFF;
+    }
     break;
   }
 }

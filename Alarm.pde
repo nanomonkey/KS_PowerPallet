@@ -82,22 +82,30 @@ void DoAlarm() {
   if (engine_state == ENGINE_ON && Temp_Data[T_ENG_COOLANT] > high_coolant_temp){
     setAlarm(ALARM_HIGH_COOLANT_TEMP);
   }  else {
-    removeAlarm(ALARM_HIGH_COOLANT_TEMP);
+    if (alarm_on[ALARM_HIGH_COOLANT_TEMP] <= shutdown[ALARM_HIGH_COOLANT_TEMP]){
+      removeAlarm(ALARM_HIGH_COOLANT_TEMP);
+    }
   }
   if (engine_state == ENGINE_ON && Temp_Data[T_TRED] < tred_low_temp){
     setAlarm(ALARM_TRED_LOW);
   }  else {
-    removeAlarm(ALARM_TRED_LOW);
+    if (alarm_on[ALARM_TRED_LOW] <= shutdown[ALARM_TRED_LOW]){
+      removeAlarm(ALARM_TRED_LOW);
+    }
   }
   if (engine_state == ENGINE_ON && Temp_Data[T_TRED] > ttred_high){
     setAlarm(ALARM_TTRED_HIGH);
   }  else {
-    removeAlarm(ALARM_TTRED_HIGH);
+    if (alarm_on[ALARM_TTRED_HIGH] <= shutdown[ALARM_TTRED_HIGH]){
+      removeAlarm(ALARM_TTRED_HIGH);
+    }
   }
   if (engine_state == ENGINE_ON && Temp_Data[T_BRED] > tbred_high){
     setAlarm(ALARM_TTRED_HIGH);
   }  else {
-    removeAlarm(ALARM_TBRED_HIGH);
+    if (alarm_on[ALARM_TBRED_HIGH] <= shutdown[ALARM_TBRED_HIGH]){
+      removeAlarm(ALARM_TBRED_HIGH);
+    }
   }
 //Low Oil Pressure alarm set in Engine state machine due to quick transition times.
 //#if ANA_OIL_PRESSURE != ABSENT
@@ -162,6 +170,7 @@ void resetAlarm(int alarm_num){
   putstring("# Alarm Reset by User\r\n");
   switch (alarm_num) {  //reset faults that kicked off alarm state.  Seperate function only for user intervention??
   case ALARM_AUGER_ON_LONG:
+    fuel_state_entered = millis();
     TransitionAuger(AUGER_OFF);
     break;
   case ALARM_AUGER_OFF_LONG:

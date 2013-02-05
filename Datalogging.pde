@@ -215,15 +215,15 @@ void LogAuger(boolean header = false) {
   }
 }
  
-void LogPulseEnergy(boolean header = false) {
-  if (header) {
-    PrintColumn("Power");
-    PrintColumn("Energy");
-  } else {
-    PrintColumnInt(CalculatePulsePower());
-    PrintColumnInt(CalculatePulseEnergy());
-  }
-}
+//void LogPulseEnergy(boolean header = false) {
+//  if (header) {
+//    PrintColumn("Power");
+//    PrintColumn("Energy");
+//  } else {
+//    PrintColumnInt(CalculatePulsePower());
+//    PrintColumnInt(CalculatePulseEnergy());
+//  }
+//}
 
 void LogHertz(boolean header = false) {
   if (header) {
@@ -233,13 +233,13 @@ void LogHertz(boolean header = false) {
   }
 }
 
-void LogCounterHertz(boolean header = false) {
-  if (header) {
-    PrintColumn("Blower PWM");
-  } else {
-    PrintColumnInt(counter_hertz);
-  }
-}
+//void LogCounterHertz(boolean header = false) {
+//  if (header) {
+//    PrintColumn("Blower PWM");
+//  } else {
+//    PrintColumnInt(counter_hertz);
+//  }
+//}
 
 //ENGINE_OFF 0, ENGINE_ON 1, ENGINE_STARTING 2, ENGINE_GOV_TUNING 3, ENGINE_SHUTDOWN 4
 
@@ -270,13 +270,14 @@ void LogEngine(boolean header=false) {
   }
 }
 
-void LogBatteryVoltage(boolean header=false) {
-    if (header) {
-      PrintColumn("battery_voltage");
-    } else {
-      PrintColumn(battery_voltage);
-    }
-}
+//void LogBatteryVoltage(boolean header=false) {
+//    if (header) {
+//      PrintColumn("battery_voltage");
+//    } else {
+//      PrintColumn(battery_voltage);
+//    }
+//}
+
 void LogOilPressure(boolean header=false){
   if (header){
     PrintColumn("OilPressureLevel");
@@ -290,6 +291,7 @@ void LogOilPressure(boolean header=false){
       PrintColumn(EngineOilPressureValue);
     }
 }
+
 void LogReactor(boolean header=false) {
     if (header) {
       PrintColumn("P_reactorLevel");
@@ -302,15 +304,15 @@ void LogReactor(boolean header=false) {
     }
 }
 
-void DoTests() { //space to log testing of variables.  Normally not logged
-  putstring("#");
-  //smooth(int data, int smoothed, int filterval)
-
-  putstring("Smoothed Signal: ");
-  Serial.print(smoothed[getAnaArray(ANA_OIL_PRESSURE)]);
-  putstring(" Smoothed PSI: ");
-  Serial.println(getPSI(smoothed[getAnaArray(ANA_OIL_PRESSURE)])); 
-}
+//void DoTests() { //space to log testing of variables.  Normally not logged
+//  putstring("#");
+//  //smooth(int data, int smoothed, int filterval)
+//
+//  putstring("Smoothed Signal: ");
+//  Serial.print(smoothed[getAnaArray(ANA_OIL_PRESSURE)]);
+//  putstring(" Smoothed PSI: ");
+//  Serial.println(getPSI(smoothed[getAnaArray(ANA_OIL_PRESSURE)])); 
+//}
 
 void PrintColumn(String str) {
   data_buffer += str;
@@ -339,7 +341,7 @@ void DoDatalogging() {
   boolean header = false;
   //Serial.begin(115200);
   if (lineCount == 0) {
-    if (serial_num[0] != '#'){
+    if (serial_num[0] != '#' && save_datalog_to_sd && sd_loaded){
       data_buffer = "# ";
       data_buffer += serial_num;
       data_buffer += " PCU #";

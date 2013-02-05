@@ -130,6 +130,12 @@ void DoLambda() {
           TransitionLambda(LAMBDA_SEALED);
         }
         break;
+//      case LAMBDA_STARTING:
+//        if (lambda_input >= 1){ //as soon as mixture gets rich
+//          SetPremixServoAngle(.15);
+//          TransitionLambda(LAMBDA_CLOSEDLOOP);
+//        }
+//        break;
      }
 }
 
@@ -206,12 +212,15 @@ void TransitionLambda(int new_state) {
       lambda_state_name = "Checking for O2 signal";
       break;
     case LAMBDA_UNKNOWN:
-       lambda_state_name = "Lambda state unknown, checking for O2 signal";
-       break;
+      lambda_state_name = "Lambda state unknown, checking for O2 signal";
+      break;
     case LAMBDA_SHUTDOWN:
-       lambda_state_name = "Lambda locked, engine shutting down";
-       lambda_PID.SetMode(MANUAL);
-       break;
+      lambda_state_name = "Lambda locked, engine shutting down";
+      lambda_PID.SetMode(MANUAL);
+      break;
+//    case LAMBDA_STARTING:
+//      SetPremixServoAngle(premix_valve_closed);
+//      break;
     }
   putstring(" to ");  
   Serial.println(lambda_state_name);

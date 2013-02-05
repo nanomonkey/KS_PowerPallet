@@ -200,7 +200,7 @@ char float_buf[15] = "";
 //Test Variables
 int testing_state = TESTING_OFF;
 unsigned long testing_state_entered = 0;
-static char *TestingStateName[] = { "Off","FET0 Auger","FET1 Grate","FET2 Engine","FET3 Starter","FET4 Flare","FET5 O2 Reset","FET6 Alarm","ANA0 ANA_Lambda","ANA2 ANA_Eng_Switch","ANA1 ANA_Fuel_Switch","ANA3 ANA_Oil", "Gov Tuning"};
+static char *TestingStateName[] = { "Off","FET0 Auger","FET1 Grate","FET2 Engine","FET3 Starter","FET4 Flare","FET5 O2 Reset","FET6 Alarm","ANA0 ANA_Lambda","ANA2 ANA_Eng_Switch", "ANA1 ANA_Fuel_Switch","ANA3 ANA_Oil", "Gov Tuning"};
 
 // Datalogging variables
 int lineCount = 0;
@@ -209,11 +209,50 @@ int lineCount = 0;
 #define CONFIG_COUNT 18
 int config_var;
 byte config_changed = false;
-static char *Configuration[CONFIG_COUNT] = { "Reset Defaults?", "Engine Type    ", "Relay Board    ", "Auger Rev (.1s)", "Auger Low (.1A)", "Auger High(.1A)", "Low Oil (PSI)  ", "Datalog SD card", "Pratio Accum#  ", "High Coolant T ", "Display Per(ms)", "Ttred low temp?", "Pfilter Accum# ", "Grate Max Inter", "Grate Min Inter", "Grate On Interv", "Ttred High Temp", "Tbred High Temp"};  //15 character Display prompt
-static char *Config_Choices[CONFIG_COUNT] = {"NO  YES ", "10k 20k ","NO  YES ",  "+    -  ", "+    -  ", "+    -  ", "+    -  ", "NO  YES ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  ", "+    -  ", "+5  -5  ", "+5  -5  "}; //8 char options for last two buttons
-int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 0, 20, 98, 20, 130, 50, 60, 12, 3, 210, 195};  //default values to be saved to EEPROM for the following getConfig variables
-int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 20, 0, 0, 0, 0};  //minimum values allowed 
-int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254}; //maximum values allowed  
+static char *Configuration[CONFIG_COUNT] = { //15 character Display prompt
+"Reset Defaults?", 
+"Engine Type    ", 
+"Relay Board    ", 
+"Auger Rev (.1s)", 
+"Auger Low (.1A)", 
+"Auger High(.1A)", 
+"Low Oil (PSI)  ", 
+"Datalog SD card", 
+"Pratio Accum#  ", 
+"High Coolant T ", 
+"Display Per(ms)", 
+"Ttred low temp?", 
+"Ttred High Temp", 
+"Tbred High Temp",
+"Pfilter Accum# ", 
+"Grate Max Inter", 
+"Grate Min Inter", 
+"Grate On Interv" 
+};  
+static char *Config_Choices[CONFIG_COUNT] = { //8 char options for last two buttons
+"NO  YES ", 
+"10k 20k ",
+"NO  YES ",  
+"+    -  ", 
+"+    -  ", 
+"+    -  ", 
+"+    -  ", 
+"NO  YES ", 
+"+5  -5  ", 
+"+    -  ", 
+"+5  -5  ", 
+"+5  -5  ", 
+"+5  -5  ", 
+"+5  -5  ",
+"+    -  ", 
+"+5  -5  ", 
+"+5  -5  ", 
+"+    -  " 
+
+}; 
+int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 1, 20, 98, 20, 210, 195, 130, 50, 60, 12, 3};  //default values to be saved to EEPROM for the following getConfig variables
+int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 0, 0, 20, 0, 0, 0, 0};  //minimum values allowed 
+int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254}; //maximum values allowed  
 
 /* Don't forget to add the following to update_config_var in Display!
    The first Configuration, Reset Defaults, is skipped, so these start at 1, not 0.
@@ -230,12 +269,13 @@ int pratio_max = getConfig(8)*5;
 int high_coolant_temp = getConfig(9);
 int display_per = getConfig(10)*5;
 int tred_low_temp = getConfig(11)*5;
-int pfilter_alarm = getConfig(12);
-int grate_max_interval = getConfig(13)*5;  //longest total interval in seconds
-int grate_min_interval = getConfig(14)*5;
-int grate_on_interval = getConfig(15);
-int ttred_high = getConfig(16)*5;
-int tbred_high = getConfig(17)*5;
+int ttred_high = getConfig(12)*5;
+int tbred_high = getConfig(13)*5;
+int pfilter_alarm = getConfig(14);
+int grate_max_interval = getConfig(15)*5;  //longest total interval in seconds
+int grate_min_interval = getConfig(16)*5;
+int grate_on_interval = getConfig(17);
+
 
 // Grate turning variables
 int grateMode = GRATE_SHAKE_PRATIO; //set default starting state
@@ -327,7 +367,7 @@ unsigned long oil_pressure_state = 0;
 
 int loopPeriod1 = 1000;
 unsigned long nextTime1;
-int loopPeriod2 = display_per;
+int loopPeriod2 = 100;
 unsigned long nextTime2;
 int loopPeriod3 = 10;
 unsigned long nextTime3;
@@ -404,7 +444,7 @@ double premix_valve_closed = 5;
 
 double premix_valve_max = 1.0;  //minimum of range for closed loop operation (percent open)
 double premix_valve_min = 0.00; //maximum of range for closed loop operation (percent open)
-double premix_valve_center = 0.00; //initial value when entering closed loop operation (percent open)
+double premix_valve_center = 15.00; //initial value when entering closed loop operation (percent open)
 double lambda_setpoint;
 double lambda_input;
 double lambda_output;
@@ -451,8 +491,8 @@ float servo2_pos;
 float servo2_db = 0; // used to deadband the servo movement
 
 //Serial Number
-char serial_num[11] = "#";
-int unique_number = 12;
+char serial_num[11] = "          ";
+unsigned int unique_number = 12;
 
 
 //Serial
@@ -468,11 +508,11 @@ int clockPin = 52; //To SRCLK on Relay Board, Second Pin from Bottom on Left han
 
 // Alarm
 boolean alarm = false;
-int pressureRatioAccumulator = 0;
+int pressureRatioAccumulator = 0;  
 
 #define ALARM_NUM 16
 unsigned long alarm_on[ALARM_NUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, pfilter_alarm, 230, 0, 0, 0, 30000, 60000, 10, 0, 0, 0, 15000};  //count or time in milliseconds when alarm goes off
+unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, pfilter_alarm, 230, 0, 0, 0, 30000, 60000, 10, 0, 0, 3000, 15000};  //count or time in milliseconds when alarm goes off
 unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 0, 0, 0, 0, 180000, 0, 0, 3000, 7000, 15000};  //time when engine will be shutdown
 int alarm_count = 0;
 int alarm_queue[ALARM_NUM] = {};
@@ -588,7 +628,10 @@ void setup() {
   //LoadLambda(); - must save lambda data first?
  
   Serial.begin(115200);
-  EEPROMReadAlpha(40, 10, serial_num);
+  if(EEPROM.read(40) != 255){
+    EEPROMReadAlpha(40, 10, serial_num);
+  }
+  
  //Library initializations                    
   Disp_Init();
   Kpd_Init();
