@@ -71,6 +71,14 @@ String readSDline(File file, int line_num = 0){ //pass an open file
   return SD_line;
 }
 
+void Log(char *buffer){
+  Serial.println(buffer);
+  if (save_datalog_to_sd && sd_loaded){
+    DatalogSD(buffer, sd_data_file_name);
+   }
+   buffer = "";
+}
+
 //void checkSDconfig(){
 //  int line = 0;  
 //  if (SD.exists("config.ini")){

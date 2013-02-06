@@ -250,7 +250,7 @@ static char *Config_Choices[CONFIG_COUNT] = { //8 char options for last two butt
 "+    -  " 
 
 }; 
-int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 1, 20, 98, 10, 210, 195, 130, 50, 60, 12, 3};  //default values to be saved to EEPROM for the following getConfig variables
+int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 1, 20, 98, 10, 130, 210, 195, 50, 60, 12, 3};  //default values to be saved to EEPROM for the following getConfig variables
 int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 0, 0, 20, 0, 0, 0, 0};  //minimum values allowed 
 int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254}; //maximum values allowed  
 

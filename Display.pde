@@ -958,23 +958,23 @@ void update_config_var(int var_num){
     tred_low_temp = getConfig(11)*5;
     break;
   case 12:
-    ttred_high = getConfig(16)*5;
+    ttred_high = getConfig(12)*5;
     break;
   case 13:
-    tbred_high = getConfig(17)*5;
+    tbred_high = getConfig(13)*5;
     break;
   case 14:
-    pfilter_alarm = getConfig(12);
+    pfilter_alarm = getConfig(14);
     alarm_start[ALARM_BAD_FILTER] = pfilter_alarm;
     break;
   case 15:
-    grate_max_interval = getConfig(13)*5;  //longest total interval in seconds
+    grate_max_interval = getConfig(15)*5;  //longest total interval in seconds
     break;
   case 16:
-    grate_min_interval = getConfig(14)*5;
+    grate_min_interval = getConfig(16)*5;
     break;
   case 17:
-    grate_on_interval = getConfig(15); 
+    grate_on_interval = getConfig(17); 
     break;
   }
 }
