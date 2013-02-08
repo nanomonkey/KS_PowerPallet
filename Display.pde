@@ -478,15 +478,15 @@ void DoDisplay() {
       switch (grateMode) {
       case GRATE_SHAKE_OFF:
         grateMode = GRATE_SHAKE_ON;
-        Serial.println("#Grate Mode: On");
+        Logln("#Grate Mode: On");
         break;
       case GRATE_SHAKE_ON:
         grateMode = GRATE_SHAKE_PRATIO;
-        Serial.println("#Grate Mode: Pressure Ratio");
+        Logln("#Grate Mode: Pressure Ratio");
         break;
       case GRATE_SHAKE_PRATIO:
         grateMode = GRATE_SHAKE_OFF;
-        Serial.println("#Grate Mode: Off");
+        Logln("#Grate Mode: Off");
         break;
       }
     }
@@ -906,7 +906,7 @@ int getConfig(int item){
 void update_config_var(int var_num){
   switch (var_num) {
   case 0:
-    putstring("# Updating Configurations to Defaults\r\n");
+    Log_p("# Updating Configurations to Defaults\r\n");
     for (int i=1; i<CONFIG_COUNT; i++){
       update_config_var(i);
     }

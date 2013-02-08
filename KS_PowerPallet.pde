@@ -39,6 +39,7 @@ EEPROM bytes used of 4k space:
 char p_buffer[21];
 #define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
 #define putstring(x) SerialPrint_P(PSTR(x))
+#define Log_p(x) Log(P(x))
 //void SerialPrint_P(PGM_P str) {
 //  for (uint8_t c; (c = pgm_read_byte(str)); str++) Serial.write(c);
 //} 
@@ -592,6 +593,7 @@ SdFile sd_root;
 SdFile sd_file;
 
 char sd_data_file_name[] = "No SD Card  ";  //Create an array that contains the name of our datalog file, updated upon reboot
+char sd_log_file_name[] = "No SD Card  "; 
 char sd_in_char=0;
 int sd_index=0;  
 

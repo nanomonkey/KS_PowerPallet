@@ -49,71 +49,71 @@ void DoSerialIn() {
       break;
     case 's':
       Servo_Calib.write(Servo_Calib.read()+10);
-      putstring("#Servo1 (degrees) now:");
-      Serial.println(Servo_Calib.read());
+      Log_p("#Servo1 (degrees) now:");
+      Logln(Servo_Calib.read());
       break;
     case 'S':
       Servo_Calib.write(Servo_Calib.read()-10);
-      putstring("#Servo1 (degrees) now:");
-      Serial.println(Servo_Calib.read());
+      Log_p("#Servo1 (degrees) now:");
+      Logln(Servo_Calib.read());
       break;
     case 'l':
       lambda_setpoint += 0.01;
-      putstring("#Lambda Setpoint now:");
-      Serial.println(lambda_setpoint);
+      Log_p("#Lambda Setpoint now:");
+      Logln(lambda_setpoint);
       WriteLambda();
       break;
     case 'L':
       lambda_setpoint -= 0.01;
-      putstring("#Lambda Setpoint now:");
-      Serial.println(lambda_setpoint);
+      Log_p("#Lambda Setpoint now:");
+      Logln(lambda_setpoint);
       WriteLambda();
       break;
     case 't':
       loopPeriod1 = max(loopPeriod1-100,100);
-      putstring("#Sample Period now:");
-      Serial.println(loopPeriod1);
+      Log_p("#Sample Period now:");
+      Logln(loopPeriod1);
       break;
     case 'T':
       loopPeriod1 = min(loopPeriod1+100,10000);
-      putstring("#Sample Period now:");
-      Serial.println(loopPeriod1);
+      Log_p("#Sample Period now:");
+      Logln(loopPeriod1);
       break;
     case 'g':  
       grate_val = GRATE_SHAKE_CROSS; //set grate val to shake for grate_on_interval
-      Serial.println("#Grate Shaken");
+      Logln("#Grate Shaken");
       break;
     case 'G':  
       switch (grateMode) {
       case GRATE_SHAKE_OFF:
         grateMode = GRATE_SHAKE_ON;
-        Serial.println("#Grate Mode: On");
+        Logln("#Grate Mode: On");
         break;
       case GRATE_SHAKE_ON:
         grateMode = GRATE_SHAKE_PRATIO;
-        Serial.println("#Grate Mode: Pressure Ratio");
+        Logln("#Grate Mode: Pressure Ratio");
         break;
       case GRATE_SHAKE_PRATIO:
         grateMode = GRATE_SHAKE_OFF;
-        Serial.println("#Grate Mode: Off");
+        Logln("#Grate Mode: Off");
         break;
       }
       break;  
     case 'm':
       grate_max_interval += 5;
       grate_min_interval = grate_max_interval*0.5;
-      putstring("#Grate Max Interval now:");
-      Serial.println(grate_max_interval);
-      putstring("#Grate Min Interval now:");
-      Serial.println(grate_min_interval);
+      Log_p("#Grate Max Interval now:");
+      Logln(grate_max_interval);
+      Log_p("#Grate Min Interval now:");
+      Logln(grate_min_interval);
       break;
     case 'M':
       grate_max_interval -= 5;
       grate_min_interval = grate_max_interval*0.5;
-      putstring("#Grate Max Interval now:");
-      Serial.println(grate_max_interval);
-      putstring("#Grate Min Interval now:");
-      Serial.println(grate_min_interval);
+      Log_p("#Grate Max Interval now:");
+      Logln(grate_max_interval);
+      Log_p("#Grate Min Interval now:");
+      Logln(grate_min_interval);
       break;   
     case 'e':
       TransitionEngine(ENGINE_GOV_TUNING);
@@ -127,19 +127,19 @@ void DoSerialIn() {
       if (memorySpace<4000){
         EEPROM.write(memorySpace, 255);
       }
-      putstring("# Rewriting eeprom space "); Serial.println(memorySpace);
-      putstring("# Changed to "); Serial.println(int(EEPROM.read(memorySpace)));
+      Log_p("# Rewriting eeprom space "); Logln(memorySpace);
+      Log_p("# Changed to "); Logln(int(EEPROM.read(memorySpace)));
     }
       break;
     case '-':
       loopPeriod2 = max(loopPeriod2-100,100);
-      putstring("#Display Period (ms):");
-      Serial.println(loopPeriod2);
+      Log_p("#Display Period (ms):");
+      Logln(loopPeriod2);
       break;
     case '+':
       loopPeriod2 = min(loopPeriod2+100,1000);
-      putstring("#Display Period (ms):");
-      Serial.println(loopPeriod2);
+      Log_p("#Display Period (ms):");
+      Logln(loopPeriod2);
       break;
     case '#':
       serial_buffer[0] = '\0';
@@ -148,15 +148,15 @@ void DoSerialIn() {
         EEPROMWriteAlpha(40, 10, serial_buffer);
       }
       EEPROMReadAlpha(40, 10, serial_num);
-      putstring("# Serial number: ");
-      Serial.println(serial_num);
+      Log_p("# Serial number: ");
+      Logln(serial_num);
       break;
 //   case 'h' || 'H':
-//      Serial.println(P(help));
+//      Logln(P(help));
 //      break; 
 //   case '$':
 //      SerialReadString(';');
-//      Serial.println(serial_buffer);
+//      Logln(serial_buffer);
 //      break;
 //   case 'W':  //write to config.ini
 //      Serial.read
@@ -199,18 +199,18 @@ void SerialReadString(char endString){
 
 
 void PrintLambdaUpdate(double P, double I, double D, double nP, double nI, double nD) {
-  putstring("#Updating PID from [");
+  Log_p("#Updating PID from [");
   Serial.print(P);
-  putstring(",");
+  Log_p(",");
   Serial.print(I);
-  putstring(",");
+  Log_p(",");
   Serial.print(D);
-  putstring("] to [");
+  Log_p("] to [");
   Serial.print(nP);
-  putstring(",");
+  Log_p(",");
   Serial.print(nI);
-  putstring(",");
+  Log_p(",");
   Serial.print(nD);
-  Serial.println("]");
+  Logln(P("]"));
 }
 

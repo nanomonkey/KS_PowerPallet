@@ -305,13 +305,13 @@ void LogReactor(boolean header=false) {
 }
 
 //void DoTests() { //space to log testing of variables.  Normally not logged
-//  putstring("#");
+//  Log_p("#");
 //  //smooth(int data, int smoothed, int filterval)
 //
-//  putstring("Smoothed Signal: ");
+//  Log_p("Smoothed Signal: ");
 //  Serial.print(smoothed[getAnaArray(ANA_OIL_PRESSURE)]);
-//  putstring(" Smoothed PSI: ");
-//  Serial.println(getPSI(smoothed[getAnaArray(ANA_OIL_PRESSURE)])); 
+//  Log_p(" Smoothed PSI: ");
+//  Logln(getPSI(smoothed[getAnaArray(ANA_OIL_PRESSURE)])); 
 //}
 
 void PrintColumn(String str) {
@@ -348,7 +348,7 @@ void DoDatalogging() {
       data_buffer += uniqueNumber();
       Serial.println(data_buffer);
       if (save_datalog_to_sd && sd_loaded){
-        DatalogSD(data_buffer, sd_data_file_name);
+        DatalogSD(data_buffer, sd_data_file_name, true);
       }
       data_buffer = "";
     }
@@ -374,7 +374,7 @@ void DoDatalogging() {
   //LogBatteryVoltage(header);
   Serial.println(data_buffer);
   if (save_datalog_to_sd && sd_loaded){
-    DatalogSD(data_buffer, sd_data_file_name);
+    DatalogSD(data_buffer, sd_data_file_name, true);
   }
 //  DoTests();
   data_buffer = "";  //extra reset to try and clear up memory

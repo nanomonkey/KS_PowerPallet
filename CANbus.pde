@@ -29,11 +29,11 @@
 //  // (Note:  This is the oscillator attached to the MCP2515, not the Arduino oscillaltor)
 //  int baudRate=CAN.Init(125,16);
 //  if(baudRate>0) {
-//    Serial.println("MCP2515 Init OK");
+//    Logln("MCP2515 Init OK");
 //    Serial.print("Baud Rate (kbps): ");
-//    Serial.println(baudRate,DEC);
+//    Logln(baudRate,DEC);
 //  } else {
-//    Serial.println("MCP2515 Init Failed");
+//    Logln("MCP2515 Init Failed");
 //  }
 //}
 //
@@ -70,22 +70,22 @@
 //    // Print message
 //    Serial.print("#ID: ");
 //    CAN_buffer += "# ID: "
-//    Serial.println(message.id,HEX);
+//    Logln(message.id,HEX);
 //    CAN_buffer += message.id
 //    Serial.print("Extended: ");
 //    CAN_buffer += " Extended: "
 //    if(message.ide) {
-//      Serial.println("Yes");
+//      Logln("Yes");
 //    } else {
-//      Serial.println("No");
+//      Logln("No");
 //    }
 //    Serial.print("DLC: ");
-//    Serial.println(message.dlc,DEC);
+//    Logln(message.dlc,DEC);
 //    for(i=0;i<message.dlc;i++) {
 //      Serial.print(message.data[i],HEX);
 //      Serial.print(" ");
 //    }
-//    Serial.println();
+//    Logln();
 //
 //    // Send out a return message for each one received
 //    // Simply increment message id and data bytes to show proper transmission
@@ -140,7 +140,7 @@
 //
 //boolean initCAN(void)
 //{
-//  Serial.println("initCan:entry");  
+//  Logln("initCan:entry");  
 //  boolean setupSuccess = false;
 //  pinMode(CS_PIN,OUTPUT);      
 //  
@@ -153,9 +153,9 @@
 //  if(baudRate>0) 
 //  { 
 //    //Print current progress
-//    Serial.println("initiCAN: MCP2515 Init OK ...");
+//    Logln("initiCAN: MCP2515 Init OK ...");
 //    Serial.print("initCAN: Baud Rate (kbps): ");
-//    Serial.println(baudRate,DEC);
+//    Logln(baudRate,DEC);
 //    delay(1000);
 //    
 //    //Print CAN bus status
@@ -163,7 +163,7 @@
 //    {
 //      Serial.print("initCAN Inital CAN Status: ");
 //      displayCanStatus();
-//      Serial.println(" ");
+//      Logln(" ");
 //    }
 //    
 //    setCanStatus();        
@@ -171,7 +171,7 @@
 //  } 
 //  else 
 //  {
-//    Serial.println("MCP2515 Init Failed ...");
+//    Logln("MCP2515 Init Failed ...");
 //  }   
 //  return setupSuccess;
 //}
@@ -179,7 +179,7 @@
 ///**Modifies several registers that determine which methods will be processed by the receive buffers*/
 //void setCanStatus()
 //{
-//  Serial.println("setCANStatus:entry");
+//  Logln("setCANStatus:entry");
 //  /*
 //    // MCP2515 SPI Commands
 //        #define CAN_RESET	0xC0
@@ -262,9 +262,9 @@
 //   int modeset = CAN.Mode(MCP2515_CONFIG);
 //   if(DEBUG ==true)
 //   {
-//     Serial.println("Changing MCP2515 Registers");
+//     Logln("Changing MCP2515 Registers");
 //     Serial.print("Mode set: ");
-//     Serial.println(modeset);
+//     Logln(modeset);
 //   }
 //    
 //
@@ -274,7 +274,7 @@
 //    if(DEBUG==true)
 //    {
 //      Serial.print("RXB0CTRL: ");
-//      Serial.println( CAN.Read(RXB0CTRL),BIN);
+//      Logln( CAN.Read(RXB0CTRL),BIN);
 //    }           
 //    
 //    //enable reception of all messages in buffer 1
@@ -283,7 +283,7 @@
 //    if(DEBUG ==true)
 //    {
 //      Serial.print("RXB1CTRL: ");
-//      Serial.println( CAN.Read(RXB1CTRL),BIN);
+//      Logln( CAN.Read(RXB1CTRL),BIN);
 //    }
 //    
 //    //Set the interrupt enable flags    
@@ -300,14 +300,14 @@
 //    if(DEBUG == true)
 //    {
 //      Serial.print("Mode set: ");
-//      Serial.println(modeset);
+//      Logln(modeset);
 //    }
 //}
 //
 //  
 ///**Initialize SPI communication*/  
 //void initSPI(void){
-//  Serial.println("initSPI:entry");
+//  Logln("initSPI:entry");
 //  SPI.setClockDivider(SPI_CLOCK_DIV2); // dataMode can be SPI_MODE0 or SPI_MODE3 only for MCP2515
 //  SPI.setDataMode(SPI_MODE0);
 //  SPI.setBitOrder(MSBFIRST);
@@ -316,7 +316,7 @@
 //
 //
 //void displayCanStatus(void){    
-//    Serial.println("displayCANStatus:entry");
+//    Logln("displayCANStatus:entry");
 //   //Display CAN Status bits
 //   /*
 //    bit 7 - CANINTF.TX2IF
@@ -328,7 +328,7 @@
 //    bit 1 - CANINTF.RX1IF
 //    bit 0 - CANINTF.RX0IF         
 //   */
-//   Serial.print("CAN Status: ");  Serial.println(CAN.Status(), BIN);
+//   Serial.print("CAN Status: ");  Logln(CAN.Status(), BIN);
 //    
 //    //DISPLAY RX status bits  
 //    /*
@@ -348,49 +348,49 @@
 //	1 | 1 | 0 | RXF0 (rollover to RXB1)
 //	1 | 1 | 1 | RXF1 (rollover to RXB1)
 //  */
-//   Serial.print("RX Status: ");   Serial.println(CAN.RXStatus(), BIN);
+//   Serial.print("RX Status: ");   Logln(CAN.RXStatus(), BIN);
 //   
 //   byte helper = CAN.Read(CANCTRL);  
-//   Serial.print("CANTRL: ");    Serial.println(helper, BIN);
+//   Serial.print("CANTRL: ");    Logln(helper, BIN);
 //   
 //   helper = CAN.Read(CANSTAT);
-//   Serial.print("CANSTAT: ");   Serial.println(helper, BIN);
+//   Serial.print("CANSTAT: ");   Logln(helper, BIN);
 //   
-//   Serial.println();
+//   Logln();
 //   helper = CAN.Read(RXB0CTRL);   
-//   Serial.print("RXB0CTRL: ");  Serial.println(helper,BIN);
+//   Serial.print("RXB0CTRL: ");  Logln(helper,BIN);
 //   
 //   helper= CAN.Read(RXB0SIDL);
-//   Serial.print("RFX0SIDL: ");  Serial.println(helper,BIN);
+//   Serial.print("RFX0SIDL: ");  Logln(helper,BIN);
 //   
 //   helper= CAN.Read(RXB0EID8);
-//   Serial.print("RXB0EID8: ");  Serial.println(helper,BIN);
+//   Serial.print("RXB0EID8: ");  Logln(helper,BIN);
 //   
 //   helper= CAN.Read(RXB0EID0);
-//   Serial.print("RXB0EID0: ");  Serial.println(helper,BIN);
-//   Serial.println();
+//   Serial.print("RXB0EID0: ");  Logln(helper,BIN);
+//   Logln();
 //   
 //   helper = CAN.Read(RXB1CTRL);
-//   Serial.print("RXB1CTRL: ");  Serial.println(helper,BIN);
+//   Serial.print("RXB1CTRL: ");  Logln(helper,BIN);
 //     
 //   helper= CAN.Read(RXB1SIDL);
-//   Serial.print("RXB1SIDL: ");  Serial.println(helper,BIN);
+//   Serial.print("RXB1SIDL: ");  Logln(helper,BIN);
 //   
 //   helper= CAN.Read(RXB1EID8);
-//   Serial.print("RXB1EID8: ");  Serial.println(helper,BIN);
+//   Serial.print("RXB1EID8: ");  Logln(helper,BIN);
 //   
 //   helper= CAN.Read(RXB1EID0);
-//   Serial.print("RXB1EID0: ");  Serial.println(helper,BIN);
-//   Serial.println();
+//   Serial.print("RXB1EID0: ");  Logln(helper,BIN);
+//   Logln();
 //      
 //   helper = CAN.Read(BFPCTRL);
-//   Serial.print("BFPCTRL: ");   Serial.println(helper,BIN);
+//   Serial.print("BFPCTRL: ");   Logln(helper,BIN);
 //   
 //   helper = CAN.Read(CANINTE);
-//   Serial.print("CANINTE: ");   Serial.println(helper,BIN);
+//   Serial.print("CANINTE: ");   Logln(helper,BIN);
 //   
 //   helper = CAN.Read(CANINTF);
-//   Serial.print("CANINTF: ");   Serial.println(helper,BIN);
+//   Serial.print("CANINTF: ");   Logln(helper,BIN);
 //}
 //
 ///**Initializes all components that will be used during the continuous loop*/
@@ -398,7 +398,7 @@
 //{
 //  boolean setupSuccess = true;
 //  Serial.begin(9600);
-//  Serial.println("Setup");
+//  Logln("Setup");
 //  
 //  
 //  //spi
@@ -418,7 +418,7 @@
 //    {
 //      displayCanStatus();
 //    }    
-//    Serial.println("Beginning to log");
+//    Logln("Beginning to log");
 //  }
 //   
 //  
@@ -438,7 +438,7 @@
 //    tmpMessage += timeLastMessageReceived;
 //    tmpMessage +=  "=";
 //    tmpMessage += result;
-//   // Serial.println( tmpMessage );
+//   // Logln( tmpMessage );
 //  }  
 //  return ( result );
 //}
@@ -465,7 +465,7 @@
 //{
 //   //Find the next available file name to prevent overwriting previously recorded sessions.
 //  Serial.print("Checking file name: ");
-//  Serial.println(fileName); 
+//  Logln(fileName); 
 //  boolean fileExists = SD.exists( fileName );
 //  //If the file exists change the name until a new one is created
 //  if( fileExists == true )
@@ -475,7 +475,7 @@
 //      fileName[4] = i/10 + '0';
 //      fileName[5] = i%10 + '0';
 //      Serial.print("Checking file name: ");
-//      Serial.println(fileName);
+//      Logln(fileName);
 //      fileExists = SD.exists( fileName );
 //      if(fileExists == false )
 //      {
@@ -503,7 +503,7 @@
 //    {
 //      tmpMessage = String("loop:timeDifference = ");
 //      tmpMessage.concat( timeDifference );
-//      Serial.println( tmpMessage );
+//      Logln( tmpMessage );
 //    }
 //    /*After a inital message has been received, the program will shutdown afte 10 sec of idle time*/
 //    if( ((timeLastMessageReceived!=0)) && ( timeDifference > 10000))
@@ -514,7 +514,7 @@
 //        tmpMessage.concat( timeDifference );
 //        tmpMessage.concat(", timeLastMessageReceived= ");
 //        tmpMessage.concat( timeLastMessageReceived );
-//        Serial.println( tmpMessage);
+//        Logln( tmpMessage);
 //      }      
 //      //Close file
 //      dataFile.close();      
@@ -528,9 +528,9 @@
 //    byte interruptFlags = CAN.Read(CANINTF);
 //    if( DEBUG == true)
 //    {
-//      Serial.println(interruptFlags,BIN);
-//      Serial.println("Done printing interrupt flags");
-//      Serial.println("Waiting for interrrupt");
+//      Logln(interruptFlags,BIN);
+//      Logln("Done printing interrupt flags");
+//      Logln("Waiting for interrrupt");
 //    }
 //    //Wait a maximum of 10 seconds for the next message
 //    unsigned long start_wait_time = millis();
@@ -546,12 +546,12 @@
 //      //Message in RX buffer 0
 //      if(interruptFlags & RX0IF) 
 //      {
-//       // Serial.println("Message on RX Buffer 0");
+//       // Logln("Message on RX Buffer 0");
 //        if(DEBUG == true )
 //        {	
-//          Serial.println("Message on RX Buffer 0");
+//          Logln("Message on RX Buffer 0");
 //          interruptFlags = CAN.Read(CANINTF);
-//          Serial.println(interruptFlags,BIN);
+//          Logln(interruptFlags,BIN);
 //        }
 //        //Retrieve the new message
 //	message0 = CAN.ReadBuffer(RXB0);
@@ -563,12 +563,12 @@
 //      }
 //      if(interruptFlags & RX1IF) 
 //      {
-//        //Serial.println("Message on RX Buffer 1");
+//        //Logln("Message on RX Buffer 1");
 //        if(DEBUG == true)
 //        {
-//         Serial.println("Message on RX Buffer 1");
+//         Logln("Message on RX Buffer 1");
 //         interruptFlags = CAN.Read(CANINTF);
-//         Serial.println(interruptFlags,BIN);
+//         Logln(interruptFlags,BIN);
 //        }
 //        //Retrieve the new message
 //	message1 = CAN.ReadBuffer(RXB1);
@@ -580,35 +580,35 @@
 //      }
 //      if(interruptFlags & TX0IF) 
 //      {
-//        // Serial.println("Sent on TX Buffer 0");
+//        // Logln("Sent on TX Buffer 0");
 //	// TX buffer 0 sent
 //        mask = TX0IF;
 //        CAN.BitModify(CANINTF,mask, INTERRUPT_RESET);
 //      }
 //      if(interruptFlags & TX1IF) 
 //      {
-//        //Serial.println("Sent on TX Buffer 1");
+//        //Logln("Sent on TX Buffer 1");
 //	// TX buffer 1 sent
 //        mask = TX1IF;
 //        CAN.BitModify(CANINTF,mask, INTERRUPT_RESET);
 //      }
 //      if(interruptFlags & TX2IF) 
 //      {
-//        //Serial.println("Sent on TX Buffer 2");
+//        //Logln("Sent on TX Buffer 2");
 //	// TX buffer 2 sent
 //        mask = TX2IF;
 //        CAN.BitModify(CANINTF,mask, INTERRUPT_RESET);
 //      }
 //      if(interruptFlags & ERRIF) 
 //      {
-//        //Serial.println("Error encountered");
+//        //Logln("Error encountered");
 //	// error handling code
 //        mask = ERRIF;
 //        CAN.BitModify(CANINTF,mask, INTERRUPT_RESET);
 //      }
 //      if(interruptFlags & MERRF) 
 //      {
-//        //Serial.println("Error encountered 2");
+//        //Logln("Error encountered 2");
 //        mask = MERRF;
 //        CAN.BitModify(CANINTF,mask, INTERRUPT_RESET);
 //	// error handling code
@@ -617,8 +617,8 @@
 //      }
 //    }
 //  }  // end while loop 
-//  Serial.println("Program complete!");
-//  Serial.println("Waiting for reset......");
+//  Logln("Program complete!");
+//  Logln("Waiting for reset......");
 //  while( true )
 //  {
 //    //do nothing
@@ -636,14 +636,14 @@
 //    if(DEBUG == true)
 //    {
 //      Serial.print("Assigning= ");
-//      Serial.println(timeLastMessageReceived);
+//      Logln(timeLastMessageReceived);
 //    }   
 //   
 //    if(message.id>0) 
 //    { 
 //      if(DEBUG == true)
 //      {      
-//        Serial.println(message.id,HEX);
+//        Logln(message.id,HEX);
 //      }
 //      dataFile.print(msgCount++, DEC);
 //      dataFile.print(",");

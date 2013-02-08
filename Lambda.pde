@@ -95,8 +95,8 @@ void DoLambda() {
       case LAMBDA_RESTART:
         if (millis() - lambda_state_entered > 60000) {
           if (engine_state == ENGINE_ON){
-            putstring("# No O2 Signal, Shutting down Engine at: ");
-            Serial.println(millis() - lambda_state_entered);
+            Log_p("# No O2 Signal, Shutting down Engine at: ");
+            Logln(millis() - lambda_state_entered);
             TransitionEngine(ENGINE_SHUTDOWN);
           }
           TransitionLambda(LAMBDA_SEALED);
@@ -163,7 +163,7 @@ void TransitionLambda(int new_state) {
      case LAMBDA_SHUTDOWN:
        break;
    }
-  putstring("# Lambda switching from ");
+  Log_p("# Lambda switching from ");
   Serial.print(lambda_state_name);
   
   //Enter
@@ -222,8 +222,8 @@ void TransitionLambda(int new_state) {
 //      SetPremixServoAngle(premix_valve_closed);
 //      break;
     }
-  putstring(" to ");  
-  Serial.println(lambda_state_name);
+  Log_p(" to ");  
+  Logln(lambda_state_name);
 }
 
     //this doesn't need to be checked that often.....
@@ -255,7 +255,7 @@ void WriteLambda(double setpoint) {
   EEPROM.write(13, val);
   EEPROM.write(14, p);
   EEPROM.write(15, i);
-  putstring("#Writing lambda settings to EEPROM\r\n");
+  Log_p("#Writing lambda settings to EEPROM\r\n");
 }
 
 void LoadLambda() {
@@ -266,13 +266,13 @@ void LoadLambda() {
   p = EEPROM.read(14)*0.01;
   i = EEPROM.read(15)*0.1;
   if (check == 128 && val >= 0.5 && val <= 1.5) { //check to see if lambda has been set
-    putstring("#Loading lambda from EEPROM\r\n");
+    Log_p("#Loading lambda from EEPROM\r\n");
     lambda_setpoint = val;
     lambda_PID.SetTunings(p,i,0);
     lambda_P[0] = p;
     lambda_I[0] = i;
   } else {
-    putstring("#Saving default lambda setpoint to EEPROM\r\n");
+    Log_p("#Saving default lambda setpoint to EEPROM\r\n");
     val = lambda_setpoint_mode[0];
     WriteLambda(val);
   }
