@@ -136,7 +136,8 @@ void DoAlarm() {
 
 void setAlarm(int alarm_num){
   if (alarm_on[alarm_num] == 0){
-    Log(display_alarm[alarm_num]);
+    Log_p("# ");
+    Logln(display_alarm[alarm_num]);
     alarm_on[alarm_num] = millis();
     alarm = true;
     setAlarmQueue();
@@ -145,8 +146,8 @@ void setAlarm(int alarm_num){
 
 void removeAlarm(int alarm_num){
   if (alarm_on[alarm_num] > 0) {
-    Log(P("# Removing: "));
-    Log(display_alarm[alarm_num]);
+    Log_p("# Removing: ");
+    Logln(display_alarm[alarm_num]);
     alarm_on[alarm_num] = 0;
     setAlarmQueue();
     if (alarm_count == 0){
