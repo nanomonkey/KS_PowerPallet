@@ -976,6 +976,12 @@ void update_config_var(int var_num){
   case 17:
     grate_on_interval = getConfig(17); 
     break;
+  case 18:
+    servo_start = getConfig(18);
+    break;
+  case 19:
+    lambda_rich = getConfig(19);
+    break;
   }
 }
 

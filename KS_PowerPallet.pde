@@ -158,6 +158,7 @@ Servo Servo_Throttle;
 #define LAMBDA_RESTART 7
 #define LAMBDA_UNKNOWN 8
 #define LAMBDA_SHUTDOWN 9
+#define LAMBDA_STARTING 10
 
 //Display States
 #define DISPLAY_SPLASH 0
@@ -207,7 +208,7 @@ static char *TestingStateName[] = { "Off","FET0 Auger","FET1 Grate","FET2 Engine
 int lineCount = 0;
 
 //Configuration Variables
-#define CONFIG_COUNT 18
+#define CONFIG_COUNT 20
 int config_var;
 byte config_changed = false;
 static char *Configuration[CONFIG_COUNT] = { //15 character Display prompt
@@ -228,7 +229,9 @@ static char *Configuration[CONFIG_COUNT] = { //15 character Display prompt
 "Pfilter Accum# ", 
 "Grate Max Inter", 
 "Grate Min Inter", 
-"Grate On Interv" 
+"Grate On Interv",
+"Servo Start Pos",
+"Lambda Rich    "
 };  
 static char *Config_Choices[CONFIG_COUNT] = { //8 char options for last two buttons
 "NO  YES ", 
@@ -248,12 +251,14 @@ static char *Config_Choices[CONFIG_COUNT] = { //8 char options for last two butt
 "+    -  ", 
 "+5  -5  ", 
 "+5  -5  ", 
-"+    -  " 
+"+    -  ",
+"+    -  ",
+"+    -  "
 
 }; 
-int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 1, 20, 98, 10, 130, 210, 195, 50, 60, 12, 3};  //default values to be saved to EEPROM for the following getConfig variables
-int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 0, 0, 20, 0, 0, 0, 0};  //minimum values allowed 
-int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254}; //maximum values allowed  
+int defaults[CONFIG_COUNT] = {0, 0, 1, 10, 35, 100, 6, 1, 20, 98, 10, 130, 210, 195, 50, 60, 12, 3, 0, 100};  //default values to be saved to EEPROM for the following getConfig variables
+int config_min[CONFIG_COUNT] = {0, 0, 0, 0, 5, 41, 1, 0, 0, 10, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0};  //minimum values allowed 
+int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 110}; //maximum values allowed  
 
 /* Don't forget to add the following to update_config_var in Display!
    The first Configuration, Reset Defaults, is skipped, so these start at 1, not 0.
@@ -276,6 +281,8 @@ int pfilter_alarm = getConfig(14);
 int grate_max_interval = getConfig(15)*5;  //longest total interval in seconds
 int grate_min_interval = getConfig(16)*5;
 int grate_on_interval = getConfig(17);
+int servo_start = getConfig(18);
+int lambda_rich = getConfig(19);
 
 
 // Grate turning variables
@@ -445,7 +452,7 @@ double premix_valve_closed = 5;
 
 double premix_valve_max = 1.0;  //minimum of range for closed loop operation (percent open)
 double premix_valve_min = 0.00; //maximum of range for closed loop operation (percent open)
-double premix_valve_center = 15.00; //initial value when entering closed loop operation (percent open)
+double premix_valve_center = servo_start/100; //initial value when entering closed loop operation (percent open)
 double lambda_setpoint;
 double lambda_input;
 double lambda_output;

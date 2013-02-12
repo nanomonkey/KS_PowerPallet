@@ -18,6 +18,9 @@ void DoLambda() {
         lambda_PID.SetTunings(lambda_P[0], lambda_I[0], lambda_D[0]);
         lambda_PID.Compute();
         SetPremixServoAngle(lambda_output);
+        if (engine_state == ENGINE_STARTING) {
+          TransitionLambda(LAMBDA_STARTING);
+        }
         if (engine_state == ENGINE_OFF) {
           TransitionLambda(LAMBDA_SEALED);
         }
@@ -38,7 +41,7 @@ void DoLambda() {
         break;
       case LAMBDA_SEALED:
         if (engine_state == ENGINE_STARTING) {
-          TransitionLambda(LAMBDA_CLOSEDLOOP);
+          TransitionLambda(LAMBDA_STARTING);
         }
         if (lambda_input < 0.52) {
           TransitionLambda(LAMBDA_NO_SIGNAL);
@@ -130,12 +133,30 @@ void DoLambda() {
           TransitionLambda(LAMBDA_SEALED);
         }
         break;
-//      case LAMBDA_STARTING:
-//        if (lambda_input >= 1){ //as soon as mixture gets rich
-//          SetPremixServoAngle(.15);
-//          TransitionLambda(LAMBDA_CLOSEDLOOP);
+      case LAMBDA_STARTING:
+        if (lambda_input >= lambda_rich/100){ //as soon as mixture gets rich
+          SetPremixServoAngle(premix_valve_center);
+          lambda_output = premix_valve_center;
+          TransitionLambda(LAMBDA_CLOSEDLOOP);
+        }
+        if (engine_state == ENGINE_OFF) {
+          TransitionLambda(LAMBDA_SEALED);
+        }
+        if (serial_last_input == 'o') {
+          TransitionLambda(LAMBDA_STEPTEST);
+          serial_last_input = '\0';
+        }
+        if (serial_last_input == 'O') {
+          TransitionLambda(LAMBDA_SPSTEPTEST);
+          serial_last_input = '\0';
+        }
+//        if (lambda_input < 0.52) {
+//          TransitionLambda(LAMBDA_NO_SIGNAL);
 //        }
-//        break;
+        if (engine_state == ENGINE_SHUTDOWN){
+          TransitionLambda(LAMBDA_SHUTDOWN);
+        }
+        break;
      }
 }
 
@@ -218,10 +239,10 @@ void TransitionLambda(int new_state) {
       lambda_state_name = "Lambda locked, engine shutting down";
       lambda_PID.SetMode(MANUAL);
       break;
-//    case LAMBDA_STARTING:
-//      SetPremixServoAngle(premix_valve_closed);
-//      break;
-    }
+    case LAMBDA_STARTING:
+      SetPremixServoAngle(premix_valve_closed);
+      break;
+  }
   Log_p(" to ");  
   Logln(lambda_state_name);
 }
