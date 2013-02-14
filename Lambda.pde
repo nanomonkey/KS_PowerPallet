@@ -185,7 +185,7 @@ void TransitionLambda(int new_state) {
        break;
    }
   Log_p("# Lambda switching from ");
-  Serial.print(lambda_state_name);
+  Log(lambda_state_name);
   
   //Enter
   lambda_state=new_state;
@@ -240,6 +240,7 @@ void TransitionLambda(int new_state) {
       lambda_PID.SetMode(MANUAL);
       break;
     case LAMBDA_STARTING:
+      lambda_state_name = "Lambda starting";
       SetPremixServoAngle(premix_valve_closed);
       break;
   }

@@ -6,21 +6,23 @@ boolean InitSD() {
   putstring("#Initializing SD card...");
   if(!SD.begin(SS_PIN)){
     putstring("initialization failed. \r\n");
-      sd_loaded = false;
-  } else {
-      putstring("card initialized.\r\n");
-      sd_loaded = true;
-      int data_log_num = EEPROMReadInt(30); //reads from EEPROM bytes 30 and 31
-      if (data_log_num == 32767){  //TODO: unsigned??  --> 65,535
-        data_log_num = 1;
-      } else { 
-        data_log_num++;
-      }
-      sprintf(sd_data_file_name, "dat%05i.csv", data_log_num); 
-      sprintf(sd_log_file_name, "log%05i.txt", data_log_num); 
-      putstring("#Writing data to ");
-      Serial.println(sd_data_file_name);
-      EEPROMWriteInt(30, data_log_num); 
+    sd_loaded = false;
+  } 
+  else {
+    putstring("card initialized.\r\n");
+    sd_loaded = true;
+    int data_log_num = EEPROMReadInt(30); //reads from EEPROM bytes 30 and 31
+    if (data_log_num == 32767){  //TODO: unsigned??  --> 65,535
+      data_log_num = 1;
+    } 
+    else { 
+      data_log_num++;
+    }
+    sprintf(sd_data_file_name, "dat%05i.csv", data_log_num); 
+    sprintf(sd_log_file_name, "log%05i.txt", data_log_num); 
+    putstring("#Writing data to ");
+    Serial.println(sd_data_file_name);
+    EEPROMWriteInt(30, data_log_num); 
   }
   return sd_loaded;
 }
@@ -31,7 +33,8 @@ void DatalogSD(String dataString, char file_name[13], boolean newline) {    //fi
   if (dataFile) {
     if (newline) {
       dataFile.println(dataString);
-    } else {
+    } 
+    else {
       dataFile.print(dataString);
     }
     dataFile.close();
@@ -46,7 +49,7 @@ void DatalogSD(String dataString, char file_name[13], boolean newline) {    //fi
 String readSDline(char file_name[13], int line_num = 0){ //pass a filename in the root directory
   char c;
   String SD_line = "";
-//  SD.begin(SS_PIN);
+  //  SD.begin(SS_PIN);
   int line_count = 0;
   File file = SD.open(file_name);
   while((c=file.read())>0 && line_count <= line_num){
@@ -77,21 +80,16 @@ String readSDline(File file, int line_num = 0){ //pass an open file
 }
 
 void Logln(String logString){
-  //Serial.print("# ");
   Serial.println(logString);
   if (save_datalog_to_sd && sd_loaded){
-    String finalString;
-    dtostrf(millis()/100.0, 5, 3, float_buf);
-    finalString += float_buf;
-    finalString += " ";
-    finalString += logString;
-    DatalogSD(finalString, sd_log_file_name, true);
+    logString = String(millis()/100) + " " + logString;
+    //logString.replace('##', String('String(millis()/100) + " "));
+    DatalogSD(logString, sd_log_file_name, true);
   }
 }
 
-void Logln(char* logCharArray){
-  String passString = String(logCharArray);
-  Logln(passString);
+void Logln(char logCharArray[]){
+  Logln(String(logCharArray));
 }
 
 void Logln(float logFloat){
@@ -119,16 +117,19 @@ void Logln(double logDouble){
 void Log(String logString){
   Serial.print(logString);
   if (save_datalog_to_sd && sd_loaded){
-    String finalString;
-    dtostrf(millis()/100.0, 5, 3, float_buf);
-    finalString += float_buf;
-    finalString += " ";
-    finalString += logString;
-    DatalogSD(finalString, sd_log_file_name, false);
+    logString = String(millis()/100) + " " + logString;
+//    String finalString;
+//    dtostrf(millis()/100.0, 5, 3, float_buf);
+//    finalString = String(millis()/100);
+//    finalString += " ";
+//    finalString += logString;
+//    DatalogSD(finalString, sd_log_file_name, false);
+//    finalString = "";
+     DatalogSD(logString, sd_log_file_name, false);
   }
 }
 
-void Log(char* logCharArray){
+void Log(char logCharArray[]){
   String passString = String(logCharArray);
   Log(passString);
 }
@@ -163,7 +164,7 @@ void Log(double logDouble){
 //    String SD_config_entry[config_count];
 //    while (line <= config_count){
 //      SD_config_entry[line] = readSDline(config, line);
-//      Log_p("# ");
+//      putstring("# ");
 //      Serial.println(SD_config_entry[line]);
 //      line++;
 //    }
@@ -190,7 +191,7 @@ void Log(double logDouble){
 //  //char sensor_config[][][3];
 //  int line_count = 0;
 //  if(SD.begin() != 0){
-//    Log_p("Problem loading SD card");
+//    putstring("Problem loading SD card");
 //    break;
 //  }
 //  file = SD.open(file_name)
@@ -212,63 +213,63 @@ void Log(double logDouble){
 //  }
 //  file.close();
 //}  
-      
+
 void testSD() {
   switch(sd_card.type()) {
-    case SD_CARD_TYPE_SD1:
-      Log_p("SD1\n");
-      break;
-    case SD_CARD_TYPE_SD2:
-      Log_p("SD2\n");
-      break;
-    case SD_CARD_TYPE_SDHC:
-      Log_p("SDHC\n");
-      break;
-    default:
-      Log_p("Unknown\n");
-    }
-    if (!sd_volume.init(sd_card)) {
-      Log_p("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card\n");
-      return;
-    }
-    uint32_t volumesize;
-    Log_p("\nVolume type is FAT");
-    Serial.println(sd_volume.fatType(), DEC);
-    Serial.println();
-    
-    volumesize = sd_volume.blocksPerCluster();    // clusters are collections of blocks
-    volumesize *= sd_volume.clusterCount();       // we'll have a lot of clusters
-    volumesize *= 512;                            // SD card blocks are always 512 bytes
-    Log_p("Volume size (bytes): ");
-    Serial.println(volumesize);
-    Log_p("Volume size (Kbytes): ");
-    volumesize /= 1024;
-    Serial.println(volumesize);
-    Log_p("Volume size (Mbytes): ");
-    volumesize /= 1024;
-    Serial.println(volumesize);
-    Log_p("\nFiles found on the card (name, date and size in bytes): \n");
-    sd_root.openRoot(sd_volume);
-    sd_root.ls(LS_R | LS_DATE | LS_SIZE);  // list all files in the card with date and size
-  
-  // print the type of card
-  Log_p("#Card type: ");
-  switch(sd_card.type()) {
-    case SD_CARD_TYPE_SD1:
-      Log_p("SD1\n");
-      break;
-    case SD_CARD_TYPE_SD2:
-      Log_p("SD2\n");
-      break;
-    case SD_CARD_TYPE_SDHC:
-      Log_p("SDHC\n");
-      break;
-    default:
-      Log_p("Unknown\n");
+  case SD_CARD_TYPE_SD1:
+    putstring("SD1\n");
+    break;
+  case SD_CARD_TYPE_SD2:
+    putstring("SD2\n");
+    break;
+  case SD_CARD_TYPE_SDHC:
+    putstring("SDHC\n");
+    break;
+  default:
+    putstring("Unknown\n");
   }
-  
   if (!sd_volume.init(sd_card)) {
-    Log_p("# Could not find FAT16/FAT32 partition.  Make sure you've formatted the card\n");
+    putstring("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card\n");
+    return;
+  }
+  uint32_t volumesize;
+  putstring("\nVolume type is FAT");
+  Serial.println(sd_volume.fatType(), DEC);
+  Serial.println();
+
+  volumesize = sd_volume.blocksPerCluster();    // clusters are collections of blocks
+  volumesize *= sd_volume.clusterCount();       // we'll have a lot of clusters
+  volumesize *= 512;                            // SD card blocks are always 512 bytes
+  putstring("Volume size (bytes): ");
+  Serial.println(volumesize);
+  putstring("Volume size (Kbytes): ");
+  volumesize /= 1024;
+  Serial.println(volumesize);
+  putstring("Volume size (Mbytes): ");
+  volumesize /= 1024;
+  Serial.println(volumesize);
+  putstring("\nFiles found on the card (name, date and size in bytes): \n");
+  sd_root.openRoot(sd_volume);
+  sd_root.ls(LS_R | LS_DATE | LS_SIZE);  // list all files in the card with date and size
+
+  // print the type of card
+  putstring("#Card type: ");
+  switch(sd_card.type()) {
+  case SD_CARD_TYPE_SD1:
+    putstring("SD1\n");
+    break;
+  case SD_CARD_TYPE_SD2:
+    putstring("SD2\n");
+    break;
+  case SD_CARD_TYPE_SDHC:
+    putstring("SDHC\n");
+    break;
+  default:
+    putstring("Unknown\n");
+  }
+
+  if (!sd_volume.init(sd_card)) {
+    putstring("# Could not find FAT16/FAT32 partition.  Make sure you've formatted the card\n");
     return;
   }
 }
@@ -277,7 +278,7 @@ void testSD() {
 void EEPROMWriteInt(int p_address, int p_value){  
   byte lowByte = ((p_value >> 0) & 0xFF);
   byte highByte = ((p_value >> 8) & 0xFF);
-  
+
   EEPROM.write(p_address, lowByte);
   EEPROM.write(p_address + 1, highByte);
 }
@@ -302,7 +303,7 @@ void EEPROMWriteAlpha(int address, int length, char* buffer){
     EEPROM.write(address+i, buffer[i]);
   }
 }
-  
+
 //void readJSON(String line){
 //  //{key:value, key2:[0,1,2,3],{nested_object_key:nested_object_value}}  //allow nested objects??
 //  while (open_bracket > close_bracket){
@@ -328,5 +329,6 @@ unsigned int uniqueNumber(){
   }
   return EEPROMReadInt(35);
 }
-      
-      
+
+
+
