@@ -22,7 +22,7 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
-    sprintf(buf, "%s  %i", serial_num, unique_number);
+    sprintf(buf, "%s  %u", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_CursOff();
     //Transition out after delay
@@ -478,15 +478,15 @@ void DoDisplay() {
       switch (grateMode) {
       case GRATE_SHAKE_OFF:
         grateMode = GRATE_SHAKE_ON;
-        Logln("##Grate Mode: On");
+        Logln("## Grate Mode: On");
         break;
       case GRATE_SHAKE_ON:
         grateMode = GRATE_SHAKE_PRATIO;
-        Logln("##Grate Mode: Pressure Ratio");
+        Logln("## Grate Mode: Pressure Ratio");
         break;
       case GRATE_SHAKE_PRATIO:
         grateMode = GRATE_SHAKE_OFF;
-        Logln("##Grate Mode: Off");
+        Logln("## Grate Mode: Off");
         break;
       }
     }
