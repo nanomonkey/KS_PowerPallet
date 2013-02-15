@@ -18,9 +18,6 @@ void DoLambda() {
         lambda_PID.SetTunings(lambda_P[0], lambda_I[0], lambda_D[0]);
         lambda_PID.Compute();
         SetPremixServoAngle(lambda_output);
-        if (engine_state == ENGINE_STARTING) {
-          TransitionLambda(LAMBDA_STARTING);
-        }
         if (engine_state == ENGINE_OFF) {
           TransitionLambda(LAMBDA_SEALED);
         }
@@ -98,7 +95,7 @@ void DoLambda() {
       case LAMBDA_RESTART:
         if (millis() - lambda_state_entered > 60000) {
           if (engine_state == ENGINE_ON){
-            Log_p("# No O2 Signal, Shutting down Engine at: ");
+            Log_p("## No O2 Signal, Shutting down Engine at: ");
             Logln(millis() - lambda_state_entered);
             TransitionEngine(ENGINE_SHUTDOWN);
           }
@@ -134,7 +131,7 @@ void DoLambda() {
         }
         break;
       case LAMBDA_STARTING:
-        if (lambda_input >= lambda_rich/100){ //as soon as mixture gets rich
+        if ((lambda_input > 0.52) && (lambda_input <= lambda_rich/100)){ //as soon as mixture gets rich
           SetPremixServoAngle(premix_valve_center);
           lambda_output = premix_valve_center;
           TransitionLambda(LAMBDA_CLOSEDLOOP);
@@ -184,7 +181,7 @@ void TransitionLambda(int new_state) {
      case LAMBDA_SHUTDOWN:
        break;
    }
-  Log_p("# Lambda switching from ");
+  Log_p("## Lambda switching from ");
   Log(lambda_state_name);
   
   //Enter
@@ -277,7 +274,7 @@ void WriteLambda(double setpoint) {
   EEPROM.write(13, val);
   EEPROM.write(14, p);
   EEPROM.write(15, i);
-  Log_p("#Writing lambda settings to EEPROM\r\n");
+  Log_p("## Writing lambda settings to EEPROM\r\n");
 }
 
 void LoadLambda() {
@@ -288,13 +285,13 @@ void LoadLambda() {
   p = EEPROM.read(14)*0.01;
   i = EEPROM.read(15)*0.1;
   if (check == 128 && val >= 0.5 && val <= 1.5) { //check to see if lambda has been set
-    Log_p("#Loading lambda from EEPROM\r\n");
+    Log_p("## Loading lambda from EEPROM\r\n");
     lambda_setpoint = val;
     lambda_PID.SetTunings(p,i,0);
     lambda_P[0] = p;
     lambda_I[0] = i;
   } else {
-    Log_p("#Saving default lambda setpoint to EEPROM\r\n");
+    Log_p("## Saving default lambda setpoint to EEPROM\r\n");
     val = lambda_setpoint_mode[0];
     WriteLambda(val);
   }

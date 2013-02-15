@@ -136,7 +136,7 @@ void DoAlarm() {
 
 void setAlarm(int alarm_num){
   if (alarm_on[alarm_num] == 0){
-    Log_p("# ");
+    Log_p("## ");
     Logln(display_alarm[alarm_num]);
     alarm_on[alarm_num] = millis();
     alarm = true;
@@ -146,7 +146,7 @@ void setAlarm(int alarm_num){
 
 void removeAlarm(int alarm_num){
   if (alarm_on[alarm_num] > 0) {
-    Log_p("# Removing: ");
+    Log_p("## Removing: ");
     Logln(display_alarm[alarm_num]);
     alarm_on[alarm_num] = 0;
     setAlarmQueue();
@@ -167,7 +167,7 @@ void setAlarmQueue(){
 }
 
 void resetAlarm(int alarm_num){
-  Log_p("# Alarm Reset by User");
+  Log_p("## Alarm Reset by User");
   switch (alarm_num) {  //reset faults that kicked off alarm state.  Seperate function only for user intervention??
   case ALARM_AUGER_ON_LONG:
     fuel_state_entered = millis();

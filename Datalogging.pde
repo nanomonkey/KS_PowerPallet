@@ -305,7 +305,7 @@ void LogReactor(boolean header=false) {
 }
 
 //void DoTests() { //space to log testing of variables.  Normally not logged
-//  Log_p("#");
+//  Log_p("##");
 //  //smooth(int data, int smoothed, int filterval)
 //
 //  Log_p("Smoothed Signal: ");
@@ -342,7 +342,7 @@ void DoDatalogging() {
   //Serial.begin(115200);
   if (lineCount == 0) {
     if (serial_num[0] != '#'){
-      data_buffer += "# ";
+      data_buffer += "## ";
       data_buffer += serial_num;
       data_buffer += " PCU #";
       data_buffer += uniqueNumber();

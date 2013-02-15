@@ -82,8 +82,8 @@ String readSDline(File file, int line_num = 0){ //pass an open file
 void Logln(String logString){
   Serial.println(logString);
   if (save_datalog_to_sd && sd_loaded){
-    logString = String(millis()/100) + " " + logString;
-    //logString.replace('##', String('String(millis()/100) + " "));
+    //logString = String(String(millis()/100) + " " + logString);
+    logString.replace('##', String(millis()/100));
     DatalogSD(logString, sd_log_file_name, true);
   }
 }
@@ -117,7 +117,7 @@ void Logln(double logDouble){
 void Log(String logString){
   Serial.print(logString);
   if (save_datalog_to_sd && sd_loaded){
-    logString = String(millis()/100) + " " + logString;
+    //logString = String(String(millis()/100) + " " + logString);
 //    String finalString;
 //    dtostrf(millis()/100.0, 5, 3, float_buf);
 //    finalString = String(millis()/100);
@@ -125,13 +125,13 @@ void Log(String logString){
 //    finalString += logString;
 //    DatalogSD(finalString, sd_log_file_name, false);
 //    finalString = "";
+     logString.replace('##', String(millis()/100));
      DatalogSD(logString, sd_log_file_name, false);
   }
 }
 
 void Log(char logCharArray[]){
-  String passString = String(logCharArray);
-  Log(passString);
+  Log(String(logCharArray));
 }
 
 void Log(float logFloat){
@@ -154,65 +154,8 @@ void Log(unsigned long logLong){
 void Log(double logDouble){
   dtostrf(logDouble, 5, 3, float_buf);
   Log(String(float_buf));
-}
+}  
 
-//void checkSDconfig(){
-//  int line = 0;  
-//  if (SD.exists("config.ini")){
-//    File config = SD.open("config.ini");
-//    config_count = config.size() / sizeof(config_entry);
-//    String SD_config_entry[config_count];
-//    while (line <= config_count){
-//      SD_config_entry[line] = readSDline(config, line);
-//      putstring("# ");
-//      Serial.println(SD_config_entry[line]);
-//      line++;
-//    }
-//  } else {
-//    Serial.println("# config.ini doesn't exist on SD card");
-//  }
-//}
-
-//config_entry Config2Struct(String config_line){
-//  string name
-//  config_entry config;
-//  name = config_line.substring(0,7);
-//  name.toCharArray(config.name, 8)
-//  //config.name = name.toArray();
-//  config.sensor_num = int(config_line.charAt(9));
-//  config.flag = int(config_line.charAt(11));
-//  config.show = int(config_line.charAt(13));
-//  return config;
-//}
-
-//void ConfigSD2Array(char file_name[12] = "config.ini", int line_num = 0){  //loads all configurations saved on SD card to sensor_config array
-//  char c;
-//  char entry[];
-//  //char sensor_config[][][3];
-//  int line_count = 0;
-//  if(SD.begin() != 0){
-//    putstring("Problem loading SD card");
-//    break;
-//  }
-//  file = SD.open(file_name)
-//  while((c = file.read())>0){
-//    if (c == '\n'){
-//      sensor_config[line_count][index] = entry;
-//      entry = "";
-//      line_count++;
-//      index = 0;
-//    } else {
-//      if (c == ','){
-//        sensor_config[line_count][index] = entry;
-//        entry = "";
-//        index++;
-//      } else {
-//        entry += c;
-//      }
-//    }
-//  }
-//  file.close();
-//}  
 
 void testSD() {
   switch(sd_card.type()) {
@@ -304,19 +247,6 @@ void EEPROMWriteAlpha(int address, int length, char* buffer){
   }
 }
 
-//void readJSON(String line){
-//  //{key:value, key2:[0,1,2,3],{nested_object_key:nested_object_value}}  //allow nested objects??
-//  while (open_bracket > close_bracket){
-//    ...
-//    if (character == "{"){
-//      open_bracket++
-//    }
-//    if (character == "}"){
-//      close_bracket++
-//    }
-//    ...
-//  }
-
 unsigned int uniqueNumber(){
   if (EEPROMReadInt(35) == 65535){ 
     for (int y=0; y<=1; y++){
@@ -330,5 +260,76 @@ unsigned int uniqueNumber(){
   return EEPROMReadInt(35);
 }
 
+//void readJSON(String line){
+//  //{key:value, key2:[0,1,2,3],{nested_object_key:nested_object_value}}  //allow nested objects??
+//  while (open_bracket > close_bracket){
+//    ...
+//    if (character == "{"){
+//      open_bracket++
+//    }
+//    if (character == "}"){
+//      close_bracket++
+//    }
+//    ...
+//  }
+
+
+//void checkSDconfig(){
+//  int line = 0;  
+//  if (SD.exists("config.ini")){
+//    File config = SD.open("config.ini");
+//    config_count = config.size() / sizeof(config_entry);
+//    String SD_config_entry[config_count];
+//    while (line <= config_count){
+//      SD_config_entry[line] = readSDline(config, line);
+//      putstring("# ");
+//      Serial.println(SD_config_entry[line]);
+//      line++;
+//    }
+//  } else {
+//    Serial.println("# config.ini doesn't exist on SD card");
+//  }
+//}
+
+//config_entry Config2Struct(String config_line){
+//  string name
+//  config_entry config;
+//  name = config_line.substring(0,7);
+//  name.toCharArray(config.name, 8)
+//  //config.name = name.toArray();
+//  config.sensor_num = int(config_line.charAt(9));
+//  config.flag = int(config_line.charAt(11));
+//  config.show = int(config_line.charAt(13));
+//  return config;
+//}
+
+//void ConfigSD2Array(char file_name[12] = "config.ini", int line_num = 0){  //loads all configurations saved on SD card to sensor_config array
+//  char c;
+//  char entry[];
+//  //char sensor_config[][][3];
+//  int line_count = 0;
+//  if(SD.begin() != 0){
+//    putstring("Problem loading SD card");
+//    break;
+//  }
+//  file = SD.open(file_name)
+//  while((c = file.read())>0){
+//    if (c == '\n'){
+//      sensor_config[line_count][index] = entry;
+//      entry = "";
+//      line_count++;
+//      index = 0;
+//    } else {
+//      if (c == ','){
+//        sensor_config[line_count][index] = entry;
+//        entry = "";
+//        index++;
+//      } else {
+//        entry += c;
+//      }
+//    }
+//  }
+//  file.close();
+//}
 
 

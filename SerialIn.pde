@@ -49,70 +49,70 @@ void DoSerialIn() {
       break;
     case 's':
       Servo_Calib.write(Servo_Calib.read()+10);
-      Log_p("#Servo1 (degrees) now:");
+      Log_p("## Servo1 (degrees) now:");
       Logln(Servo_Calib.read());
       break;
     case 'S':
       Servo_Calib.write(Servo_Calib.read()-10);
-      Log_p("#Servo1 (degrees) now:");
+      Log_p("## Servo1 (degrees) now:");
       Logln(Servo_Calib.read());
       break;
     case 'l':
       lambda_setpoint += 0.01;
-      Log_p("#Lambda Setpoint now:");
+      Log_p("## Lambda Setpoint now:");
       Logln(lambda_setpoint);
       WriteLambda();
       break;
     case 'L':
       lambda_setpoint -= 0.01;
-      Log_p("#Lambda Setpoint now:");
+      Log_p("## Lambda Setpoint now:");
       Logln(lambda_setpoint);
       WriteLambda();
       break;
     case 't':
       loopPeriod1 = max(loopPeriod1-100,100);
-      Log_p("#Sample Period now:");
+      Log_p("## Sample Period now:");
       Logln(loopPeriod1);
       break;
     case 'T':
       loopPeriod1 = min(loopPeriod1+100,10000);
-      Log_p("#Sample Period now:");
+      Log_p("## Sample Period now:");
       Logln(loopPeriod1);
       break;
     case 'g':  
       grate_val = GRATE_SHAKE_CROSS; //set grate val to shake for grate_on_interval
-      Logln("#Grate Shaken");
+      Logln("## Grate Shaken");
       break;
     case 'G':  
       switch (grateMode) {
       case GRATE_SHAKE_OFF:
         grateMode = GRATE_SHAKE_ON;
-        Logln("#Grate Mode: On");
+        Logln("## Grate Mode: On");
         break;
       case GRATE_SHAKE_ON:
         grateMode = GRATE_SHAKE_PRATIO;
-        Logln("#Grate Mode: Pressure Ratio");
+        Logln("## Grate Mode: Pressure Ratio");
         break;
       case GRATE_SHAKE_PRATIO:
         grateMode = GRATE_SHAKE_OFF;
-        Logln("#Grate Mode: Off");
+        Logln("## Grate Mode: Off");
         break;
       }
       break;  
     case 'm':
       grate_max_interval += 5;
       grate_min_interval = grate_max_interval*0.5;
-      Log_p("#Grate Max Interval now:");
+      Log_p("## Grate Max Interval now:");
       Logln(grate_max_interval);
-      Log_p("#Grate Min Interval now:");
+      Log_p("## Grate Min Interval now:");
       Logln(grate_min_interval);
       break;
     case 'M':
       grate_max_interval -= 5;
       grate_min_interval = grate_max_interval*0.5;
-      Log_p("#Grate Max Interval now:");
+      Log_p("## Grate Max Interval now:");
       Logln(grate_max_interval);
-      Log_p("#Grate Min Interval now:");
+      Log_p("## Grate Min Interval now:");
       Logln(grate_min_interval);
       break;   
     case 'e':
@@ -127,18 +127,18 @@ void DoSerialIn() {
       if (memorySpace<4000){
         EEPROM.write(memorySpace, 255);
       }
-      Log_p("# Rewriting eeprom space "); Logln(memorySpace);
-      Log_p("# Changed to "); Logln(int(EEPROM.read(memorySpace)));
+      Log_p("## Rewriting eeprom space "); Logln(memorySpace);
+      Log_p("## Changed to "); Logln(int(EEPROM.read(memorySpace)));
     }
       break;
     case '-':
       loopPeriod2 = max(loopPeriod2-100,100);
-      Log_p("#Display Period (ms):");
+      Log_p("## Display Period (ms):");
       Logln(loopPeriod2);
       break;
     case '+':
       loopPeriod2 = min(loopPeriod2+100,1000);
-      Log_p("#Display Period (ms):");
+      Log_p("## Display Period (ms):");
       Logln(loopPeriod2);
       break;
     case '#':
@@ -148,7 +148,7 @@ void DoSerialIn() {
         EEPROMWriteAlpha(40, 10, serial_buffer);
       }
       EEPROMReadAlpha(40, 10, serial_num);
-      Log_p("# Serial number: ");
+      Log_p("## Serial number: ");
       Logln(serial_num);
       break;
 //   case 'h' || 'H':
@@ -199,7 +199,7 @@ void SerialReadString(char endString){
 
 
 void PrintLambdaUpdate(double P, double I, double D, double nP, double nI, double nD) {
-  Log_p("#Updating PID from [");
+  Log_p("## Updating PID from [");
   Serial.print(P);
   Log_p(",");
   Serial.print(I);
