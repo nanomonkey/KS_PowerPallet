@@ -32,7 +32,7 @@ void DoLambda() {
         if (lambda_input < 0.52) {
           TransitionLambda(LAMBDA_NO_SIGNAL);
         }
-        if (engine_state == ENGINE_SHUTDOWN){
+        if (engine_state == ENGINE_SHUTDOWN) {
           TransitionLambda(LAMBDA_SHUTDOWN);
         }
         break;
@@ -83,7 +83,7 @@ void DoLambda() {
         if (lambda_input > 0.52) {
           TransitionLambda(LAMBDA_CLOSEDLOOP);
         }
-        if (engine_state == ENGINE_SHUTDOWN){
+        if (engine_state == ENGINE_SHUTDOWN) {
           TransitionLambda(LAMBDA_SHUTDOWN);
         }
         break;
@@ -94,7 +94,7 @@ void DoLambda() {
         break;
       case LAMBDA_RESTART:
         if (millis() - lambda_state_entered > 60000) {
-          if (engine_state == ENGINE_ON){
+          if (engine_state == ENGINE_ON) {
             Log_p("## No O2 Signal, Shutting down Engine at: ");
             Logln(millis() - lambda_state_entered);
             TransitionEngine(ENGINE_SHUTDOWN);
@@ -111,7 +111,7 @@ void DoLambda() {
         break;
       case LAMBDA_UNKNOWN:
         if (lambda_input > 0.52) {
-          if (engine_state == ENGINE_ON){
+          if (engine_state == ENGINE_ON) {
             TransitionLambda(LAMBDA_CLOSEDLOOP);
           }  else {
             TransitionLambda(LAMBDA_SEALED);
@@ -123,7 +123,7 @@ void DoLambda() {
         }
         break;
       case LAMBDA_SHUTDOWN:
-        if (millis()-lambda_state_entered > 2000){
+        if (millis()-lambda_state_entered > 2000) {
           SetPremixServoAngle(1);
         }
         if (engine_state == ENGINE_OFF) {
@@ -131,7 +131,7 @@ void DoLambda() {
         }
         break;
       case LAMBDA_STARTING:
-        if ((lambda_input > 0.52) && (lambda_input <= lambda_rich/100)){ //as soon as mixture gets rich
+        if ((lambda_input > 0.52) && (lambda_input <= lambda_rich/100)) { //as soon as mixture gets rich
           SetPremixServoAngle(premix_valve_center);
           lambda_output = premix_valve_center;  //necessary? 
           TransitionLambda(LAMBDA_CLOSEDLOOP);
@@ -150,7 +150,7 @@ void DoLambda() {
 //        if (lambda_input < 0.52) {
 //          TransitionLambda(LAMBDA_NO_SIGNAL);
 //        }
-        if (engine_state == ENGINE_SHUTDOWN){
+        if (engine_state == ENGINE_SHUTDOWN) {
           TransitionLambda(LAMBDA_SHUTDOWN);
         }
         break;
