@@ -792,9 +792,7 @@ void DoKeyInput() {
       TransitionDisplay(DISPLAY_GRATE);
       break;
     case DISPLAY_GRATE:
-      if (grateMode != GRATE_SHAKE_PRATIO){
-        grateMode = GRATE_SHAKE_PRATIO;
-      }
+      grateMode = GRATE_SHAKE_PRATIO;
       if (config_changed == true){
         TransitionDisplay(DISPLAY_REACTOR);
       } else {
@@ -815,8 +813,8 @@ void DoKeyInput() {
         TransitionDisplay(DISPLAY_SERVO);
       } 
       else {
-        TransitionDisplay(DISPLAY_REACTOR);
         TransitionTesting(TESTING_OFF);
+        TransitionDisplay(DISPLAY_REACTOR);
       }
       break;
     case DISPLAY_SERVO:

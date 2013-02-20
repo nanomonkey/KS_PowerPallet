@@ -82,8 +82,10 @@ String readSDline(File file, int line_num = 0){ //pass an open file
 void Logln(String logString){
   Serial.println(logString);
   if (save_datalog_to_sd && sd_loaded){
-    //logString = String(String(millis()/100) + " " + logString);
-    logString.replace('##', String(millis()/100));
+    if (logString[0] == '#'){
+      logString = String(String(millis()/100) + " " + logString);
+    }
+    //logString.replace('##', String(millis()/100));
     DatalogSD(logString, sd_log_file_name, true);
   }
 }
@@ -117,7 +119,7 @@ void Logln(double logDouble){
 void Log(String logString){
   Serial.print(logString);
   if (save_datalog_to_sd && sd_loaded){
-    //logString = String(String(millis()/100) + " " + logString);
+    logString = String(String(millis()/100) + " " + logString);
 //    String finalString;
 //    dtostrf(millis()/100.0, 5, 3, float_buf);
 //    finalString = String(millis()/100);
@@ -125,7 +127,7 @@ void Log(String logString){
 //    finalString += logString;
 //    DatalogSD(finalString, sd_log_file_name, false);
 //    finalString = "";
-     logString.replace('##', String(millis()/100));
+     //logString.replace('##', String(millis()/100));
      DatalogSD(logString, sd_log_file_name, false);
   }
 }

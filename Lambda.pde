@@ -133,7 +133,7 @@ void DoLambda() {
       case LAMBDA_STARTING:
         if ((lambda_input > 0.52) && (lambda_input <= lambda_rich/100)){ //as soon as mixture gets rich
           SetPremixServoAngle(premix_valve_center);
-          lambda_output = premix_valve_center;
+          lambda_output = premix_valve_center;  //necessary? 
           TransitionLambda(LAMBDA_CLOSEDLOOP);
         }
         if (engine_state == ENGINE_OFF) {
@@ -191,9 +191,9 @@ void TransitionLambda(int new_state) {
     case LAMBDA_CLOSEDLOOP:
       lambda_state_name = "Closed Loop";
       lambda_setpoint = lambda_setpoint_mode[0];
-      if (engine_state == ENGINE_STARTING){
-        lambda_output = premix_valve_center;
-      }
+//      if (engine_state == ENGINE_STARTING){
+//        lambda_output = premix_valve_center;
+//      }
       lambda_PID.SetMode(AUTO);
       lambda_PID.SetSampleTime(20);
       lambda_PID.SetInputLimits(0.5,1.5);
@@ -239,6 +239,7 @@ void TransitionLambda(int new_state) {
     case LAMBDA_STARTING:
       lambda_state_name = "Lambda starting";
       SetPremixServoAngle(premix_valve_closed);
+      lambda_PID.SetMode(MANUAL);
       break;
   }
   Log_p(" to ");  

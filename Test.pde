@@ -131,7 +131,7 @@ void GoToNextTestingState() {
 }
 
 void turnAllOff(){
-      digitalWrite(FET_AUGER,LOW);
+    digitalWrite(FET_AUGER,LOW);
     digitalWrite(FET_GRATE,LOW);
     digitalWrite(FET_IGNITION,LOW);
     digitalWrite(FET_STARTER,LOW);
