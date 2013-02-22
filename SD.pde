@@ -46,48 +46,16 @@ void DatalogSD(String dataString, char file_name[13], boolean newline) {    //fi
   } 
 }
 
-String readSDline(char file_name[13], int line_num = 0){ //pass a filename in the root directory
-  char c;
-  String SD_line = "";
-  //  SD.begin(SS_PIN);
-  int line_count = 0;
-  File file = SD.open(file_name);
-  while((c=file.read())>0 && line_count <= line_num){
-    if (c == '\n'){
-      line_count++;
-    }
-    if (line_count == line_num && c != '\n'){
-      SD_line += c;
-    }
-  }
-  file.close();
-  return SD_line;
-}
-
-String readSDline(File file, int line_num = 0){ //pass an open file
-  char c;
-  String SD_line = "";
-  int line_count = 0;
-  while((c=file.read())>0 && line_count <= line_num){
-    if (c == '\n'){
-      line_count++;
-    }
-    if (line_count == line_num && c != '\n'){
-      SD_line += c;
-    }
-  }
-  return SD_line;
-}
 
 void Logln(String logString){
   Serial.println(logString);
-  if (save_datalog_to_sd && sd_loaded){
-    if (logString[0] == '#'){
-      logString = String(String(millis()/100) + " " + logString);
-    }
-    //logString.replace('##', String(millis()/100));
-    DatalogSD(logString, sd_log_file_name, true);
-  }
+//  if (save_datalog_to_sd && sd_loaded){
+//    if (logString[0] == '#'){
+//      logString = String(String(millis()/100) + " " + logString);
+//    }
+//    //logString.replace('##', String(millis()/100));
+//    DatalogSD(logString, sd_log_file_name, true);
+//  }
 }
 
 void Logln(char logCharArray[]){
@@ -118,18 +86,20 @@ void Logln(double logDouble){
 
 void Log(String logString){
   Serial.print(logString);
-  if (save_datalog_to_sd && sd_loaded){
-    logString = String(String(millis()/100) + " " + logString);
-//    String finalString;
-//    dtostrf(millis()/100.0, 5, 3, float_buf);
-//    finalString = String(millis()/100);
-//    finalString += " ";
-//    finalString += logString;
-//    DatalogSD(finalString, sd_log_file_name, false);
-//    finalString = "";
-     //logString.replace('##', String(millis()/100));
-     DatalogSD(logString, sd_log_file_name, false);
-  }
+// if (save_datalog_to_sd && sd_loaded){
+//    if (logString[0] == '#'){
+//      logString = String(String(millis()/100) + " " + logString);
+//    }
+////    String finalString;
+////    dtostrf(millis()/100.0, 5, 3, float_buf);
+////    finalString = String(millis()/100);
+////    finalString += " ";
+////    finalString += logString;
+////    DatalogSD(finalString, sd_log_file_name, false);
+////    finalString = "";
+//     //logString.replace('##', String(millis()/100));
+//     DatalogSD(logString, sd_log_file_name, false);
+//  }
 }
 
 void Log(char logCharArray[]){
@@ -261,6 +231,39 @@ unsigned int uniqueNumber(){
   }
   return EEPROMReadInt(35);
 }
+
+//String readSDline(char file_name[13], int line_num = 0){ //pass a filename in the root directory
+//  char c;
+//  String SD_line = "";
+//  //  SD.begin(SS_PIN);
+//  int line_count = 0;
+//  File file = SD.open(file_name);
+//  while((c=file.read())>0 && line_count <= line_num){
+//    if (c == '\n'){
+//      line_count++;
+//    }
+//    if (line_count == line_num && c != '\n'){
+//      SD_line += c;
+//    }
+//  }
+//  file.close();
+//  return SD_line;
+//}
+
+//String readSDline(File file, int line_num = 0){ //pass an open file
+//  char c;
+//  String SD_line = "";
+//  int line_count = 0;
+//  while((c=file.read())>0 && line_count <= line_num){
+//    if (c == '\n'){
+//      line_count++;
+//    }
+//    if (line_count == line_num && c != '\n'){
+//      SD_line += c;
+//    }
+//  }
+//  return SD_line;
+//}
 
 //void readJSON(String line){
 //  //{key:value, key2:[0,1,2,3],{nested_object_key:nested_object_value}}  //allow nested objects??

@@ -606,7 +606,7 @@ void DoDisplay() {
       config_var = 0;
     }
     if (config_var == -1){  //keeps values from being negative
-      config_var = 254;
+      config_var = config_max[cur_item];
     }
     Disp_RC(0,0);
     Disp_PutStr(P("   Configurations   "));
@@ -895,9 +895,9 @@ int getConfig(int item){
     if (value == 255){  //values hasn't been saved yet to EEPROM, go with default value saved in defaults[]
       value = defaults[item];
       EEPROM.write(499+item, value);
+      config_changed = true;
     }
   }
-  config_changed = true;
   return value;
 }
 
