@@ -49,13 +49,13 @@ void DatalogSD(String dataString, char file_name[13], boolean newline) {    //fi
 
 void Logln(String logString){
   Serial.println(logString);
-//  if (save_datalog_to_sd && sd_loaded){
-//    if (logString[0] == '#'){
-//      logString = String(String(millis()/100) + " " + logString);
-//    }
-//    //logString.replace('##', String(millis()/100));
-//    DatalogSD(logString, sd_log_file_name, true);
-//  }
+  if (save_datalog_to_sd && sd_loaded){
+    if (logString[0] == '#'){
+      logString = String(String(millis()/100) + " " + logString);
+    }
+    //logString.replace('##', String(millis()/100));
+    DatalogSD(logString, sd_log_file_name, true);
+  }
 }
 
 void Logln(char logCharArray[]){
@@ -86,20 +86,20 @@ void Logln(double logDouble){
 
 void Log(String logString){
   Serial.print(logString);
-// if (save_datalog_to_sd && sd_loaded){
-//    if (logString[0] == '#'){
-//      logString = String(String(millis()/100) + " " + logString);
-//    }
-////    String finalString;
-////    dtostrf(millis()/100.0, 5, 3, float_buf);
-////    finalString = String(millis()/100);
-////    finalString += " ";
-////    finalString += logString;
-////    DatalogSD(finalString, sd_log_file_name, false);
-////    finalString = "";
-//     //logString.replace('##', String(millis()/100));
-//     DatalogSD(logString, sd_log_file_name, false);
-//  }
+ if (save_datalog_to_sd && sd_loaded){
+    if (logString[0] == '#'){
+      logString = String(String(millis()/100) + " " + logString);
+    }
+//    String finalString;
+//    dtostrf(millis()/100.0, 5, 3, float_buf);
+//    finalString = String(millis()/100);
+//    finalString += " ";
+//    finalString += logString;
+//    DatalogSD(finalString, sd_log_file_name, false);
+//    finalString = "";
+     //logString.replace('##', String(millis()/100));
+     DatalogSD(logString, sd_log_file_name, false);
+  }
 }
 
 void Log(char logCharArray[]){

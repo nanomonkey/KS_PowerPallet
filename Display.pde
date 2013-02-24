@@ -611,34 +611,36 @@ void DoDisplay() {
     Disp_RC(0,0);
     Disp_PutStr(P("   Configurations   "));
     Disp_RC(1,0);
-    if (Config_Choices[cur_item] == "+    -  "){
-      sprintf(buf, "%s:%3i ", Configuration[cur_item], config_var);
+    strcpy_P(config_buffer, (char*)pgm_read_word(&(Configuration[cur_item])));
+    strcpy_P(config_choice_buffer, (char*)pgm_read_word(&(Config_Choices[cur_item])));
+    if (config_choice_buffer == "+    -  "){ 
+      sprintf(buf, "%s:%3i ", config_buffer, config_var);
     } 
-    else if (Config_Choices[cur_item] == "+5  -5  "){
-      sprintf(buf, "%s:%4i", Configuration[cur_item], 5*config_var);
+    else if (config_choice_buffer == "+5  -5  "){
+      sprintf(buf, "%s:%4i ", config_buffer, config_var*5);
     } 
     else {
       if (config_var == 0){
-        choice[0] = Config_Choices[cur_item][0];
-        choice[1] = Config_Choices[cur_item][1];
-        choice[2] = Config_Choices[cur_item][2];
-        choice[3] = Config_Choices[cur_item][3];
+        choice[0] = config_choice_buffer[0];
+        choice[1] = config_choice_buffer[1];
+        choice[2] = config_choice_buffer[2];
+        choice[3] = config_choice_buffer[3];
       } 
       else {
-        choice[0] = Config_Choices[cur_item][4];
-        choice[1] = Config_Choices[cur_item][5];
-        choice[2] = Config_Choices[cur_item][6];
-        choice[3] = Config_Choices[cur_item][7];
+        choice[0] = config_choice_buffer[4];
+        choice[1] = config_choice_buffer[5];
+        choice[2] = config_choice_buffer[6];
+        choice[3] = config_choice_buffer[7];
       }
-      sprintf(buf, "%s:%s", Configuration[cur_item], choice);
+      sprintf(buf, "%s:%s", config_buffer, choice);
     }
     Disp_PutStr(buf);
     Disp_RC(2,0);
     Disp_PutStr(P("ADV to save choice  "));
     Disp_RC(3,0);
-    sprintf(buf, "NEXT  ADV   %s", Config_Choices[cur_item]);
+    sprintf(buf, "NEXT  ADV   %s", config_choice_buffer);
     Disp_PutStr(buf);
-    if (Config_Choices[cur_item] == "+    -  "){
+    if (config_choice_buffer == "+    -  "){
       if (key == 2) {
         if (config_max[cur_item] >= config_var + 1){
           config_var += 1;
@@ -652,7 +654,7 @@ void DoDisplay() {
         }
       }
     } 
-    else if (Config_Choices[cur_item] == "+5  -5  "){
+    else if (config_choice_buffer == "+5  -5  "){
       if (key == 2) {
         if (config_max[cur_item] >= config_var + 1){
           config_var += 1;

@@ -211,52 +211,58 @@ int lineCount = 0;
 #define CONFIG_COUNT 20  
 int config_var;
 byte config_changed = false;
+char config_buffer[] = "               ";
+char config_choice_buffer[] = "        ";
 
-static char *Configuration[CONFIG_COUNT] = { //15 character Display prompt
-"Reset Defaults?", 
-"Engine Type    ", 
-"Relay Board    ", 
-"Auger Rev (.1s)", 
-"Auger Low (.1A)", 
-"Auger High(.1A)", 
-"Low Oil (PSI)  ", 
-"Datalog SD card", 
-"Pratio Accum#  ", 
-"High Coolant T ", 
-"Display Per .1s", 
-"Ttred low temp?", 
-"Ttred High Temp", 
-"Tbred High Temp",
-"Pfilter Accum# ", 
-"Grate Max Inter", 
-"Grate Min Inter", 
-"Grate On Interv",
-"Servo Start Pos",
-"Lambda Rich    "
-};  
+prog_char config_0[] PROGMEM = "Reset Defaults?";
+prog_char config_1[] PROGMEM = "Engine Type    "; 
+prog_char config_2[] PROGMEM = "Relay Board    "; 
+prog_char config_3[] PROGMEM = "Auger Rev (.1s)"; 
+prog_char config_4[] PROGMEM = "Auger Low (.1A)"; 
+prog_char config_5[] PROGMEM = "Auger High(.1A)"; 
+prog_char config_6[] PROGMEM = "Low Oil (PSI)  "; 
+prog_char config_7[] PROGMEM = "Datalog SD card"; 
+prog_char config_8[] PROGMEM = "Pratio Accum#  "; 
+prog_char config_9[] PROGMEM = "High Coolant T "; 
+prog_char config_10[] PROGMEM = "Display Per .1s"; 
+prog_char config_11[] PROGMEM = "Ttred low temp?"; 
+prog_char config_12[] PROGMEM = "Ttred High Temp"; 
+prog_char config_13[] PROGMEM = "Tbred High Temp";
+prog_char config_14[] PROGMEM = "Pfilter Accum# "; 
+prog_char config_15[] PROGMEM = "Grate Max Inter"; 
+prog_char config_16[] PROGMEM = "Grate Min Inter"; 
+prog_char config_17[] PROGMEM = "Grate On Interv";
+prog_char config_18[] PROGMEM = "Servo Start Pos";
+prog_char config_19[] PROGMEM = "Lambda Rich    ";
 
-//8 char options for last two buttons
-static char *Config_Choices[CONFIG_COUNT] = { 
-"NO  YES ", 
-"10k 20k ",
-"NO  YES ",
-"+    -  ", 
-"+    -  ", 
-"+    -  ", 
-"+    -  ", 
-"NO  YES ", 
-"+5  -5  ", 
-"+    -  ", 
-"+    -  ", 
-"+5  -5  ", 
-"+5  -5  ", 
-"+5  -5  ",
-"+    -  ", 
-"+5  -5  ", 
-"+5  -5  ", 
-"+    -  ",
-"+    -  ",
-"+    -  "
+PROGMEM const char *Configuration[CONFIG_COUNT] = {config_0, config_1, config_2, config_3, config_4, config_5, config_6, config_7, config_8, config_9, config_10, config_11, config_12, config_13, config_14, config_15, config_16, config_17, config_18, config_19};
+
+prog_char plus_minus[] PROGMEM = "+    -  ";
+prog_char no_yes[] PROGMEM = "NO  YES ";
+prog_char ten_twenty_k[] PROGMEM = "10k 20k ";
+prog_char plus_minus_five[] PROGMEM = "+5  -5  ";
+
+PROGMEM const char *Config_Choices[CONFIG_COUNT] = {
+no_yes, 
+ten_twenty_k,
+no_yes,
+plus_minus, 
+plus_minus, 
+plus_minus, 
+plus_minus, 
+no_yes, 
+plus_minus_five, 
+plus_minus, 
+plus_minus, 
+plus_minus_five, 
+plus_minus_five, 
+plus_minus_five,
+plus_minus, 
+plus_minus_five, 
+plus_minus_five, 
+plus_minus,
+plus_minus,
+plus_minus
 }; 
 
 int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   20,  98,  10,  130, 210, 195, 50,  60,  12,  3,   15, 114};  //default values to be saved to EEPROM for the following getConfig variables
@@ -672,8 +678,8 @@ void setup() {
   InitLambda();
   InitServos();
   InitGrate();  
-  InitPeriodHertz(); //attach interrupt
-  InitCounterHertz();
+  //InitPeriodHertz(); //attach interrupt
+  //InitCounterHertz();
   InitSD();
   //InitGovernor();
   //InitPulseEnergyMonitoring();
@@ -706,7 +712,7 @@ void loop() {
       DoReactor();
       DoAuger();
       DoBattery();
-      DoCounterHertz();
+ //     DoCounterHertz();
     }
     DoKeyInput();
     DoHeartBeat(); // blink heartbeat LED

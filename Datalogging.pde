@@ -225,13 +225,13 @@ void LogAuger(boolean header = false) {
 //  }
 //}
 
-void LogHertz(boolean header = false) {
-  if (header) {
-    PrintColumn("Hz");
-  } else {
-    PrintColumnInt(CalculatePeriodHertz());
-  }
-}
+//void LogHertz(boolean header = false) {
+//  if (header) {
+//    PrintColumn("Hz");
+//  } else {
+//    PrintColumnInt(CalculatePeriodHertz());
+//  }
+//}
 
 //void LogCounterHertz(boolean header = false) {
 //  if (header) {
