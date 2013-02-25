@@ -552,43 +552,44 @@ int alarm_shown = 0;
 #define ALARM_TTRED_HIGH 14
 #define ALARM_TBRED_HIGH 15
 
-char* display_alarm[ALARM_NUM] = {  //line 1 on display
-  "Auger on too long   ",
-  "Auger off too long  ",
-  "Bad Reactor P_ratio ",
-  "Bad Filter P_ratio  ",
-  "Reactor Fuel Low    ",
-  "tred low for eng.   ",
-  "bred high for eng.  ",
-  "Check Oil Pressure  ",
-  "No O2 Sensor Signal ",
-  "Auger Low Current   ",
-  "FuelSwitch/Auger Jam",
-  "High P_comb         ",
-  "High Coolant Temp   ",
-  "Reduction Temp Low  ",
-  "Reduction Temp High ",
-  "Reduction Temp High "
-}; //20 char message for 4x20 display
+prog_char alarm_1[] PROGMEM = "Auger on too long   ";
+prog_char alarm_2[] PROGMEM = "Auger off too long  ";
+prog_char alarm_3[] PROGMEM = "Bad Reactor P_ratio ";
+prog_char alarm_4[] PROGMEM = "Bad Filter P_ratio  ";
+prog_char alarm_5[] PROGMEM = "Reactor Fuel Low    ";
+prog_char alarm_6[] PROGMEM = "tred low for eng.   ";
+prog_char alarm_7[] PROGMEM = "bred high for eng.  ";
+prog_char alarm_8[] PROGMEM = "Check Oil Pressure  ";
+prog_char alarm_9[] PROGMEM = "No O2 Sensor Signal ";
+prog_char alarm_10[] PROGMEM = "Auger Low Current   ";
+prog_char alarm_11[] PROGMEM = "FuelSwitch/Auger Jam";
+prog_char alarm_12[] PROGMEM = "High P_comb         ";
+prog_char alarm_13[] PROGMEM = "High Coolant Temp   ";
+prog_char alarm_14[] PROGMEM = "Reduction Temp Low  ";
+prog_char alarm_15[] PROGMEM = "Reduction Temp High ";
+prog_char alarm_16[] PROGMEM = "Reduction Temp High ";
 
-char* display_alarm2[ALARM_NUM] = {  //line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
-  "Check Fuel          ",
-  "Bridging?           ",
-  "Reactor Fuel Issue  ",
-  "Check Filter        ",
-  "Check Auger/Fuel    ",  //Not implemented!!
-  "Increase Load       ",
-  "Low Fuel in Reactor?",
-  "                    ",
-  "                    ",
-  "Check Fuel          ",
-  "Check Fuel & Switch ",
-  "Check Air Intake    ",
-  "                    ",
-  "                    ",
-  "Reduce Load         ",
-  "Reduce Load         "
-};
+PROGMEM const char *display_alarm[]  = {alarm_1, alarm_2, alarm_3, alarm_4, alarm_5, alarm_6, alarm_7, alarm_8, alarm_9, alarm_10, alarm_11, alarm_12, alarm_13, alarm_14, alarm_15, alarm_16};
+
+//line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
+prog_char alarm2_1[] PROGMEM = "Check Fuel          ";
+prog_char alarm2_2[] PROGMEM = "Bridging?           ";
+prog_char alarm2_3[] PROGMEM = "Reactor Fuel Issue  ";
+prog_char alarm2_4[] PROGMEM = "Check Filter        ";
+prog_char alarm2_5[] PROGMEM = "Check Auger/Fuel    ";  //Not implemented!!
+prog_char alarm2_6[] PROGMEM = "Increase Load       ";
+prog_char alarm2_7[] PROGMEM = "Low Fuel in Reactor?";
+prog_char alarm2_8[] PROGMEM = "                    ";
+prog_char alarm2_9[] PROGMEM = "                    ";
+prog_char alarm2_10[] PROGMEM = "Check Fuel          ";
+prog_char alarm2_11[] PROGMEM = "Check Fuel & Switch ";
+prog_char alarm2_12[] PROGMEM = "Check Air Intake    ";
+prog_char alarm2_13[] PROGMEM = "                    ";
+prog_char alarm2_14[] PROGMEM = "                    ";
+prog_char alarm2_15[] PROGMEM = "Reduce Load         ";
+prog_char alarm2_16[] PROGMEM = "Reduce Load         ";
+
+PROGMEM const char *display_alarm2[] = {alarm2_1, alarm2_2, alarm2_3, alarm2_4, alarm2_5, alarm2_6, alarm2_7, alarm2_8, alarm2_9, alarm2_10, alarm2_11, alarm2_12, alarm2_13, alarm2_14, alarm2_15, alarm2_16};
 
 // SD Card
 boolean sd_loaded;

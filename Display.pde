@@ -49,10 +49,12 @@ void DoDisplay() {
       Disp_PutStr(buf);
       //Row 1
       Disp_RC(1, 0);
-      Disp_PutStr(display_alarm[alarm_shown]);
+      strcpy_P(p_buffer, (char*)pgm_read_word(&(display_alarm[alarm_shown])));
+      Disp_PutStr(p_buffer);
       //Row 2
       Disp_RC(2, 0);
-      Disp_PutStr(display_alarm2[alarm_shown]);
+      strcpy_P(p_buffer, (char*)pgm_read_word(&(display_alarm2[alarm_shown])));
+      Disp_PutStr(p_buffer);
       if (shutdown[alarm_shown] > 999 && engine_state == ENGINE_ON){     //anything less than 999 is probably a count and not a shutdown time in millisecond so don't show. 
         Disp_RC(2, 13);
         sprintf(buf, "OFF:%3i", (shutdown[alarm_shown] - alarm_start[alarm_shown] - (millis() - alarm_on[alarm_shown]))/1000);
