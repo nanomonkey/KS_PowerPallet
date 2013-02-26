@@ -567,9 +567,9 @@ prog_char alarm_12[] PROGMEM = "High P_comb         ";
 prog_char alarm_13[] PROGMEM = "High Coolant Temp   ";
 prog_char alarm_14[] PROGMEM = "Reduction Temp Low  ";
 prog_char alarm_15[] PROGMEM = "Reduction Temp High ";
-prog_char alarm_16[] PROGMEM = "Reduction Temp High ";
+//prog_char alarm_16[] PROGMEM = "Reduction Temp High ";
 
-PROGMEM const char *display_alarm[]  = {alarm_1, alarm_2, alarm_3, alarm_4, alarm_5, alarm_6, alarm_7, alarm_8, alarm_9, alarm_10, alarm_11, alarm_12, alarm_13, alarm_14, alarm_15, alarm_16};
+PROGMEM const char *display_alarm[]  = {alarm_1, alarm_2, alarm_3, alarm_4, alarm_5, alarm_6, alarm_7, alarm_8, alarm_9, alarm_10, alarm_11, alarm_12, alarm_13, alarm_14, alarm_15, alarm_15};
 
 //line 2 on display.  If shutdown[] is greater than zero, countdown will be added to last 3 spaces.
 prog_char alarm2_1[] PROGMEM = "Check Fuel          ";
@@ -581,15 +581,15 @@ prog_char alarm2_6[] PROGMEM = "Increase Load       ";
 prog_char alarm2_7[] PROGMEM = "Low Fuel in Reactor?";
 //prog_char alarm2_8[] PROGMEM = "                    ";
 //prog_char alarm2_9[] PROGMEM = "                    ";
-prog_char alarm2_10[] PROGMEM = "Check Fuel          ";
+//prog_char alarm2_10[] PROGMEM = "Check Fuel          ";
 prog_char alarm2_11[] PROGMEM = "Check Fuel & Switch ";
 prog_char alarm2_12[] PROGMEM = "Check Air Intake    ";
 //prog_char alarm2_13[] PROGMEM = "                    ";
 //prog_char alarm2_14[] PROGMEM = "                    ";
 prog_char alarm2_15[] PROGMEM = "Reduce Load         ";
-prog_char alarm2_16[] PROGMEM = "Reduce Load         ";
+//prog_char alarm2_16[] PROGMEM = "Reduce Load         ";
 
-PROGMEM const char *display_alarm2[] = {alarm2_1, alarm2_2, alarm2_3, alarm2_4, alarm2_5, alarm2_6, alarm2_7, blank, blank, alarm2_10, alarm2_11, alarm2_12, blank, blank, alarm2_15, alarm2_16};
+PROGMEM const char *display_alarm2[] = {alarm2_1, alarm2_2, alarm2_3, alarm2_4, alarm2_5, alarm2_6, alarm2_7, blank, blank, alarm2_1, alarm2_11, alarm2_12, blank, blank, alarm2_15, alarm2_15};
 
 // SD Card
 boolean sd_loaded;
