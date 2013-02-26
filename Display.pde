@@ -564,7 +564,8 @@ void DoDisplay() {
     Disp_RC(1,0);
     Disp_PutStr(P("Sensors to zero?    "));
     Disp_RC(2,0);
-    Disp_PutStr("                    ");
+    strcpy_P(buf, blank);
+    Disp_PutStr(buf);
     Disp_RC(3,0);
     Disp_PutStr(P("NEXT       YES      "));
     if (key == 2) {
@@ -615,10 +616,10 @@ void DoDisplay() {
     Disp_RC(1,0);
     strcpy_P(config_buffer, (char*)pgm_read_word(&(Configuration[cur_item])));
     strcpy_P(config_choice_buffer, (char*)pgm_read_word(&(Config_Choices[cur_item])));
-    if (config_choice_buffer == "+    -  "){ 
+    if (strcmp(config_choice_buffer, "+    -  ") == 0){
       sprintf(buf, "%s:%3i ", config_buffer, config_var);
     } 
-    else if (config_choice_buffer == "+5  -5  "){
+    else if (strcmp(config_choice_buffer, "+5  -5  ") == 0){
       sprintf(buf, "%s:%4i ", config_buffer, config_var*5);
     } 
     else {
@@ -642,7 +643,7 @@ void DoDisplay() {
     Disp_RC(3,0);
     sprintf(buf, "NEXT  ADV   %s", config_choice_buffer);
     Disp_PutStr(buf);
-    if (config_choice_buffer == "+    -  "){
+    if (strcmp(config_choice_buffer, "+    -  ") == 0){
       if (key == 2) {
         if (config_max[cur_item] >= config_var + 1){
           config_var += 1;
@@ -656,7 +657,7 @@ void DoDisplay() {
         }
       }
     } 
-    else if (config_choice_buffer == "+5  -5  "){
+    else if (strcmp(config_choice_buffer, "+5  -5  ") == 0){
       if (key == 2) {
         if (config_max[cur_item] >= config_var + 1){
           config_var += 1;

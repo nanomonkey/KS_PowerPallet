@@ -579,17 +579,17 @@ prog_char alarm2_4[] PROGMEM = "Check Filter        ";
 prog_char alarm2_5[] PROGMEM = "Check Auger/Fuel    ";  //Not implemented!!
 prog_char alarm2_6[] PROGMEM = "Increase Load       ";
 prog_char alarm2_7[] PROGMEM = "Low Fuel in Reactor?";
-prog_char alarm2_8[] PROGMEM = "                    ";
-prog_char alarm2_9[] PROGMEM = "                    ";
+//prog_char alarm2_8[] PROGMEM = "                    ";
+//prog_char alarm2_9[] PROGMEM = "                    ";
 prog_char alarm2_10[] PROGMEM = "Check Fuel          ";
 prog_char alarm2_11[] PROGMEM = "Check Fuel & Switch ";
 prog_char alarm2_12[] PROGMEM = "Check Air Intake    ";
-prog_char alarm2_13[] PROGMEM = "                    ";
-prog_char alarm2_14[] PROGMEM = "                    ";
+//prog_char alarm2_13[] PROGMEM = "                    ";
+//prog_char alarm2_14[] PROGMEM = "                    ";
 prog_char alarm2_15[] PROGMEM = "Reduce Load         ";
 prog_char alarm2_16[] PROGMEM = "Reduce Load         ";
 
-PROGMEM const char *display_alarm2[] = {alarm2_1, alarm2_2, alarm2_3, alarm2_4, alarm2_5, alarm2_6, alarm2_7, alarm2_8, alarm2_9, alarm2_10, alarm2_11, alarm2_12, alarm2_13, alarm2_14, alarm2_15, alarm2_16};
+PROGMEM const char *display_alarm2[] = {alarm2_1, alarm2_2, alarm2_3, alarm2_4, alarm2_5, alarm2_6, alarm2_7, blank, blank, alarm2_10, alarm2_11, alarm2_12, blank, blank, alarm2_15, alarm2_16};
 
 // SD Card
 boolean sd_loaded;
