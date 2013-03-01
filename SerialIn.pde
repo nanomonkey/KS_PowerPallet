@@ -47,16 +47,16 @@ void DoSerialIn() {
       CalibratePressureSensors();
       LoadPressureSensorCalibration();
       break;
-    case 's':
-      Servo_Calib.write(Servo_Calib.read()+10);
-      Log_p("## Servo1 (degrees) now:");
-      Logln(Servo_Calib.read());
-      break;
-    case 'S':
-      Servo_Calib.write(Servo_Calib.read()-10);
-      Log_p("## Servo1 (degrees) now:");
-      Logln(Servo_Calib.read());
-      break;
+//    case 's':
+//      Servo_Calib.write(Servo_Calib.read()+10);
+//      Log_p("## Servo1 (degrees) now:");
+//      Logln(Servo_Calib.read());
+//      break;
+//    case 'S':
+//      Servo_Calib.write(Servo_Calib.read()-10);
+//      Log_p("## Servo1 (degrees) now:");
+//      Logln(Servo_Calib.read());
+//      break;
     case 'l':
       lambda_setpoint += 0.01;
       Log_p("## Lambda Setpoint now:");

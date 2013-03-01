@@ -1,7 +1,6 @@
 void DoDisplay() {
   boolean disp_alt; // Var for alternating value display
-  char choice[5] = "    ";
-  char buf[20];
+
   if (millis() % (display_per*200) > (display_per*100) ) {    //  if (millis() % 2000 > 1000) {
     disp_alt = false;
   } 
@@ -136,7 +135,7 @@ void DoDisplay() {
         } 
         else {
           sprintf(buf, "AugOff%3i  ", (millis() - auger_state_entered)/1000);  
-        }  
+        }
         break;
       case AUGER_REVERSE:
         sprintf(buf, "AugRev%3i  ", (millis() - auger_state_entered)/1000); 
@@ -215,7 +214,8 @@ void DoDisplay() {
     Disp_PutStr(P("Testing             ")); 
     //Row 1			
     Disp_RC(1,0);
-    sprintf(buf, "%-20s", TestingStateName[testing_state]);
+    strcpy_P(config_buffer, (char*)pgm_read_word(&(TestingStateName[testing_state])));
+    sprintf(buf, "%-20s", config_buffer);
     Disp_PutStr(buf);
     //Row 2
     Disp_RC(2,0);
@@ -434,7 +434,6 @@ void DoDisplay() {
     //      break; 
     //    }
     //    break;
-
     Disp_CursOff();
     Disp_RC(0,0);
     Disp_PutStr(P("   Manual Control   ")); 

@@ -1,8 +1,6 @@
 // KS_PowerPallet
 // Library used to run APL Power Pallet
 // Developed for the APL GCU/PCU: http://gekgasifier.pbworks.com/Gasifier-Control-Unit
-//#define <pins_arduino.h> <pins_PCU.h>
-//#define <pins_arduino.c> <pins_PCU.c>
 
 #include <EEPROM.h>         // included with Arduino, can read/writes to non-volatile memory
 #include <Servo.h>          // Arduino's native servo library
@@ -74,12 +72,12 @@ int smoothed_filters[8] = {0, 0, 0, 8, 0, 0, 0, 0};  //filter values for each an
 //Servo Mapping
 //TODO: Use these define
 #define SERVO_MIXTURE SERVO0
-#define SERVO_CALIB SERVO1
-#define SERVO_THROTTLE SERVO2
+//#define SERVO_CALIB SERVO1
+//#define SERVO_THROTTLE SERVO2
 
 Servo Servo_Mixture;
-Servo Servo_Calib;
-Servo Servo_Throttle;
+//Servo Servo_Calib;
+//Servo Servo_Throttle;
 
 //Thermocouple Mappings
 #define T_BRED 1
@@ -106,8 +104,8 @@ Servo Servo_Throttle;
 // 3 - pin 20 - PD1
 // 4 - pin 19 - PD2
 // 5 - pin 18 - PD3
-#define INT_HERTZ 5 //interrupt number (not pin number)
-#define INT_ENERGY_PULSE 4
+//#define INT_HERTZ 5 //interrupt number (not pin number)
+//#define INT_ENERGY_PULSE 4
 
 // Grate Shaking States
 #define GRATE_SHAKE_OFF 0
@@ -177,6 +175,10 @@ Servo Servo_Throttle;
 const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
 const prog_char blank[] PROGMEM = "                    ";
 const prog_char half_blank[] PROGMEM = "          ";
+char choice[5] = "    ";
+char buf[20];
+char config_buffer[] = "               ";
+char config_choice_buffer[] = "        ";
 
 //Testing States
 #define TESTING_OFF 0
@@ -202,7 +204,22 @@ char float_buf[15] = "";
 //Test Variables
 int testing_state = TESTING_OFF;
 unsigned long testing_state_entered = 0;
-static char *TestingStateName[] = { "Off","FET0 Auger","FET1 Grate","FET2 Engine","FET3 Starter","FET4 Flare","FET5 O2 Reset","FET6 Alarm","ANA0 ANA_Lambda","ANA2 ANA_Eng_Switch", "ANA1 ANA_Fuel_Switch","ANA3 ANA_Oil", "Gov Tuning"};
+
+prog_char testing_state_0[] PROGMEM = "Off";
+prog_char testing_state_1[] PROGMEM = "FET0 Auger";
+prog_char testing_state_2[] PROGMEM = "FET1 Grate";
+prog_char testing_state_3[] PROGMEM = "FET2 Engine";
+prog_char testing_state_4[] PROGMEM = "FET3 Starter";
+prog_char testing_state_5[] PROGMEM = "FET4 Flare";
+prog_char testing_state_6[] PROGMEM = "FET5 O2 Reset";
+prog_char testing_state_7[] PROGMEM = "FET6 Alarm";
+prog_char testing_state_8[] PROGMEM = "ANA0 ANA_Lambda";
+prog_char testing_state_9[] PROGMEM = "ANA2 ANA_Eng_Switch";
+prog_char testing_state_10[] PROGMEM = "ANA1 ANA_Fuel_Switch";
+prog_char testing_state_11[] PROGMEM = "ANA3 ANA_Oil";
+prog_char testing_state_12[] PROGMEM = "Gov Tuning";
+
+PROGMEM const char *TestingStateName[] = {testing_state_0, testing_state_1, testing_state_2, testing_state_3, testing_state_4, testing_state_5, testing_state_6, testing_state_7, testing_state_8, testing_state_9, testing_state_10, testing_state_11, testing_state_12};
 
 // Datalogging variables
 int lineCount = 0;
@@ -211,8 +228,6 @@ int lineCount = 0;
 #define CONFIG_COUNT 20  
 int config_var;
 byte config_changed = false;
-char config_buffer[] = "               ";
-char config_choice_buffer[] = "        ";
 
 prog_char config_0[] PROGMEM = "Reset Defaults?";
 prog_char config_1[] PROGMEM = "Engine Type    "; 
@@ -499,13 +514,13 @@ int servo_alt = 0; //used to pulse every other time through loop (~20 ms)
 float servo0_pos = 0;
 float servo0_db = 0; // used to deadband the servo movement
 
-//Servo1
-float servo1_pos;
-float servo1_db = 0; // used to deadband the servo movement
-
-//Servo2
-float servo2_pos;
-float servo2_db = 0; // used to deadband the servo movement
+////Servo1
+//float servo1_pos;
+//float servo1_db = 0; // used to deadband the servo movement
+//
+////Servo2
+//float servo2_pos;
+//float servo2_db = 0; // used to deadband the servo movement
 
 //Serial Number
 char serial_num[11] = "          ";
@@ -516,12 +531,12 @@ unsigned int unique_number = 12;
 char serial_last_input = '\0'; // \0 is the ABSENT character
 char serial_buffer[20];
 
-//Relay Muliplexer  Still to be implemented
-byte shiftRegister = 0;  //Holder for all 8 relay states (8 bits, initialized to B00000000, all relays off)
-int dataPin = 50;  //To SRIN on Relay Board, Bottom Right Pin on Relay Board when XR IN at top.
-int latchPin = 51; //To RCK on Relay Board, Second Pin from Bottom on Right hand side
-int clockPin = 52; //To SRCLK on Relay Board, Second Pin from Bottom on Left hand side
-
+////Relay Muliplexer  Still to be implemented
+//byte shiftRegister = 0;  //Holder for all 8 relay states (8 bits, initialized to B00000000, all relays off)
+//int dataPin = 50;  //To SRIN on Relay Board, Bottom Right Pin on Relay Board when XR IN at top.
+//int latchPin = 51; //To RCK on Relay Board, Second Pin from Bottom on Right hand side
+//int clockPin = 52; //To SRCLK on Relay Board, Second Pin from Bottom on Left hand side
+//
 
 // Alarm
 boolean alarm = false;
@@ -675,7 +690,7 @@ void setup() {
   
   
   //Sketch initializations
-  InitFlow();
+  //InitFlow();
   InitLambda();
   InitServos();
   InitGrate();  
@@ -701,7 +716,7 @@ void loop() {
       Press_ReadAll(); // reads into array Press_Data[], in hPa
       Timer_ReadAll(); // reads pulse timer into Timer_Data, in RPM ??? XXX
       DoPressure();
-      DoFlow();
+      //DoFlow();
       DoSerialIn();
       DoLambda();
       //DoGovernor();
@@ -712,7 +727,7 @@ void loop() {
       DoFlare();
       DoReactor();
       DoAuger();
-      DoBattery();
+     // DoBattery();
  //     DoCounterHertz();
     }
     DoKeyInput();
