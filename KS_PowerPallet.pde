@@ -401,8 +401,7 @@ int loopPeriod1 = 1000;
 unsigned long nextTime1;
 int loopPeriod2 = 100;
 unsigned long nextTime2;
-int loopPeriod3 = 10;
-unsigned long nextTime3;
+
 
 //Control
 int control_state = CONTROL_OFF;
@@ -498,14 +497,14 @@ int smoothedLambda;
 int Press_Calib[6];
 int Press[6]; //values corrected for sensor offset (calibration)
 
-// Flow variables
-float CfA0_air_rct = 0.6555;
-float CfA0_air_eng = 0.6555;
-float CfA0_gas_eng = 4.13698;
-double air_eng_flow;
-double air_rct_flow;
-double gas_eng_flow;
-boolean flow_active; // are any flowmeters hooked up?
+//// Flow variables
+//float CfA0_air_rct = 0.6555;
+//float CfA0_air_eng = 0.6555;
+//float CfA0_gas_eng = 4.13698;
+//double air_eng_flow;
+//double air_rct_flow;
+//double gas_eng_flow;
+//boolean flow_active; // are any flowmeters hooked up?
 
 //Servos
 int servo_alt = 0; //used to pulse every other time through loop (~20 ms)
@@ -626,8 +625,8 @@ SdFile sd_file;
 
 char sd_data_file_name[] = "No SD Card  ";  //Create an array that contains the name of our datalog file, updated upon reboot
 char sd_log_file_name[] = "No SD Card  "; 
-char sd_in_char=0;
-int sd_index=0;  
+//char sd_in_char=0;
+//int sd_index=0;  
 
 void setup() {
   GCU_Setup(V3,FULLFILL,P777722);
@@ -655,7 +654,6 @@ void setup() {
   // timer initialization
   nextTime1 = millis() + loopPeriod1;
   nextTime2 = millis() + loopPeriod2;
-  nextTime3 = millis() + loopPeriod3;
   
   LoadPressureSensorCalibration();
   LoadServo();
@@ -708,43 +706,39 @@ void setup() {
 }
 
 void loop() {
-  if (millis() >= nextTime3) {
-    nextTime3 += loopPeriod3;
-    // first, read all KS's sensors
-    if (testing_state == TESTING_OFF) {
-      Temp_ReadAll();  // reads into array Temp_Data[], in deg C
-      Press_ReadAll(); // reads into array Press_Data[], in hPa
-      Timer_ReadAll(); // reads pulse timer into Timer_Data, in RPM ??? XXX
-      DoPressure();
-      //DoFlow();
-      DoSerialIn();
-      DoLambda();
-      //DoGovernor();
-      DoControlInputs();
-      DoOilPressure();
-      DoEngine();
-      //DoServos();
-      DoFlare();
-      DoReactor();
-      DoAuger();
-     // DoBattery();
+  if (testing_state == TESTING_OFF) {
+    Temp_ReadAll();  // reads into array Temp_Data[], in deg C
+    Press_ReadAll(); // reads into array Press_Data[], in hPa
+    Timer_ReadAll(); // reads pulse timer into Timer_Data, in RPM ??? XXX
+    DoPressure();
+    //DoFlow();
+    DoSerialIn();
+    DoLambda();
+    //DoGovernor();
+    DoControlInputs();
+    DoOilPressure();
+    DoEngine();
+    //DoServos();
+    DoFlare();
+    DoReactor();
+    DoAuger();
+   // DoBattery();
  //     DoCounterHertz();
-    }
-    DoKeyInput();
-    DoHeartBeat(); // blink heartbeat LED
-    //TODO: Add OpenEnergyMonitor Library
-    if (millis() >= nextTime2) {
-      nextTime2 += loopPeriod2;
-      DoDisplay();
-      if (millis() >= nextTime1) {
-        nextTime1 += loopPeriod1;
-        if (testing_state == TESTING_OFF) {
-          DoGrate();
-          DoFilter();
-          DoDatalogging();
-          DoAlarmUpdate();
-          DoAlarm();
-        }
+  }
+  DoKeyInput();
+  DoHeartBeat(); // blink heartbeat LED
+  //TODO: Add OpenEnergyMonitor Library
+  if (millis() >= nextTime2) {
+    nextTime2 += loopPeriod2;
+    DoDisplay();
+    if (millis() >= nextTime1) {
+      nextTime1 += loopPeriod1;
+      if (testing_state == TESTING_OFF) {
+        DoGrate();
+        DoFilter();
+        DoDatalogging();
+        DoAlarmUpdate();
+        DoAlarm();
       }
     }
   }

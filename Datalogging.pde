@@ -7,25 +7,25 @@ void LogTime(boolean header = false) {
   }
 }
 
-void LogFlows(boolean header = false) {
-  if (flow_active) {
-    if (header) {
-      if (P_Q_AIR_ENG != ABSENT) { PrintColumn("Q_air_eng"); }
-      if (P_Q_AIR_RCT != ABSENT) { PrintColumn("Q_air_rct"); }
-      if (P_Q_GAS_ENG != ABSENT) { PrintColumn("Q_gas_eng"); }
-    } else {
-      if (P_Q_AIR_ENG != ABSENT) {
-        PrintColumn(air_eng_flow);
-      }
-      if (P_Q_AIR_RCT != ABSENT) {
-        PrintColumn(air_rct_flow);
-      }
-      if (P_Q_GAS_ENG != ABSENT) {
-        PrintColumn(gas_eng_flow);
-      }
-    }
-  }
-}
+//void LogFlows(boolean header = false) {
+//  if (flow_active) {
+//    if (header) {
+//      if (P_Q_AIR_ENG != ABSENT) { PrintColumn("Q_air_eng"); }
+//      if (P_Q_AIR_RCT != ABSENT) { PrintColumn("Q_air_rct"); }
+//      if (P_Q_GAS_ENG != ABSENT) { PrintColumn("Q_gas_eng"); }
+//    } else {
+//      if (P_Q_AIR_ENG != ABSENT) {
+//        PrintColumn(air_eng_flow);
+//      }
+//      if (P_Q_AIR_RCT != ABSENT) {
+//        PrintColumn(air_rct_flow);
+//      }
+//      if (P_Q_GAS_ENG != ABSENT) {
+//        PrintColumn(gas_eng_flow);
+//      }
+//    }
+//  }
+//}
 
 void LogPID(boolean header = false) {
   if (header) {
