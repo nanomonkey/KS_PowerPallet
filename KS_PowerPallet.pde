@@ -10,10 +10,10 @@
 #include <fet.h>            // part of KSlibs, control FETs (field effect transitor) to drive motors, solenoids, etc
 #include <keypad.h>         // part of KSlibs, read buttons and keypad
 #include <pressure.h>       // part of KSlibs, read pressure sensors
-#include <servos.h>         // part of KSlibs, not implemented
+#include <servos.h>         // part of KSlibs
 #include <temp.h>           // part of KSlibs, read thermocouples
-#include <timer.h>          // part of KSlibs, not implemented
-#include <ui.h>             // part of KSlibs, menu
+//#include <timer.h>          // part of KSlibs, not implemented
+//#include <ui.h>             // part of KSlibs, menu
 #include <util.h>           // part of KSlibs, utility functions, GCU_Setup
 #include <avr/io.h>         // advanced: provides port definitions for the microcontroller (ATmega1280, http://www.atmel.com/dyn/resources/prod_documents/doc2549.PDF)   
 #include <SD.h>             // SD card  
@@ -199,6 +199,7 @@ char config_choice_buffer[] = "        ";
 
 //Datalogging Buffer
 String data_buffer = "";
+String log_buffer = "";
 char float_buf[15] = "";
 
 //Test Variables
@@ -667,24 +668,24 @@ void setup() {
  //Library initializations                    
   Disp_Init();
   Kpd_Init();
-  UI_Init();
+  //UI_Init();
   ADC_Init();
   Temp_Init();
   Press_Init();
   Fet_Init();
   //Servo_Init();
-  Timer_Init();
+  //Timer_Init();
 
   Disp_Reset();
   Kpd_Reset();
-  UI_Reset();
+  //UI_Reset();
   ADC_Reset();
   Temp_Reset();
   Press_Reset();
   unique_number = uniqueNumber();
   Fet_Reset();
   //Servo_Reset();
-  Timer_Reset();
+ // Timer_Reset();
   
   
   //Sketch initializations
@@ -709,7 +710,7 @@ void loop() {
   if (testing_state == TESTING_OFF) {
     Temp_ReadAll();  // reads into array Temp_Data[], in deg C
     Press_ReadAll(); // reads into array Press_Data[], in hPa
-    Timer_ReadAll(); // reads pulse timer into Timer_Data, in RPM ??? XXX
+ //   Timer_ReadAll(); // reads pulse timer into Timer_Data, in RPM ??? XXX
     DoPressure();
     //DoFlow();
     DoSerialIn();

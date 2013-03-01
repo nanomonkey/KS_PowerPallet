@@ -1,7 +1,7 @@
 // Datalogging
 void LogTime(boolean header = false) {
   if (header) {
-    PrintColumn("Time");
+    PrintColumn(P("Time"));
   } else {
    PrintColumn(millis()/100.0); 
   }
@@ -29,12 +29,12 @@ void LogTime(boolean header = false) {
 
 void LogPID(boolean header = false) {
   if (header) {
-    PrintColumn("Lambda_In");
-    PrintColumn("Lambda_Out");
-    PrintColumn("Lambda_Setpoint");
-    PrintColumn("Lambda_P");
-    PrintColumn("Lambda_I");
-    PrintColumn("Lambda_D");
+    PrintColumn(P("Lambda_In"));
+    PrintColumn(P("Lambda_Out"));
+    PrintColumn(P("Lambda_Setpoint"));
+    PrintColumn(P("Lambda_P"));
+    PrintColumn(P("Lambda_I"));
+    PrintColumn(P("Lambda_D"));
   } else {
     PrintColumn(lambda_input);
     PrintColumn(lambda_output);
@@ -47,14 +47,14 @@ void LogPID(boolean header = false) {
 
 void LogAnalogInputs(boolean header = false) {
   if (header) {
-    PrintColumn("ANA0");
-    PrintColumn("ANA1");
-    PrintColumn("ANA2");
-    PrintColumn("ANA3");
-    PrintColumn("ANA4");
-    PrintColumn("ANA5");
-    PrintColumn("ANA6");
-    PrintColumn("ANA7");
+    PrintColumn(P("ANA0"));
+    PrintColumn(P("ANA1"));
+    PrintColumn(P("ANA2"));
+    PrintColumn(P("ANA3"));
+    PrintColumn(P("ANA4"));
+    PrintColumn(P("ANA5"));
+    PrintColumn(P("ANA6"));
+    PrintColumn(P("ANA7"));
   } else {
     PrintColumnInt(analogRead(ANA0));
     PrintColumnInt(analogRead(ANA1));
@@ -70,10 +70,10 @@ void LogAnalogInputs(boolean header = false) {
 void LogGrate(boolean header = false) {
   if (header) {
     //PrintColumn("grateMode");
-    PrintColumn("Grate");
-    PrintColumn("P_ratio_reactor");
-    PrintColumn("P_ratio_state_reactor");
-    PrintColumn("Grate_Val");
+    PrintColumn(P("Grate"));
+    PrintColumn(P("P_ratio_reactor"));
+    PrintColumn(P("P_ratio_state_reactor"));
+    PrintColumn(P("Grate_Val"));
   } else {
     //PrintColumnInt(grateMode);
     PrintColumnInt(grate_motor_state);
@@ -85,15 +85,15 @@ void LogGrate(boolean header = false) {
 
 void LogFilter(boolean header = false) {
    if (header) {
-    PrintColumn("P_ratio_filter");
-    PrintColumn("P_ratio_filter_state");
+    PrintColumn(P("P_ratio_filter"));
+    PrintColumn(P("P_ratio_filter_state"));
   } else {
     PrintColumn(pRatioFilter);
     //TODO: Move to enum
     if (pRatioFilterHigh) {
-      PrintColumn("Bad");
+      PrintColumn(P("Bad"));
     } else {
-      PrintColumn("Good");
+      PrintColumn(P("Good"));
     }
   }
 }
@@ -102,22 +102,22 @@ void LogPressures(boolean header = false) {
   if (header) {
     //TODO: Handle half/full fill
     #if P_REACTOR != ABSENT
-      PrintColumn("P_reactor");
+      PrintColumn(P("P_reactor"));
     #endif
     #if P_FILTER != ABSENT
-      PrintColumn("P_filter");
+      PrintColumn(P("P_filter"));
     #endif
     #if P_COMB != ABSENT
-      PrintColumn("P_comb");
+      PrintColumn(P("P_comb"));
     #endif
     #if P_Q_AIR_ENG != ABSENT
-      PrintColumn("P_Q_air_eng");
+      PrintColumn(P("P_Q_air_eng"));
     #endif
     #if P_Q_AIR_RCT != ABSENT
-      PrintColumn("P_Q_air_rct");
+      PrintColumn(P("P_Q_air_rct"));
     #endif
     #if P_Q_GAS_ENG != ABSENT
-      PrintColumn("P_Q_gas_eng");
+      PrintColumn(P("P_Q_gas_eng"));
     #endif
   } else {
     #if P_REACTOR != ABSENT
@@ -144,28 +144,28 @@ void LogPressures(boolean header = false) {
 void LogTemps(boolean header = false) {
   if (header) {
       #if T_TRED != ABSENT
-        PrintColumn("T_tred");
+        PrintColumn(P("T_tred"));
       #endif
       #if T_BRED != ABSENT
-        PrintColumn("T_bred");
+        PrintColumn(P("T_bred"));
       #endif
       #if T_PYRO_IN != ABSENT
-        PrintColumn("T_pyro_in");
+        PrintColumn(P("T_pyro_in"));
       #endif
       #if T_PYRO_OUT != ABSENT
-        PrintColumn("T_pyro_out");
+        PrintColumn(P("T_pyro_out"));
       #endif
       #if T_ENG_COOLANT != ABSENT
-        PrintColumn("T_eng_coolant");
+        PrintColumn(P("T_eng_coolant"));
       #endif 
       #if T_DRYING_GAS_OUT != ABSENT
-        PrintColumn("T_drying_gas_out");
+        PrintColumn(P("T_drying_gas_out"));
       #endif
       #if T_REACTOR_GAS_OUT != ABSENT
-        PrintColumn("T_reactor_gas_out");
+        PrintColumn(P("T_reactor_gas_out"));
       #endif
       #if T_FILTER != ABSENT
-        PrintColumn("T_filter");
+        PrintColumn(P("T_filter"));
       #endif
   } else {
     #if T_TRED != ABSENT
@@ -198,11 +198,11 @@ void LogTemps(boolean header = false) {
 void LogAuger(boolean header = false) {
   if (header) {
      if (relay_board){ 
-      PrintColumn("AugerCurrent");
-      PrintColumn("AugerLevel");
+      PrintColumn(P("AugerCurrent"));
+      PrintColumn(P("AugerLevel"));
      }
     #if ANA_FUEL_SWITCH != ABSENT
-      PrintColumn("FuelSwitchLevel");
+      PrintColumn(P("FuelSwitchLevel"));
     #endif
   } else {
      if (relay_board){ 
@@ -245,23 +245,23 @@ void LogAuger(boolean header = false) {
 
 void LogEngine(boolean header=false) {
   if (header) {
-    PrintColumn("Engine");
+    PrintColumn(P("Engine"));
   } else {
     switch(engine_state){
       case ENGINE_OFF:
-        PrintColumn("Off"); 
+        PrintColumn(P("Off")); 
         break;
       case ENGINE_ON:
-        PrintColumn("On");
+        PrintColumn(P("On"));
         break;
       case ENGINE_STARTING:
-        PrintColumn("Starting");
+        PrintColumn(P("Starting"));
         break;
       case ENGINE_GOV_TUNING:
-        PrintColumn("Govenor Tuning");
+        PrintColumn(P("Govenor Tuning"));
         break;
       case ENGINE_SHUTDOWN:
-        PrintColumn("Shutdown");
+        PrintColumn(P("Shutdown"));
         break;
       default:
         PrintColumnInt(engine_state);
@@ -280,11 +280,11 @@ void LogEngine(boolean header=false) {
 
 void LogOilPressure(boolean header=false){
   if (header){
-    PrintColumn("OilPressureLevel");
+    PrintColumn(P("OilPressureLevel"));
     if (engine_type == 1){ //20k
-      PrintColumn("OilPressurePSI");
+      PrintColumn(P("OilPressurePSI"));
     } else {
-      PrintColumn("OilPressureValue");
+      PrintColumn(P("OilPressureValue"));
     }
   } else {
       PrintColumn(EngineOilPressureLevel[EngineOilPressureName]);
@@ -294,9 +294,9 @@ void LogOilPressure(boolean header=false){
 
 void LogReactor(boolean header=false) {
     if (header) {
-      PrintColumn("P_reactorLevel");
-      PrintColumn("T_tredLevel");
-      PrintColumn("T_bredLevel");
+      PrintColumn(P("P_reactorLevel"));
+      PrintColumn(P("T_tredLevel"));
+      PrintColumn(P("T_bredLevel"));
     } else {
       PrintColumn(P_reactorLevel[P_reactorLevelName]);
       PrintColumn(T_tredLevel[TempLevelName]);
@@ -342,7 +342,7 @@ void DoDatalogging() {
   //Serial.begin(115200);
   if (lineCount == 0) {
     if (serial_num[0] != '#'){
-      data_buffer += "## ";
+      data_buffer += "# ";
       data_buffer += serial_num;
       data_buffer += " PCU #";
       data_buffer += uniqueNumber();

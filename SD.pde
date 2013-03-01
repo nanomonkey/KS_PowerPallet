@@ -46,86 +46,125 @@ void DatalogSD(String dataString, char file_name[13], boolean newline) {    //fi
   } 
 }
 
+void checkBuffer(){
+  if (sizeof(log_buffer) >= 512){ 
+      DatalogSD(log_buffer, sd_log_file_name, true);
+      log_buffer = "";
+  }
+}
 
 void Logln(String logString){
   Serial.println(logString);
   if (save_datalog_to_sd && sd_loaded){
     if (logString[0] == '#'){
-      logString = String(String(millis()/100) + " " + logString);
+      log_buffer += millis()/100;
     }
-    //logString.replace('##', String(millis()/100));
-    DatalogSD(logString, sd_log_file_name, true);
+    log_buffer += logString;
+    log_buffer += '/n';
+    checkBuffer();
   }
 }
 
 void Logln(char logCharArray[]){
-  Logln(String(logCharArray));
+  Serial.println(logCharArray);
+  if (save_datalog_to_sd && sd_loaded){
+  if (logCharArray[0] == '#'){
+    log_buffer += millis()/100;
+  }
+  log_buffer += logCharArray;
+  log_buffer += '/n';
+  checkBuffer();
+  }
 }
 
+
 void Logln(float logFloat){
+  Serial.println(logFloat);
   dtostrf(logFloat, 5, 3, float_buf);
-  Logln(String(float_buf));
+  log_buffer += float_buf;
+  log_buffer += '/n';
+  checkBuffer();
 }
 
 void Logln(int logInt){
-  Logln(String(logInt));
+  Serial.println(logInt);
+  log_buffer += logInt;
+  log_buffer += '/n';
+  checkBuffer();
 }
 
 void Logln(long logLong){
-  Logln(String(logLong));
+  Serial.println(logLong);
+  log_buffer += logLong;
+  log_buffer += '/n';
+  checkBuffer();
 }
 
 void Logln(unsigned long logLong){
-  Logln(String(logLong));
+  Serial.println(logLong);
+  log_buffer += logLong;
+  log_buffer += '/n';
+  checkBuffer();
 }
 
 void Logln(double logDouble){
   dtostrf(logDouble, 5, 3, float_buf);
-  Logln(String(float_buf));
+  Serial.println(float_buf);
+  log_buffer += float_buf;
+  log_buffer += '/n';
+  checkBuffer();
 }
 
 void Log(String logString){
   Serial.print(logString);
- if (save_datalog_to_sd && sd_loaded){
+  if (save_datalog_to_sd && sd_loaded){
     if (logString[0] == '#'){
-      logString = String(String(millis()/100) + " " + logString);
+      log_buffer += millis()/100;
     }
-//    String finalString;
-//    dtostrf(millis()/100.0, 5, 3, float_buf);
-//    finalString = String(millis()/100);
-//    finalString += " ";
-//    finalString += logString;
-//    DatalogSD(finalString, sd_log_file_name, false);
-//    finalString = "";
-     //logString.replace('##', String(millis()/100));
-     DatalogSD(logString, sd_log_file_name, false);
+    log_buffer += logString;
+    checkBuffer();
   }
 }
 
 void Log(char logCharArray[]){
-  Log(String(logCharArray));
+  Serial.print(logCharArray);
+  if (save_datalog_to_sd && sd_loaded){
+    if (logCharArray[0] == '#'){
+      log_buffer += millis()/100;
+    }
+    log_buffer += logCharArray;
+    checkBuffer();
+  }
 }
 
 void Log(float logFloat){
   dtostrf(logFloat, 5, 3, float_buf);
-  Log(String(float_buf));
+  Serial.print(float_buf);
+  log_buffer += float_buf;
 }
 
 void Log(int logInt){
-  Log(String(logInt));
+  Serial.print(logInt);
+  log_buffer += logInt;
 }
 
 void Log(long logLong){
-  Log(String(logLong));
+  Serial.print(logLong);
+  log_buffer += logLong;
+  checkBuffer();
 }
 
 void Log(unsigned long logLong){
-  Log(String(logLong));
+  Serial.print(logLong);
+  log_buffer += logLong;
+  checkBuffer();
 }
 
 void Log(double logDouble){
   dtostrf(logDouble, 5, 3, float_buf);
-  Log(String(float_buf));
+  Serial.print(float_buf);
+  log_buffer += float_buf;
+  checkBuffer();
 }  
 
 
