@@ -27,18 +27,19 @@ boolean InitSD() {
   return sd_loaded;
 }
 
-void DatalogSD(String dataString, char file_name[13], boolean newline) {    //file_name should be 8.3 format names
+void DatalogSD(char file_name[13], boolean newline) {    //file_name should be 8.3 format names
   //SD.begin(SS_PIN);
   File dataFile = SD.open(file_name, FILE_WRITE);  //if file doesn't exist it will be created
   if (dataFile) {
     if (newline) {
-      dataFile.println(dataString);
+      dataFile.println(string_buffer);
     } 
     else {
-      dataFile.print(dataString);
+      dataFile.print(string_buffer);
     }
     dataFile.close();
-    //Serial.println(dataString);
+    string_buffer[0] = '/0';
+    buffer_size = 0;
   }  
   else {
     putstring("# Error loading ");
@@ -46,189 +47,144 @@ void DatalogSD(String dataString, char file_name[13], boolean newline) {    //fi
   } 
 }
 
-void checkBuffer(){
-  if (sizeof(log_buffer) >= 512){ 
-      DatalogSD(log_buffer, sd_log_file_name, true);
-      log_buffer = "";
-  }
-}
+//Logging Functions:
 
-void Logln(String logString){
-  Serial.println(logString);
-  if (save_datalog_to_sd && sd_loaded){
-    if (logString[0] == '#'){
-      log_buffer += millis()/100;
-    }
-    log_buffer += logString;
-    log_buffer += '/n';
-    checkBuffer();
-  }
-}
-
-void Logln(char logCharArray[]){
-  Serial.println(logCharArray);
-  if (save_datalog_to_sd && sd_loaded){
-  if (logCharArray[0] == '#'){
-    log_buffer += millis()/100;
-  }
-  log_buffer += logCharArray;
-  log_buffer += '/n';
-  checkBuffer();
-  }
-}
-
-
-void Logln(float logFloat){
-  Serial.println(logFloat);
-  dtostrf(logFloat, 5, 3, float_buf);
-  log_buffer += float_buf;
-  log_buffer += '/n';
-  checkBuffer();
-}
-
-void Logln(int logInt){
-  Serial.println(logInt);
-  log_buffer += logInt;
-  log_buffer += '/n';
-  checkBuffer();
-}
-
-void Logln(long logLong){
-  Serial.println(logLong);
-  log_buffer += logLong;
-  log_buffer += '/n';
-  checkBuffer();
-}
-
-void Logln(unsigned long logLong){
-  Serial.println(logLong);
-  log_buffer += logLong;
-  log_buffer += '/n';
-  checkBuffer();
-}
-
-void Logln(double logDouble){
-  dtostrf(logDouble, 5, 3, float_buf);
-  Serial.println(float_buf);
-  log_buffer += float_buf;
-  log_buffer += '/n';
-  checkBuffer();
-}
-
-void Log(String logString){
-  Serial.print(logString);
-  if (save_datalog_to_sd && sd_loaded){
-    if (logString[0] == '#'){
-      log_buffer += millis()/100;
-    }
-    log_buffer += logString;
-    checkBuffer();
-  }
-}
-
-void Log(char logCharArray[]){
-  Serial.print(logCharArray);
-  if (save_datalog_to_sd && sd_loaded){
-    if (logCharArray[0] == '#'){
-      log_buffer += millis()/100;
-    }
-    log_buffer += logCharArray;
-    checkBuffer();
-  }
-}
-
-void Log(float logFloat){
-  dtostrf(logFloat, 5, 3, float_buf);
-  Serial.print(float_buf);
-  log_buffer += float_buf;
-}
-
-void Log(int logInt){
-  Serial.print(logInt);
-  log_buffer += logInt;
-}
-
-void Log(long logLong){
-  Serial.print(logLong);
-  log_buffer += logLong;
-  checkBuffer();
-}
-
-void Log(unsigned long logLong){
-  Serial.print(logLong);
-  log_buffer += logLong;
-  checkBuffer();
-}
-
-void Log(double logDouble){
-  dtostrf(logDouble, 5, 3, float_buf);
-  Serial.print(float_buf);
-  log_buffer += float_buf;
-  checkBuffer();
+void appendTimestamp(){
+  dtostrf(millis()/100, 5, 3, float_buf);
+  strncat(float_buf, comma, 15);
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
 }  
 
-
-void testSD() {
-  switch(sd_card.type()) {
-  case SD_CARD_TYPE_SD1:
-    putstring("SD1\n");
-    break;
-  case SD_CARD_TYPE_SD2:
-    putstring("SD2\n");
-    break;
-  case SD_CARD_TYPE_SDHC:
-    putstring("SDHC\n");
-    break;
-  default:
-    putstring("Unknown\n");
+void Logln(const char * str) {
+  if (buffer_size == 0){
+    appendTimestamp();
   }
-  if (!sd_volume.init(sd_card)) {
-    putstring("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card\n");
-    return;
-  }
-  uint32_t volumesize;
-  putstring("\nVolume type is FAT");
-  Serial.println(sd_volume.fatType(), DEC);
-  Serial.println();
-
-  volumesize = sd_volume.blocksPerCluster();    // clusters are collections of blocks
-  volumesize *= sd_volume.clusterCount();       // we'll have a lot of clusters
-  volumesize *= 512;                            // SD card blocks are always 512 bytes
-  putstring("Volume size (bytes): ");
-  Serial.println(volumesize);
-  putstring("Volume size (Kbytes): ");
-  volumesize /= 1024;
-  Serial.println(volumesize);
-  putstring("Volume size (Mbytes): ");
-  volumesize /= 1024;
-  Serial.println(volumesize);
-  putstring("\nFiles found on the card (name, date and size in bytes): \n");
-  sd_root.openRoot(sd_volume);
-  sd_root.ls(LS_R | LS_DATE | LS_SIZE);  // list all files in the card with date and size
-
-  // print the type of card
-  putstring("#Card type: ");
-  switch(sd_card.type()) {
-  case SD_CARD_TYPE_SD1:
-    putstring("SD1\n");
-    break;
-  case SD_CARD_TYPE_SD2:
-    putstring("SD2\n");
-    break;
-  case SD_CARD_TYPE_SDHC:
-    putstring("SDHC\n");
-    break;
-  default:
-    putstring("Unknown\n");
-  }
-
-  if (!sd_volume.init(sd_card)) {
-    putstring("# Could not find FAT16/FAT32 partition.  Make sure you've formatted the card\n");
-    return;
+  strncat(string_buffer, str, BUFFER_SIZE);
+  Serial.println(string_buffer);
+  if (save_datalog_to_sd && sd_loaded){
+    DatalogSD(sd_data_file_name, true);  
   }
 }
 
+void Log(const char * str) {
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, str, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+}
 
+void Logln(float str) {
+  dtostrf(str, 5, 3, float_buf);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+  Serial.println(string_buffer);
+  if (save_datalog_to_sd && sd_loaded){
+    DatalogSD(sd_data_file_name, true);  
+  }
+}
+
+void Log(float str) {
+  dtostrf(str, 5, 3, float_buf);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+}
+
+void Logln(int str) {
+  sprintf(float_buf, "%d", str);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+  Serial.println(string_buffer);
+  if (save_datalog_to_sd && sd_loaded){
+    DatalogSD(sd_data_file_name, true);  
+  }
+}
+
+void Log(int str) {
+  sprintf(float_buf, "%d", str);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+}
+
+void Logln(double str){
+  dtostrf(str, 5, 3, float_buf);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+  Serial.println(string_buffer);
+  if (save_datalog_to_sd && sd_loaded){
+    DatalogSD(sd_data_file_name, true);  
+  }
+}
+
+void Log(double str){
+  dtostrf(str, 5, 3, float_buf);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+}
+
+void Logln(long str){
+  sprintf(float_buf, "%d", str);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+  Serial.println(string_buffer);
+  if (save_datalog_to_sd && sd_loaded){
+    DatalogSD(sd_data_file_name, true);  
+  }
+}
+
+void Log(long str){
+  sprintf(float_buf, "%d", str);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+}
+
+void Logln(unsigned long str){
+  sprintf(float_buf, "%d", str);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+  Serial.println(string_buffer);
+  if (save_datalog_to_sd && sd_loaded){
+    DatalogSD(sd_data_file_name, true);  
+  }
+}
+
+void Log(unsigned long str){
+  sprintf(float_buf, "%d", str);
+  if (buffer_size == 0){
+    appendTimestamp();
+  }
+  strncat(string_buffer, float_buf, BUFFER_SIZE);
+  buffer_size = strlen(string_buffer);
+}
+  
 void EEPROMWriteInt(int p_address, int p_value){  
   byte lowByte = ((p_value >> 0) & 0xFF);
   byte highByte = ((p_value >> 8) & 0xFF);
@@ -270,6 +226,66 @@ unsigned int uniqueNumber(){
   }
   return EEPROMReadInt(35);
 }
+
+//void testSD() {
+//  switch(sd_card.type()) {
+//  case SD_CARD_TYPE_SD1:
+//    putstring("SD1\n");
+//    break;
+//  case SD_CARD_TYPE_SD2:
+//    putstring("SD2\n");
+//    break;
+//  case SD_CARD_TYPE_SDHC:
+//    putstring("SDHC\n");
+//    break;
+//  default:
+//    putstring("Unknown\n");
+//  }
+//  if (!sd_volume.init(sd_card)) {
+//    putstring("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card\n");
+//    return;
+//  }
+//  uint32_t volumesize;
+//  putstring("\nVolume type is FAT");
+//  Serial.println(sd_volume.fatType(), DEC);
+//  Serial.println();
+//
+//  volumesize = sd_volume.blocksPerCluster();    // clusters are collections of blocks
+//  volumesize *= sd_volume.clusterCount();       // we'll have a lot of clusters
+//  volumesize *= 512;                            // SD card blocks are always 512 bytes
+//  putstring("Volume size (bytes): ");
+//  Serial.println(volumesize);
+//  putstring("Volume size (Kbytes): ");
+//  volumesize /= 1024;
+//  Serial.println(volumesize);
+//  putstring("Volume size (Mbytes): ");
+//  volumesize /= 1024;
+//  Serial.println(volumesize);
+//  putstring("\nFiles found on the card (name, date and size in bytes): \n");
+//  sd_root.openRoot(sd_volume);
+//  sd_root.ls(LS_R | LS_DATE | LS_SIZE);  // list all files in the card with date and size
+//
+//  // print the type of card
+//  putstring("#Card type: ");
+//  switch(sd_card.type()) {
+//  case SD_CARD_TYPE_SD1:
+//    putstring("SD1\n");
+//    break;
+//  case SD_CARD_TYPE_SD2:
+//    putstring("SD2\n");
+//    break;
+//  case SD_CARD_TYPE_SDHC:
+//    putstring("SDHC\n");
+//    break;
+//  default:
+//    putstring("Unknown\n");
+//  }
+//
+//  if (!sd_volume.init(sd_card)) {
+//    putstring("# Could not find FAT16/FAT32 partition.  Make sure you've formatted the card\n");
+//    return;
+//  }
+//}
 
 //String readSDline(char file_name[13], int line_num = 0){ //pass a filename in the root directory
 //  char c;

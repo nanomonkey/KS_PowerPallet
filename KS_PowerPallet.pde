@@ -12,12 +12,13 @@
 #include <pressure.h>       // part of KSlibs, read pressure sensors
 #include <servos.h>         // part of KSlibs
 #include <temp.h>           // part of KSlibs, read thermocouples
-//#include <timer.h>          // part of KSlibs, not implemented
-//#include <ui.h>             // part of KSlibs, menu
+#include <timer.h>          // part of KSlibs, not implemented
+#include <ui.h>             // part of KSlibs, menu
 #include <util.h>           // part of KSlibs, utility functions, GCU_Setup
 #include <avr/io.h>         // advanced: provides port definitions for the microcontroller (ATmega1280, http://www.atmel.com/dyn/resources/prod_documents/doc2549.PDF)   
 #include <SD.h>             // SD card  
 #include <avr/pgmspace.h>
+#include <string.h>
 //#include <MCP2515.h> 
 //#include <SPI.h>
 
@@ -172,13 +173,10 @@ Servo Servo_Mixture;
 #define DISPLAY_CONFIG 10
 #define DISPLAY_SD 11
 
-const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
 const prog_char blank[] PROGMEM = "                    ";
 const prog_char half_blank[] PROGMEM = "          ";
 char choice[5] = "    ";
-char buf[20];
-char config_buffer[] = "               ";
-char config_choice_buffer[] = "        ";
+
 
 //Testing States
 #define TESTING_OFF 0
@@ -198,8 +196,11 @@ char config_choice_buffer[] = "        ";
 
 
 //Datalogging Buffer
-String data_buffer = "";
-String log_buffer = "";
+//String data_buffer = "";
+#define BUFFER_SIZE 128
+int buffer_size = 0;
+char string_buffer[BUFFER_SIZE];
+char comma[]=", ";
 char float_buf[15] = "";
 
 //Test Variables
@@ -408,18 +409,18 @@ unsigned long nextTime2;
 int control_state = CONTROL_OFF;
 unsigned long control_state_entered;
 
-//Flare
+////Flare
 int flare_state = FLARE_USER_SET;
 boolean ignitor_on;
-int blower_dial = 0;
-double blower_setpoint;
-double blower_input;
-double blower_output;
-double blower_value;
-double blower_P[1] = {2}; //Adjust P_Param to get more aggressive or conservative control, change sign if moving in the wrong direction
-double blower_I[1] = {.2}; //Make I_Param about the same as your manual response time (in Seconds)/4 
-double blower_D[1] = {0.0}; //Unless you know what it's for, don't use D
-PID blower_PID(&blower_input, &blower_output, &blower_setpoint,blower_P[0],blower_I[0],blower_D[0]);
+//int blower_dial = 0;
+//double blower_setpoint;
+//double blower_input;
+//double blower_output;
+//double blower_value;
+//double blower_P[1] = {2}; //Adjust P_Param to get more aggressive or conservative control, change sign if moving in the wrong direction
+//double blower_I[1] = {.2}; //Make I_Param about the same as your manual response time (in Seconds)/4 
+//double blower_D[1] = {0.0}; //Unless you know what it's for, don't use D
+//PID blower_PID(&blower_input, &blower_output, &blower_setpoint,blower_P[0],blower_I[0],blower_D[0]);
 
 //Engine
 int engine_state = ENGINE_OFF;
@@ -432,25 +433,25 @@ double battery_voltage;
 int display_state = DISPLAY_SPLASH;
 unsigned long display_state_entered;
 unsigned long transition_entered;
-String transition_message;
+//String transition_message;
 int item_count,cur_item;
 
 //Keypad
 int key = -1;
 
-//Hertz
-double hertz = 0;
-volatile unsigned long hertz_last_interrupt;
-volatile int hertz_period;
+////Hertz
+//double hertz = 0;
+//volatile unsigned long hertz_last_interrupt;
+//volatile int hertz_period;
 
-//Counter Hertz
-int counter_hertz = 0;
+////Counter Hertz
+//int counter_hertz = 0;
 
-//Energy Pulse
-double power = 0;
-volatile int energy_pulse_count;
-volatile unsigned long energy_last_interrupt;
-volatile int energy_period;
+////Energy Pulse
+//double power = 0;
+//volatile int energy_pulse_count;
+//volatile unsigned long energy_last_interrupt;
+//volatile int energy_period;
 
 // Lambda variables
 // Servo Valve Calibration - will vary depending on the servo valve
@@ -488,7 +489,7 @@ double lambda_D[1] = {0.0}; //Unless you know what it's for, don't use D
 PID lambda_PID(&lambda_input, &lambda_output, &lambda_setpoint,lambda_P[0],lambda_I[0],lambda_D[0]);
 unsigned long lamba_updated_time;
 boolean write_lambda = false;
-String lambda_state_name;
+char lambda_state_name[20] = "";
 int lambda_state = LAMBDA_SEALED;
 unsigned long lambda_state_entered;
 float smooth_filter_Lambda = .75;
@@ -508,11 +509,11 @@ int Press[6]; //values corrected for sensor offset (calibration)
 //boolean flow_active; // are any flowmeters hooked up?
 
 //Servos
-int servo_alt = 0; //used to pulse every other time through loop (~20 ms)
+//int servo_alt = 0; //used to pulse every other time through loop (~20 ms)
 
 //Servo0
-float servo0_pos = 0;
-float servo0_db = 0; // used to deadband the servo movement
+//float servo0_pos = 0;
+//float servo0_db = 0; // used to deadband the servo movement
 
 ////Servo1
 //float servo1_pos;
@@ -521,10 +522,6 @@ float servo0_db = 0; // used to deadband the servo movement
 ////Servo2
 //float servo2_pos;
 //float servo2_db = 0; // used to deadband the servo movement
-
-//Serial Number
-char serial_num[11] = "          ";
-unsigned int unique_number = 12;
 
 
 //Serial
@@ -619,11 +616,10 @@ boolean sd_loaded;
 //} config_entry;
 ////config_entry config[config_num];  //use config_entry struct
 
-Sd2Card sd_card;
-SdVolume sd_volume;
-SdFile sd_root;
-SdFile sd_file;
-
+//Sd2Card sd_card;
+//SdVolume sd_volume;
+//SdFile sd_root;
+//SdFile sd_file;
 char sd_data_file_name[] = "No SD Card  ";  //Create an array that contains the name of our datalog file, updated upon reboot
 char sd_log_file_name[] = "No SD Card  "; 
 //char sd_in_char=0;
@@ -661,31 +657,27 @@ void setup() {
   //LoadLambda(); - must save lambda data first?
  
   Serial.begin(115200);
-  if(EEPROM.read(40) != 255){
-    EEPROMReadAlpha(40, 10, serial_num);
-  }
   
  //Library initializations                    
   Disp_Init();
   Kpd_Init();
-  //UI_Init();
+  UI_Init();
   ADC_Init();
   Temp_Init();
   Press_Init();
   Fet_Init();
-  //Servo_Init();
-  //Timer_Init();
+  Servo_Init();
+  Timer_Init();
 
   Disp_Reset();
   Kpd_Reset();
-  //UI_Reset();
+  UI_Reset();
   ADC_Reset();
   Temp_Reset();
   Press_Reset();
-  unique_number = uniqueNumber();
   Fet_Reset();
-  //Servo_Reset();
- // Timer_Reset();
+  Servo_Reset();
+  Timer_Reset();
   
   
   //Sketch initializations

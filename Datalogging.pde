@@ -314,43 +314,74 @@ void LogReactor(boolean header=false) {
 //  Logln(getPSI(smoothed[getAnaArray(ANA_OIL_PRESSURE)])); 
 //}
 
-void PrintColumn(String str) {
-  data_buffer += str;
-  data_buffer += ", ";
-//  Serial.print(str);
-//  Serial.print(", ");  
+
+void PrintColumn(const char * str) {
+  if (buffer_size + strlen(str) + 2 < BUFFER_SIZE){
+    strncat(string_buffer, str, BUFFER_SIZE);
+    strncat(string_buffer, comma, BUFFER_SIZE); //add comma
+    buffer_size = strlen(string_buffer);  //add on size of comma
+  }  else {
+    Serial.print(string_buffer);
+    if (save_datalog_to_sd && sd_loaded){
+        DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
+      }
+    strcpy(string_buffer, str);
+    strncat(string_buffer, comma, BUFFER_SIZE);
+    buffer_size = strlen(string_buffer);
+  }
 }
 
 void PrintColumn(float str) {
   dtostrf(str, 5, 3, float_buf);
-  data_buffer += float_buf;
-  data_buffer += ", ";
-//  Serial.print(str);
-//  Serial.print(", ");  
+  if (buffer_size + strlen(float_buf) + 2 < BUFFER_SIZE){
+    strncat(string_buffer, float_buf, BUFFER_SIZE);
+    strncat(string_buffer, comma, BUFFER_SIZE); //add comma
+    buffer_size = strlen(string_buffer);
+  }  else {
+    Serial.print(string_buffer);
+    if (save_datalog_to_sd && sd_loaded){
+        DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
+      }
+    strcpy(string_buffer, float_buf);
+    strncat(string_buffer, comma, BUFFER_SIZE);
+    buffer_size = strlen(string_buffer);
+  }
 }
 
 void PrintColumnInt(int str) {
-  data_buffer += str;
-  data_buffer += ", ";
-//  Serial.print(str);
-//  Serial.print(", ");
+  sprintf(float_buf, "%d, ", str);
+  if (buffer_size + strlen(float_buf) < BUFFER_SIZE){
+    strncat(string_buffer, float_buf, BUFFER_SIZE);
+    buffer_size = strlen(string_buffer);
+  }  else {
+    Serial.print(string_buffer);
+    if (save_datalog_to_sd && sd_loaded){
+        DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
+      }
+    strcpy(string_buffer, float_buf);
+    buffer_size = strlen(string_buffer);
+  }
 }
 
 void DoDatalogging() {
-  data_buffer = "";
+  //data_buffer = "";
+  buffer_size = 0;
+  string_buffer[0] = '/0';
   boolean header = false;
   //Serial.begin(115200);
   if (lineCount == 0) {
+    char serial_num[11] = "          ";
+    if(EEPROM.read(40) != 255){
+      EEPROMReadAlpha(40, 10, serial_num);
+    }
     if (serial_num[0] != '#'){
-      data_buffer += "# ";
-      data_buffer += serial_num;
-      data_buffer += " PCU #";
-      data_buffer += uniqueNumber();
-      Serial.println(data_buffer);
+      sprintf(string_buffer, "#%s PCU# %d", serial_num, uniqueNumber());
+      Serial.println(string_buffer);
       if (save_datalog_to_sd && sd_loaded){
-        DatalogSD(data_buffer, sd_data_file_name, true);
+        DatalogSD(sd_data_file_name, true);
       }
-      data_buffer = "";
+      string_buffer[0] = '/0';
+      buffer_size = 0;
     }
     header = true;
   }
@@ -372,12 +403,12 @@ void DoDatalogging() {
   //LogGovernor(header);
   //LogPulseEnergy(header);
   //LogBatteryVoltage(header);
-  Serial.println(data_buffer);
+  Serial.println(string_buffer);
   if (save_datalog_to_sd && sd_loaded){
-    DatalogSD(data_buffer, sd_data_file_name, true);
+    DatalogSD(sd_data_file_name, true);
   }
 //  DoTests();
-  data_buffer = "";  //extra reset to try and clear up memory
+  string_buffer[0] = '/0';  
   lineCount++;
 }
 

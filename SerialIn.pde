@@ -118,9 +118,9 @@ void DoSerialIn() {
     case 'e':
       TransitionEngine(ENGINE_GOV_TUNING);
       break; 
-    case 'x':
-      testSD();
-      break;
+//    case 'x':
+//      testSD();
+//      break;
     case '!': //Clear EEPROM memory address
     { //extra bracket necessary for scope of memorySpace declaration:
       int memorySpace = SerialReadInt();
@@ -147,9 +147,9 @@ void DoSerialIn() {
       if (serial_buffer[0] != '\0'){
         EEPROMWriteAlpha(40, 10, serial_buffer);
       }
-      EEPROMReadAlpha(40, 10, serial_num);
+      EEPROMReadAlpha(40, 10, p_buffer);
       Log_p("## Serial number: ");
-      Logln(serial_num);
+      Logln(p_buffer);
       break;
 //   case 'h' || 'H':
 //      Logln(P(help));

@@ -1,6 +1,13 @@
 void DoDisplay() {
   boolean disp_alt; // Var for alternating value display
-
+  const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
+  char buf[20];
+  char config_buffer[] = "               ";
+  char config_choice_buffer[] = "        ";
+  //Serial Number
+  char serial_num[11] = "          ";
+  unsigned int unique_number = 12;
+  
   if (millis() % (display_per*200) > (display_per*100) ) {    //  if (millis() % 2000 > 1000) {
     disp_alt = false;
   } 
@@ -21,7 +28,13 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
-    sprintf(buf, "%s  %u", serial_num, unique_number);
+    {
+      char serial_num[11] = "          ";
+      if(EEPROM.read(40) != 255){
+        EEPROMReadAlpha(40, 10, serial_num);
+      }
+      sprintf(buf, "%s  %u", serial_num, uniqueNumber());
+    }
     Disp_PutStr(buf);
     Disp_CursOff();
     //Transition out after delay
@@ -70,11 +83,11 @@ void DoDisplay() {
     else {
       //Row 0
       Disp_RC(0, 0);
-      if (millis()-transition_entered<2000) {
-        transition_message.toCharArray(buf,21);
-        Disp_PutStr(buf);
-      } 
-      else {
+//      if (millis()-transition_entered<2000) {
+//        transition_message.toCharArray(buf,21);
+//        Disp_PutStr(buf);
+//      } 
+//      else {
         if (disp_alt) {
           sprintf(buf, "Ttred%4i  ", Temp_Data[T_TRED]);
         } 
@@ -85,7 +98,7 @@ void DoDisplay() {
         Disp_RC(0, 11);
         sprintf(buf, "Pcomb%4i", Press[P_COMB] / 25);
         Disp_PutStr(buf);
-      }
+//      }
 
       //Row 1
       Disp_RC(1, 0);
@@ -627,12 +640,14 @@ void DoDisplay() {
         choice[1] = config_choice_buffer[1];
         choice[2] = config_choice_buffer[2];
         choice[3] = config_choice_buffer[3];
+        choice[4] = '\0';
       } 
       else {
         choice[0] = config_choice_buffer[4];
         choice[1] = config_choice_buffer[5];
         choice[2] = config_choice_buffer[6];
         choice[3] = config_choice_buffer[7];
+        choice[4] = '\0';
       }
       sprintf(buf, "%s:%s", config_buffer, choice);
     }
@@ -874,10 +889,10 @@ void DoHeartBeat() {
   //PORTJ ^= 0x80;    // toggle the heartbeat LED
 }
 
-void TransitionMessage(String t_message) {
-  transition_message = t_message;
-  transition_entered = millis();
-}
+//void TransitionMessage(String t_message) {
+//  transition_message = t_message;
+//  transition_entered = millis();
+//}
 
 void saveConfig(int item, int state){  //EEPROM:  0-499 for internal states, 500-999 for configurable states, 1000-4000 for data logging configurations.
   if (item == 0  and state == 1){
