@@ -35,10 +35,11 @@ EEPROM bytes used of 4k space:
 #define CODE_VERSION "v1.12" 
 
 //PROGMEM string buffer
-char p_buffer[21];
+char p_buffer[41];
 #define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
 #define putstring(x) SerialPrint_P(PSTR(x))
 #define Log_p(x) Log(P(x))
+#define Logln_p(x) Logln(P(x))
 //void SerialPrint_P(PGM_P str) {
 //  for (uint8_t c; (c = pgm_read_byte(str)); str++) Serial.write(c);
 //} 
@@ -489,7 +490,7 @@ double lambda_D[1] = {0.0}; //Unless you know what it's for, don't use D
 PID lambda_PID(&lambda_input, &lambda_output, &lambda_setpoint,lambda_P[0],lambda_I[0],lambda_D[0]);
 unsigned long lamba_updated_time;
 boolean write_lambda = false;
-char lambda_state_name[20] = "";
+char lambda_state_name[40] = "Unknown";
 int lambda_state = LAMBDA_SEALED;
 unsigned long lambda_state_entered;
 float smooth_filter_Lambda = .75;

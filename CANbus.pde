@@ -69,7 +69,7 @@
 //  if(message.id>0) {
 //    // Print message
 //    Serial.print("#ID: ");
-//    CAN_buffer += "# ID: "
+//    CAN_buffer += "ID: "
 //    Logln(message.id,HEX);
 //    CAN_buffer += message.id
 //    Serial.print("Extended: ");

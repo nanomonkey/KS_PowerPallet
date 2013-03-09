@@ -33,12 +33,12 @@ void WriteServo(){
   if (servo_min != premix_valve_closed) {
     EEPROM.write(22,premix_valve_closed);
     servo_min = premix_valve_closed;
-    Log_p("## Writing Servo Min position setting to EEPROM\n");
+    Logln_p("Writing Servo Min position setting to EEPROM");
   }
   if (servo_max != premix_valve_open){
     EEPROM.write(23,premix_valve_open);
     servo_max = premix_valve_open;
-    Log_p("## Writing Servo Max position setting to EEPROM\n");
+    Logln_p("Writing Servo Max position setting to EEPROM");
   }
 }
 

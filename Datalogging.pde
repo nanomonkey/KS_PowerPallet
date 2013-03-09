@@ -305,7 +305,7 @@ void LogReactor(boolean header=false) {
 }
 
 //void DoTests() { //space to log testing of variables.  Normally not logged
-//  Log_p("##");
+//  Log_p("#");
 //  //smooth(int data, int smoothed, int filterval)
 //
 //  Log_p("Smoothed Signal: ");
@@ -364,11 +364,11 @@ void PrintColumnInt(int str) {
 }
 
 void DoDatalogging() {
-  //data_buffer = "";
-  buffer_size = 0;
-  string_buffer[0] = '/0';
-  boolean header = false;
   //Serial.begin(115200);
+  if (buffer_size > 0){
+    Logln_p("...");
+  }
+  boolean header = false;
   if (lineCount == 0) {
     char serial_num[11] = "          ";
     if(EEPROM.read(40) != 255){
@@ -380,8 +380,7 @@ void DoDatalogging() {
       if (save_datalog_to_sd && sd_loaded){
         DatalogSD(sd_data_file_name, true);
       }
-      string_buffer[0] = '/0';
-      buffer_size = 0;
+      clearBuffer();
     }
     header = true;
   }
@@ -408,7 +407,7 @@ void DoDatalogging() {
     DatalogSD(sd_data_file_name, true);
   }
 //  DoTests();
-  string_buffer[0] = '/0';  
+  clearBuffer();
   lineCount++;
 }
 

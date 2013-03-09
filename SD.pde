@@ -38,8 +38,6 @@ void DatalogSD(char file_name[13], boolean newline) {    //file_name should be 8
       dataFile.print(string_buffer);
     }
     dataFile.close();
-    string_buffer[0] = '/0';
-    buffer_size = 0;
   }  
   else {
     putstring("# Error loading ");
@@ -52,19 +50,26 @@ void DatalogSD(char file_name[13], boolean newline) {    //file_name should be 8
 void appendTimestamp(){
   dtostrf(millis()/100, 5, 3, float_buf);
   strncat(float_buf, comma, 15);
+  strncat(string_buffer, "# ", BUFFER_SIZE);
   strncat(string_buffer, float_buf, BUFFER_SIZE);
   buffer_size = strlen(string_buffer);
 }  
+
+void clearBuffer(){
+  buffer_size = 0;
+  string_buffer[0] = '\0';
+}
 
 void Logln(const char * str) {
   if (buffer_size == 0){
     appendTimestamp();
   }
   strncat(string_buffer, str, BUFFER_SIZE);
-  Serial.println(string_buffer);
+  Serial.print(string_buffer); Serial.println();
   if (save_datalog_to_sd && sd_loaded){
     DatalogSD(sd_data_file_name, true);  
   }
+  clearBuffer();
 }
 
 void Log(const char * str) {
@@ -82,10 +87,11 @@ void Logln(float str) {
   }
   strncat(string_buffer, float_buf, BUFFER_SIZE);
   buffer_size = strlen(string_buffer);
-  Serial.println(string_buffer);
+  Serial.print(string_buffer); Serial.println();
   if (save_datalog_to_sd && sd_loaded){
     DatalogSD(sd_data_file_name, true);  
   }
+  clearBuffer();
 }
 
 void Log(float str) {
@@ -104,10 +110,11 @@ void Logln(int str) {
   }
   strncat(string_buffer, float_buf, BUFFER_SIZE);
   buffer_size = strlen(string_buffer);
-  Serial.println(string_buffer);
+  Serial.print(string_buffer); Serial.println();
   if (save_datalog_to_sd && sd_loaded){
     DatalogSD(sd_data_file_name, true);  
   }
+  clearBuffer();
 }
 
 void Log(int str) {
@@ -126,10 +133,11 @@ void Logln(double str){
   }
   strncat(string_buffer, float_buf, BUFFER_SIZE);
   buffer_size = strlen(string_buffer);
-  Serial.println(string_buffer);
+  Serial.print(string_buffer); Serial.println();
   if (save_datalog_to_sd && sd_loaded){
     DatalogSD(sd_data_file_name, true);  
   }
+  clearBuffer();
 }
 
 void Log(double str){
@@ -148,10 +156,11 @@ void Logln(long str){
   }
   strncat(string_buffer, float_buf, BUFFER_SIZE);
   buffer_size = strlen(string_buffer);
-  Serial.println(string_buffer);
+  Serial.print(string_buffer); Serial.println();
   if (save_datalog_to_sd && sd_loaded){
     DatalogSD(sd_data_file_name, true);  
   }
+  clearBuffer();
 }
 
 void Log(long str){
@@ -170,10 +179,11 @@ void Logln(unsigned long str){
   }
   strncat(string_buffer, float_buf, BUFFER_SIZE);
   buffer_size = strlen(string_buffer);
-  Serial.println(string_buffer);
+  Serial.print(string_buffer); Serial.println();
   if (save_datalog_to_sd && sd_loaded){
     DatalogSD(sd_data_file_name, true);  
   }
+  clearBuffer();
 }
 
 void Log(unsigned long str){

@@ -492,15 +492,15 @@ void DoDisplay() {
       switch (grateMode) {
       case GRATE_SHAKE_OFF:
         grateMode = GRATE_SHAKE_ON;
-        Logln("## Grate Mode: On");
+        Logln("Grate Mode: On");
         break;
       case GRATE_SHAKE_ON:
         grateMode = GRATE_SHAKE_PRATIO;
-        Logln("## Grate Mode: Pressure Ratio");
+        Logln("Grate Mode: Pressure Ratio");
         break;
       case GRATE_SHAKE_PRATIO:
         grateMode = GRATE_SHAKE_OFF;
-        Logln("## Grate Mode: Off");
+        Logln("Grate Mode: Off");
         break;
       }
     }
@@ -923,7 +923,7 @@ int getConfig(int item){
 void update_config_var(int var_num){
   switch (var_num) {
   case 0:
-    Log_p("## Updating Configurations to Defaults\r\n");
+    Log_p("Updating Configurations to Defaults\r\n");
     for (int i=1; i<CONFIG_COUNT; i++){
       update_config_var(i);
     }
@@ -945,14 +945,14 @@ void update_config_var(int var_num){
     //{ { -140, 10}, {10, current_low_boundary}, {current_low_boundary+5, current_high_boundary-5}, {current_high_boundary, 750} }
     AugerCurrentLevelBoundary[CURRENT_LOW][1] = current_low_boundary; 
     AugerCurrentLevelBoundary[CURRENT_ON][0] = current_low_boundary+5;
-    //Serial.print("##Updating current_low_boundary: "); 
+    //Serial.print("#Updating current_low_boundary: "); 
     //Serial.println(current_low_boundary); 
     break;
   case 5:
     current_high_boundary = getConfig(5);
     AugerCurrentLevelBoundary[CURRENT_ON][1] = current_high_boundary - 5; 
     AugerCurrentLevelBoundary[CURRENT_HIGH][0] = current_high_boundary;
-    //Serial.print("## Updating current_high_boundary: ");
+    //Serial.print("Updating current_high_boundary: ");
     //Serial.println(current_high_boundary);
     break;
   case 6:
