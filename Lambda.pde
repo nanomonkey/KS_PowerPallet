@@ -189,7 +189,7 @@ void TransitionLambda(int new_state) {
   lambda_state_entered = millis();
   switch (new_state) {
     case LAMBDA_CLOSEDLOOP:
-      strcpy_P(lambda_state_name, P("Closed Loop"));
+      strcpy(lambda_state_name, P("Closed Loop"));
       lambda_setpoint = lambda_setpoint_mode[0];
 //      if (engine_state == ENGINE_STARTING){
 //        lambda_output = premix_valve_center;
@@ -200,44 +200,44 @@ void TransitionLambda(int new_state) {
       lambda_PID.SetOutputLimits(premix_valve_min,premix_valve_max);
       break;
     case LAMBDA_SEALED:
-      strcpy_P(lambda_state_name, P("Sealed"));
+      strcpy(lambda_state_name, P("Sealed"));
       SetPremixServoAngle(premix_valve_closed);
       lambda_PID.SetMode(MANUAL);
       break;
     case LAMBDA_STEPTEST:
-      strcpy_P(lambda_state_name, P("Step Test"));
+      strcpy(lambda_state_name, P("Step Test"));
       lambda_PID.SetMode(AUTO);
       lambda_output = (random(3,8)/10.0)*(lambda_PID.GetOUTMax()-lambda_PID.GetOUTMin()); //steps in random 10% increments of control output limits
       loopPeriod1 = loopPeriod1/4; //fast datalogging
       break;
     case LAMBDA_SPSTEPTEST:
-      strcpy_P(lambda_state_name, P("Setpoint Step Test"));
+      strcpy(lambda_state_name, P("Setpoint Step Test"));
       lambda_PID.SetMode(AUTO);
       lambda_setpoint = random(8,12)/10.0; //steps in random 10% increments of control output limits
       loopPeriod1 = loopPeriod1/4; //fast datalogging
       break;
     case LAMBDA_NO_SIGNAL:
-      strcpy_P(lambda_state_name, P("O2 signal loss"));
+      strcpy(lambda_state_name, P("O2 signal loss"));
       lambda_PID.SetMode(MANUAL);
       //lambda_output = smoothedLambda;
       break;
     case LAMBDA_RESET:
       digitalWrite(FET_O2_RESET, HIGH);
-      strcpy_P(lambda_state_name, P("Resetting O2 Relay"));
+      strcpy(lambda_state_name, P("Resetting O2 Relay"));
       break;
     case LAMBDA_RESTART:
       digitalWrite(FET_O2_RESET, LOW);
-      strcpy_P(lambda_state_name, P("Checking for O2 signal"));
+      strcpy(lambda_state_name, P("Checking for O2 signal"));
       break;
     case LAMBDA_UNKNOWN:
-      strcpy_P(lambda_state_name, P("Unknown, Checking for O2 signal"));
+      strcpy(lambda_state_name, P("Unknown, Checking for O2 signal"));
       break;
     case LAMBDA_SHUTDOWN:
-      strcpy_P(lambda_state_name, P("Lambda locked, engine shutting down"));
+      strcpy(lambda_state_name, P("Lambda locked, engine shutting down"));
       lambda_PID.SetMode(MANUAL);
       break;
     case LAMBDA_STARTING:
-      strcpy_P(lambda_state_name, P("Lambda starting"));
+      strcpy(lambda_state_name, P("Lambda starting"));
       SetPremixServoAngle(premix_valve_closed);
       lambda_PID.SetMode(MANUAL);
       break;

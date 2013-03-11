@@ -69,8 +69,8 @@ void DoEngine() {
 }
 
 void TransitionEngine(int new_state) {
-  const prog_char new_engine_state[] PROGMEM = "New Engine State: ";
-  strcpy_P(p_buffer, (char*)pgm_read_word(&(new_engine_state)));
+  //const prog_char new_engine_state[] PROGMEM = "New Engine State: ";
+  strcpy_P(p_buffer, new_engine_state);
   //can look at engine_state for "old" state before transitioning at the end of this method
   engine_state_entered = millis();
   switch (new_state) {
@@ -137,13 +137,15 @@ void DoOilPressure() {
   
 }
 
+int getPSI(int pressure_reading){  //returns oil pressure in PSI for 20k
+  return (pressure_reading-512)/-2;  //alternately use : analogRead(ANA_OIL_PRESSURE) instead of passing pressure_reading
+}
+
 void DoBattery() {
   #if ANA_BATT_V != ABSENT
   battery_voltage = 0.07528*(analogRead(ANA_BATT_V)-512);
   #endif
 }
 
-int getPSI(int pressure_reading){  //returns oil pressure in PSI for 20k
-  return (pressure_reading-512)/-2;  //alternately use : analogRead(ANA_OIL_PRESSURE) instead of passing pressure_reading
-}
+
 
