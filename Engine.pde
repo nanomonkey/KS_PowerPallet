@@ -1,4 +1,5 @@
 void DoEngine() {   
+  strcpy_P(buf, engine_shutdown);
   switch (engine_state) {
     case ENGINE_OFF:
       if (control_state == CONTROL_START) {
@@ -7,7 +8,7 @@ void DoEngine() {
       break;
     case ENGINE_ON:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
-        Logln_p("Key switch turned off, Engine Shutdown."); 
+        Log_p("Key switch turned off"); Logln(buf);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (control_state == CONTROL_START) {
@@ -25,30 +26,30 @@ void DoEngine() {
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (Press[P_COMB] > 7472) {  
-        Logln_p("Reactor Pressure too high (above 30 inch water), Engine Shutdown");
+        Log_p("Reactor Pressure too high (above 30 inch water)"); Logln(buf);
         setAlarm(ALARM_HIGH_PCOMB);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (alarm_on[ALARM_HIGH_COOLANT_TEMP] > shutdown[ALARM_HIGH_COOLANT_TEMP]){
-        Logln_p("Engine coolant temp too high, Engine shutdown"); 
+        Log_p("Engine coolant temp too high"); Logln(buf);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (alarm_on[ALARM_TRED_LOW] > shutdown[ALARM_TRED_LOW]){
-        Logln_p("Reduction zone temp too low, Engine shutdown"); 
+        Log_p("Reduction zone temp too low"); Logln(buf);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (alarm_on[ALARM_TTRED_HIGH] > shutdown[ALARM_TTRED_HIGH]){
-        Logln_p("Top of reduction zone temp too high, Engine shutdown"); 
+        Log_p("Top of reduction zone temp too high"); Logln(buf);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (alarm_on[ALARM_TBRED_HIGH] > shutdown[ALARM_TBRED_HIGH]){
-        Logln_p("Bottom of reduction zone temp too high, Engine shutdown"); 
+        Log_p("Bottom of reduction zone temp too high"); Logln(buf);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       break;
     case ENGINE_STARTING:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
-        Logln_p("Key switch turned off, Engine Shutdown."); 
+        Log_p("Key switch turned off"); Logln(buf);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
       if (control_state == CONTROL_ON) { // Use starter button in the standard manual control configuration (push button to start, release to stop cranking)

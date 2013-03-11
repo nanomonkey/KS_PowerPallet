@@ -176,9 +176,11 @@ Servo Servo_Mixture;
 
 const prog_char blank[] PROGMEM = "                    ";
 const prog_char new_engine_state[] PROGMEM = "New Engine State: ";
+const prog_char engine_shutdown[] PROGMEM = ", Engine Shutdown.";
 const prog_char new_auger_state[] PROGMEM = "New Auger State: ";
 const prog_char half_blank[] PROGMEM = "          ";
 char choice[5] = "    ";
+char buf[20];
 
 
 //Testing States

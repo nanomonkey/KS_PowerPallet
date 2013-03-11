@@ -1,7 +1,6 @@
 void DoDisplay() {
   boolean disp_alt; // Var for alternating value display
   const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
-  char buf[20];
   char config_buffer[] = "               ";
   char config_choice_buffer[] = "        ";
   //Serial Number
