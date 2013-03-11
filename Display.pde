@@ -923,7 +923,7 @@ int getConfig(int item){
 void update_config_var(int var_num){
   switch (var_num) {
   case 0:
-    Log_p("Updating Configurations to Defaults\r\n");
+    Logln_p("Updating Configurations to Defaults");
     for (int i=1; i<CONFIG_COUNT; i++){
       update_config_var(i);
     }

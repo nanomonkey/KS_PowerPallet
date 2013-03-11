@@ -133,6 +133,7 @@ void DoAuger() {
 
 
 void TransitionAuger(int new_state) {
+  const prog_char new_auger_state[] PROGMEM = "New Auger State: ";
   //can look at auger_state for "old" state before transitioning at the end of this method
   if (new_state != AUGER_PULSE && auger_state != AUGER_PULSE) {
     auger_state_entered = millis();
@@ -140,19 +141,19 @@ void TransitionAuger(int new_state) {
   switch (new_state) {
   case AUGER_OFF:
     AugerOff();
-    Logln_p("New Auger State: Off");
+    Log(new_auger_state); Logln_p("Off");
     //TransitionMessage("Auger: Off         ");
     auger_rev_count = 0;
     auger_pulse_state = 0;
     break;
   case AUGER_STARTING:
     AugerReverse(); //start in reverse for a few moments to reduce bridging 
-    Logln_p("New Auger State: Starting Forward");  
+    Log(new_auger_state); Logln_p("Starting Forward");  
     //TransitionMessage("Auger: Starting      "); 
     break;
   case AUGER_FORWARD:
     AugerForward();
-    Log_p("New Auger State: Forward\r\n");
+    Log(new_auger_state); Logln_p("Forward");
     //TransitionMessage("Auger: Forward      ");
     break;
   case AUGER_HIGH:
@@ -162,12 +163,12 @@ void TransitionAuger(int new_state) {
     //Serial.print(current_low_boundary);
     //Serial.print(" current_high_boundary:");
     //Serial.println(current_high_boundary);
-    Logln_p("New Auger State: Forward, Current High");
+    Log(new_auger_state); Logln_p("Forward, Current High");
     //TransitionMessage("Auger: Current High ");
     break;
   case AUGER_REVERSE:
     auger_reverse_entered = millis();
-    Logln_p("New Auger State: Reverse");
+    Log(new_auger_state); Logln_p("Reverse");
     AugerReverse();
     auger_rev_count++;
     Logln_p("Auger Rev Count Incremented to ");
@@ -175,7 +176,7 @@ void TransitionAuger(int new_state) {
     //TransitionMessage("Auger: Reverse      ");
     break;
   case AUGER_REVERSE_HIGH:
-    Logln_p("New Auger State: Reverse High Current"); 
+    Log(new_auger_state); Logln_p("Reverse High Current"); 
     //TransitionMessage("Auger: Reverse High"); 
     break; 
   case AUGER_CURRENT_LOW:
@@ -185,16 +186,16 @@ void TransitionAuger(int new_state) {
     //Serial.print(current_low_boundary);
     //Serial.print(" current_high_boundary:");
     //Serial.println(current_high_boundary);
-    Logln_p("New Auger State: Current Low");
+    Log(new_auger_state); Logln_p("Current Low");
     //TransitionMessage("Auger: Low Current");
     break;
   case AUGER_ALARM:
     AugerOff();
-    Logln_p("New Auger State: Alarmed, Off");
+    Log(new_auger_state); Logln_p("Alarmed, Off");
     //TransitionMessage("Auger: Off          ");
     break; 
   case AUGER_PULSE:
-    Logln_p("New Auger State: Pulse");
+    Log(new_auger_state); Logln_p("Pulse");
     if (auger_pulse_state == 0){
       AugerReverse();
     } else {
