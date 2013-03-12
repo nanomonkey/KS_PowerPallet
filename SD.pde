@@ -82,117 +82,52 @@ void Log(const char * str) {
 
 void Logln(float str) {
   dtostrf(str, 5, 3, float_buf);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
-  Serial.print(string_buffer); Serial.println();
-  if (save_datalog_to_sd && sd_loaded){
-    DatalogSD(sd_data_file_name, true);  
-  }
-  clearBuffer();
+  Logln(float_buf);
 }
 
 void Log(float str) {
   dtostrf(str, 5, 3, float_buf);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
+  Log(float_buf);
 }
 
 void Logln(int str) {
   sprintf(float_buf, "%d", str);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
-  Serial.print(string_buffer); Serial.println();
-  if (save_datalog_to_sd && sd_loaded){
-    DatalogSD(sd_data_file_name, true);  
-  }
-  clearBuffer();
+  Logln(float_buf);
 }
 
 void Log(int str) {
   sprintf(float_buf, "%d", str);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
+  Log(float_buf);
 }
 
 void Logln(double str){
   dtostrf(str, 5, 3, float_buf);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
-  Serial.print(string_buffer); Serial.println();
-  if (save_datalog_to_sd && sd_loaded){
-    DatalogSD(sd_data_file_name, true);  
-  }
-  clearBuffer();
+  Logln(float_buf);
 }
 
 void Log(double str){
   dtostrf(str, 5, 3, float_buf);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
+  Log(float_buf);
 }
 
 void Logln(long str){
   sprintf(float_buf, "%d", str);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
-  Serial.print(string_buffer); Serial.println();
-  if (save_datalog_to_sd && sd_loaded){
-    DatalogSD(sd_data_file_name, true);  
-  }
-  clearBuffer();
+  Logln(float_buf);
 }
 
 void Log(long str){
   sprintf(float_buf, "%d", str);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
+  Log(float_buf);
 }
 
 void Logln(unsigned long str){
   sprintf(float_buf, "%d", str);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
-  Serial.print(string_buffer); Serial.println();
-  if (save_datalog_to_sd && sd_loaded){
-    DatalogSD(sd_data_file_name, true);  
-  }
-  clearBuffer();
+  Logln(float_buf);
 }
 
 void Log(unsigned long str){
   sprintf(float_buf, "%d", str);
-  if (buffer_size == 0){
-    appendTimestamp();
-  }
-  strncat(string_buffer, float_buf, BUFFER_SIZE);
-  buffer_size = strlen(string_buffer);
+  Log(float_buf);
 }
   
 void EEPROMWriteInt(int p_address, int p_value){  
