@@ -230,14 +230,14 @@ void TransitionLambda(int new_state) {
       strcpy(lambda_state_name, P("Checking for O2 signal"));
       break;
     case LAMBDA_UNKNOWN:
-      strcpy(lambda_state_name, P("Unknown, Checking for O2 signal"));
+      strcpy(lambda_state_name, P("Unknown (Checking)"));
       break;
     case LAMBDA_SHUTDOWN:
-      strcpy(lambda_state_name, P("Lambda locked, engine shutting down"));
+      strcpy(lambda_state_name, P("Lambda Locked (engine shutting down)"));
       lambda_PID.SetMode(MANUAL);
       break;
     case LAMBDA_STARTING:
-      strcpy(lambda_state_name, P("Lambda starting"));
+      strcpy(lambda_state_name, P("Lambda Starting"));
       SetPremixServoAngle(premix_valve_closed);
       lambda_PID.SetMode(MANUAL);
       break;

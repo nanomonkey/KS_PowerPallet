@@ -40,9 +40,6 @@ char p_buffer[41];
 #define putstring(x) SerialPrint_P(PSTR(x))
 #define Log_p(x) Log(P(x))
 #define Logln_p(x) Logln(P(x))
-//void SerialPrint_P(PGM_P str) {
-//  for (uint8_t c; (c = pgm_read_byte(str)); str++) Serial.write(c);
-//} 
 
 //const prog_char help[] PROGMEM = "#p: add 0.02 to p\r\n#P: subtract 0.02 from p\r\n#i: add 0.02 to i\r\n#I: subtract 0.02 from i\r\n#d & D: reserved for d in PID (not implemented)\r\n#c: Calibrate Pressure Sensors\r\n#s: add 10 to Servo1 calibration\r\n#S: subtract 10  degrees from Servo1 position\r\n#l: add 0.01 to lambda_setpoint\r\n#L: subtract 0.01 from lambda_setpoint\r\n#t: subtract 100 ms from Sample Period (loopPeriod1)\r\n#T: add 100 ms from Sample Period (loopPeriod1)\r\n#g: Shake grate\r\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\r\n#m: add 5ms to grate shake interval\r\n#M: subtract 5 ms from grate shake interval\r\n#e: Engine Governor Tuning mode\r\n# h: Print Help Text";
 
@@ -174,14 +171,17 @@ Servo Servo_Mixture;
 #define DISPLAY_CONFIG 10
 #define DISPLAY_SD 11
 
+const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
 const prog_char blank[] PROGMEM = "                    ";
 const prog_char new_engine_state[] PROGMEM = "New Engine State: ";
 const prog_char engine_shutdown[] PROGMEM = ", Engine Shutdown.";
 const prog_char new_auger_state[] PROGMEM = "New Auger State: ";
 const prog_char half_blank[] PROGMEM = "          ";
 char choice[5] = "    ";
-char buf[20];
+char buf[21];
 
+char serial_num[11] = "#         ";
+unsigned int unique_number;
 
 //Testing States
 #define TESTING_OFF 0
@@ -200,8 +200,6 @@ char buf[20];
 #define TESTING_SERVO 13     //used in Display to defeat any other writes to servo.  Must be last testing state!!!
 
 
-//Datalogging Buffer
-//String data_buffer = "";
 #define BUFFER_SIZE 128
 int buffer_size = 0;
 char string_buffer[BUFFER_SIZE];
@@ -701,6 +699,11 @@ void setup() {
   TransitionLambda(LAMBDA_UNKNOWN);
   TransitionAuger(AUGER_OFF);
   TransitionDisplay(DISPLAY_SPLASH);
+  
+  if(EEPROM.read(40) != 255){
+    EEPROMReadAlpha(40, 10, serial_num);
+  }
+  unique_number = uniqueNumber();
 }
 
 void loop() {

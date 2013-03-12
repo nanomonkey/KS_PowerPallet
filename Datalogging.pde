@@ -241,8 +241,6 @@ void LogAuger(boolean header = false) {
 //  }
 //}
 
-//ENGINE_OFF 0, ENGINE_ON 1, ENGINE_STARTING 2, ENGINE_GOV_TUNING 3, ENGINE_SHUTDOWN 4
-
 void LogEngine(boolean header=false) {
   if (header) {
     PrintColumn(P("Engine"));
@@ -370,12 +368,8 @@ void DoDatalogging() {
   }
   boolean header = false;
   if (lineCount == 0) {
-    char serial_num[11] = "          ";
-    if(EEPROM.read(40) != 255){
-      EEPROMReadAlpha(40, 10, serial_num);
-    }
     if (serial_num[0] != '#'){
-      sprintf(string_buffer, "#%s PCU# %d", serial_num, uniqueNumber());
+      sprintf(string_buffer, "#%s PCU# %d", serial_num, unique_number);
       Serial.println(string_buffer);
       if (save_datalog_to_sd && sd_loaded){
         DatalogSD(sd_data_file_name, true);

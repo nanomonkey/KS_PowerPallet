@@ -70,7 +70,6 @@ void DoEngine() {
 }
 
 void TransitionEngine(int new_state) {
-  //const prog_char new_engine_state[] PROGMEM = "New Engine State: ";
   strcpy_P(p_buffer, new_engine_state);
   //can look at engine_state for "old" state before transitioning at the end of this method
   engine_state_entered = millis();

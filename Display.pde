@@ -1,11 +1,9 @@
 void DoDisplay() {
   boolean disp_alt; // Var for alternating value display
-  const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
   char config_buffer[] = "               ";
   char config_choice_buffer[] = "        ";
-  //Serial Number
-  char serial_num[11] = "          ";
-  unsigned int unique_number = 12;
+  
+  
   
   if (millis() % (display_per*200) > (display_per*100) ) {    //  if (millis() % 2000 > 1000) {
     disp_alt = false;
@@ -27,13 +25,7 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
-    {
-      char serial_num[11] = "          ";
-      if(EEPROM.read(40) != 255){
-        EEPROMReadAlpha(40, 10, serial_num);
-      }
-      sprintf(buf, "%s  %u", serial_num, uniqueNumber());
-    }
+    sprintf(buf, "%s  %u", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_CursOff();
     //Transition out after delay
@@ -507,7 +499,7 @@ void DoDisplay() {
   case DISPLAY_INFO:
     Disp_CursOff();
     Disp_RC(0,0);
-    sprintf(buf, "%s   %i ", serial_num, unique_number);
+    sprintf(buf, "%s  %8i", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_RC(1,0);
     sprintf(buf, "       Time:%8i", millis()/1000);
@@ -929,30 +921,23 @@ void update_config_var(int var_num){
     break;
   case 1:
     engine_type = getConfig(1);
-    //Serial.println("Updating engine_type");
     break;
   case 2:
     relay_board = getConfig(2);
-    //Serial.println("Updating relay_board");
     break;
   case 3:
     aug_rev_time = getConfig(3)*100;
-    //Serial.println("Updating aug_rev_time");
     break;
   case 4:
     current_low_boundary = getConfig(4); 
     //{ { -140, 10}, {10, current_low_boundary}, {current_low_boundary+5, current_high_boundary-5}, {current_high_boundary, 750} }
     AugerCurrentLevelBoundary[CURRENT_LOW][1] = current_low_boundary; 
     AugerCurrentLevelBoundary[CURRENT_ON][0] = current_low_boundary+5;
-    //Serial.print("#Updating current_low_boundary: "); 
-    //Serial.println(current_low_boundary); 
     break;
   case 5:
     current_high_boundary = getConfig(5);
     AugerCurrentLevelBoundary[CURRENT_ON][1] = current_high_boundary - 5; 
     AugerCurrentLevelBoundary[CURRENT_HIGH][0] = current_high_boundary;
-    //Serial.print("Updating current_high_boundary: ");
-    //Serial.println(current_high_boundary);
     break;
   case 6:
     low_oil_psi = getConfig(6);
