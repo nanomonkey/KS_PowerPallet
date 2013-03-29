@@ -2,8 +2,9 @@
 void LogTime(boolean header = false) {
   if (header) {
     PrintColumn(P("Time"));
-  } else {
-   PrintColumn(millis()/100.0); 
+  } 
+  else {
+    PrintColumn(millis()/100.0); 
   }
 }
 
@@ -35,7 +36,8 @@ void LogPID(boolean header = false) {
     PrintColumn(P("Lambda_P"));
     PrintColumn(P("Lambda_I"));
     PrintColumn(P("Lambda_D"));
-  } else {
+  } 
+  else {
     PrintColumn(lambda_input);
     PrintColumn(lambda_output);
     PrintColumn(lambda_setpoint);
@@ -55,7 +57,8 @@ void LogAnalogInputs(boolean header = false) {
     PrintColumn(P("ANA5"));
     PrintColumn(P("ANA6"));
     PrintColumn(P("ANA7"));
-  } else {
+  } 
+  else {
     PrintColumnInt(analogRead(ANA0));
     PrintColumnInt(analogRead(ANA1));
     PrintColumnInt(analogRead(ANA2));
@@ -74,7 +77,8 @@ void LogGrate(boolean header = false) {
     PrintColumn(P("P_ratio_reactor"));
     PrintColumn(P("P_ratio_state_reactor"));
     PrintColumn(P("Grate_Val"));
-  } else {
+  } 
+  else {
     //PrintColumnInt(grateMode);
     PrintColumnInt(grate_motor_state);
     PrintColumn(pRatioReactor);
@@ -84,15 +88,17 @@ void LogGrate(boolean header = false) {
 }
 
 void LogFilter(boolean header = false) {
-   if (header) {
+  if (header) {
     PrintColumn(P("P_ratio_filter"));
     PrintColumn(P("P_ratio_filter_state"));
-  } else {
+  } 
+  else {
     PrintColumn(pRatioFilter);
     //TODO: Move to enum
     if (pRatioFilterHigh) {
       PrintColumn(P("Bad"));
-    } else {
+    } 
+    else {
       PrintColumn(P("Good"));
     }
   }
@@ -101,120 +107,123 @@ void LogFilter(boolean header = false) {
 void LogPressures(boolean header = false) {
   if (header) {
     //TODO: Handle half/full fill
-    #if P_REACTOR != ABSENT
-      PrintColumn(P("P_reactor"));
-    #endif
-    #if P_FILTER != ABSENT
-      PrintColumn(P("P_filter"));
-    #endif
-    #if P_COMB != ABSENT
-      PrintColumn(P("P_comb"));
-    #endif
-    #if P_Q_AIR_ENG != ABSENT
-      PrintColumn(P("P_Q_air_eng"));
-    #endif
-    #if P_Q_AIR_RCT != ABSENT
-      PrintColumn(P("P_Q_air_rct"));
-    #endif
-    #if P_Q_GAS_ENG != ABSENT
-      PrintColumn(P("P_Q_gas_eng"));
-    #endif
-  } else {
-    #if P_REACTOR != ABSENT
-      PrintColumnInt(Press[P_REACTOR]);
-    #endif
-    #if P_FILTER != ABSENT
-      PrintColumnInt(Press[P_FILTER]);
-    #endif
-    #if P_COMB != ABSENT
-      PrintColumnInt(Press[P_COMB]);
-    #endif
-    #if P_Q_AIR_ENG != ABSENT
-      PrintColumnInt(Press[P_Q_AIR_ENG]);
-    #endif
-    #if P_Q_AIR_RCT != ABSENT
-      PrintColumnInt(Press[P_Q_AIR_RCT]);
-    #endif
-    #if P_Q_GAS_ENG != ABSENT
-      PrintColumnInt(Press[P_Q_GAS_ENG]);
-    #endif
+#if P_REACTOR != ABSENT
+    PrintColumn(P("P_reactor"));
+#endif
+#if P_FILTER != ABSENT
+    PrintColumn(P("P_filter"));
+#endif
+#if P_COMB != ABSENT
+    PrintColumn(P("P_comb"));
+#endif
+#if P_Q_AIR_ENG != ABSENT
+    PrintColumn(P("P_Q_air_eng"));
+#endif
+#if P_Q_AIR_RCT != ABSENT
+    PrintColumn(P("P_Q_air_rct"));
+#endif
+#if P_Q_GAS_ENG != ABSENT
+    PrintColumn(P("P_Q_gas_eng"));
+#endif
+  } 
+  else {
+#if P_REACTOR != ABSENT
+    PrintColumnInt(Press[P_REACTOR]);
+#endif
+#if P_FILTER != ABSENT
+    PrintColumnInt(Press[P_FILTER]);
+#endif
+#if P_COMB != ABSENT
+    PrintColumnInt(Press[P_COMB]);
+#endif
+#if P_Q_AIR_ENG != ABSENT
+    PrintColumnInt(Press[P_Q_AIR_ENG]);
+#endif
+#if P_Q_AIR_RCT != ABSENT
+    PrintColumnInt(Press[P_Q_AIR_RCT]);
+#endif
+#if P_Q_GAS_ENG != ABSENT
+    PrintColumnInt(Press[P_Q_GAS_ENG]);
+#endif
   }
 }
 
 void LogTemps(boolean header = false) {
   if (header) {
-      #if T_TRED != ABSENT
-        PrintColumn(P("T_tred"));
-      #endif
-      #if T_BRED != ABSENT
-        PrintColumn(P("T_bred"));
-      #endif
-      #if T_PYRO_IN != ABSENT
-        PrintColumn(P("T_pyro_in"));
-      #endif
-      #if T_PYRO_OUT != ABSENT
-        PrintColumn(P("T_pyro_out"));
-      #endif
-      #if T_ENG_COOLANT != ABSENT
-        PrintColumn(P("T_eng_coolant"));
-      #endif 
-      #if T_DRYING_GAS_OUT != ABSENT
-        PrintColumn(P("T_drying_gas_out"));
-      #endif
-      #if T_REACTOR_GAS_OUT != ABSENT
-        PrintColumn(P("T_reactor_gas_out"));
-      #endif
-      #if T_FILTER != ABSENT
-        PrintColumn(P("T_filter"));
-      #endif
-  } else {
-    #if T_TRED != ABSENT
-      PrintColumnInt(Temp_Data[T_TRED]);
-    #endif
-    #if T_BRED != ABSENT
-      PrintColumnInt(Temp_Data[T_BRED]);
-    #endif
-    #if T_PYRO_IN != ABSENT
-      PrintColumnInt(Temp_Data[T_PYRO_IN]);
-    #endif
-    #if T_PYRO_OUT != ABSENT
-      PrintColumnInt(Temp_Data[T_PYRO_OUT]);
-    #endif
-    #if T_ENG_COOLANT != ABSENT
-      PrintColumnInt(Temp_Data[T_ENG_COOLANT]);
-    #endif 
-    #if T_DRYING_GAS_OUT != ABSENT
-      PrintColumnInt(Temp_Data[T_DRYING_GAS_OUT]);
-    #endif
-    #if T_REACTOR_GAS_OUT != ABSENT
-      PrintColumnInt(Temp_Data[T_REACTOR_GAS_OUT]);
-    #endif
-    #if T_FILTER != ABSENT
-      PrintColumnInt(Temp_Data[T_FILTER]);
-    #endif
+#if T_TRED != ABSENT
+    PrintColumn(P("T_tred"));
+#endif
+#if T_BRED != ABSENT
+    PrintColumn(P("T_bred"));
+#endif
+#if T_PYRO_IN != ABSENT
+    PrintColumn(P("T_pyro_in"));
+#endif
+#if T_PYRO_OUT != ABSENT
+    PrintColumn(P("T_pyro_out"));
+#endif
+#if T_ENG_COOLANT != ABSENT
+    PrintColumn(P("T_eng_coolant"));
+#endif 
+#if T_DRYING_GAS_OUT != ABSENT
+    PrintColumn(P("T_drying_gas_out"));
+#endif
+#if T_REACTOR_GAS_OUT != ABSENT
+    PrintColumn(P("T_reactor_gas_out"));
+#endif
+#if T_FILTER != ABSENT
+    PrintColumn(P("T_filter"));
+#endif
+  } 
+  else {
+#if T_TRED != ABSENT
+    PrintColumnInt(Temp_Data[T_TRED]);
+#endif
+#if T_BRED != ABSENT
+    PrintColumnInt(Temp_Data[T_BRED]);
+#endif
+#if T_PYRO_IN != ABSENT
+    PrintColumnInt(Temp_Data[T_PYRO_IN]);
+#endif
+#if T_PYRO_OUT != ABSENT
+    PrintColumnInt(Temp_Data[T_PYRO_OUT]);
+#endif
+#if T_ENG_COOLANT != ABSENT
+    PrintColumnInt(Temp_Data[T_ENG_COOLANT]);
+#endif 
+#if T_DRYING_GAS_OUT != ABSENT
+    PrintColumnInt(Temp_Data[T_DRYING_GAS_OUT]);
+#endif
+#if T_REACTOR_GAS_OUT != ABSENT
+    PrintColumnInt(Temp_Data[T_REACTOR_GAS_OUT]);
+#endif
+#if T_FILTER != ABSENT
+    PrintColumnInt(Temp_Data[T_FILTER]);
+#endif
   }
 } 
 
 void LogAuger(boolean header = false) {
   if (header) {
-     if (relay_board){ 
+    if (relay_board){ 
       PrintColumn(P("AugerCurrent"));
       PrintColumn(P("AugerLevel"));
-     }
-    #if ANA_FUEL_SWITCH != ABSENT
-      PrintColumn(P("FuelSwitchLevel"));
-    #endif
-  } else {
-     if (relay_board){ 
+    }
+#if ANA_FUEL_SWITCH != ABSENT
+    PrintColumn(P("FuelSwitchLevel"));
+#endif
+  } 
+  else {
+    if (relay_board){ 
       PrintColumnInt(AugerCurrentValue);
       PrintColumn(AugerCurrentLevel[AugerCurrentLevelName]);
-     }
-    #if ANA_FUEL_SWITCH != ABSENT
-      PrintColumn(FuelSwitchLevel[FuelSwitchLevelName]);
-    #endif
+    }
+#if ANA_FUEL_SWITCH != ABSENT
+    PrintColumn(FuelSwitchLevel[FuelSwitchLevelName]);
+#endif
   }
 }
- 
+
 //void LogPulseEnergy(boolean header = false) {
 //  if (header) {
 //    PrintColumn("Power");
@@ -244,26 +253,27 @@ void LogAuger(boolean header = false) {
 void LogEngine(boolean header=false) {
   if (header) {
     PrintColumn(P("Engine"));
-  } else {
+  } 
+  else {
     switch(engine_state){
-      case ENGINE_OFF:
-        PrintColumn(P("Off")); 
-        break;
-      case ENGINE_ON:
-        PrintColumn(P("On"));
-        break;
-      case ENGINE_STARTING:
-        PrintColumn(P("Starting"));
-        break;
-      case ENGINE_GOV_TUNING:
-        PrintColumn(P("Govenor Tuning"));
-        break;
-      case ENGINE_SHUTDOWN:
-        PrintColumn(P("Shutdown"));
-        break;
-      default:
-        PrintColumnInt(engine_state);
-        break;
+    case ENGINE_OFF:
+      PrintColumn(P("Off")); 
+      break;
+    case ENGINE_ON:
+      PrintColumn(P("On"));
+      break;
+    case ENGINE_STARTING:
+      PrintColumn(P("Starting"));
+      break;
+    case ENGINE_GOV_TUNING:
+      PrintColumn(P("Govenor Tuning"));
+      break;
+    case ENGINE_SHUTDOWN:
+      PrintColumn(P("Shutdown"));
+      break;
+    default:
+      PrintColumnInt(engine_state);
+      break;
     }
   }
 }
@@ -281,25 +291,28 @@ void LogOilPressure(boolean header=false){
     PrintColumn(P("OilPressureLevel"));
     if (engine_type == 1){ //20k
       PrintColumn(P("OilPressurePSI"));
-    } else {
+    } 
+    else {
       PrintColumn(P("OilPressureValue"));
     }
-  } else {
-      PrintColumn(EngineOilPressureLevel[EngineOilPressureName]);
-      PrintColumn(EngineOilPressureValue);
-    }
+  } 
+  else {
+    PrintColumn(EngineOilPressureLevel[EngineOilPressureName]);
+    PrintColumn(EngineOilPressureValue);
+  }
 }
 
 void LogReactor(boolean header=false) {
-    if (header) {
-      PrintColumn(P("P_reactorLevel"));
-      PrintColumn(P("T_tredLevel"));
-      PrintColumn(P("T_bredLevel"));
-    } else {
-      PrintColumn(P_reactorLevel[P_reactorLevelName]);
-      PrintColumn(T_tredLevel[TempLevelName]);
-      PrintColumn(T_bredLevel[TempLevelName]);
-    }
+  if (header) {
+    PrintColumn(P("P_reactorLevel"));
+    PrintColumn(P("T_tredLevel"));
+    PrintColumn(P("T_bredLevel"));
+  } 
+  else {
+    PrintColumn(P_reactorLevel[P_reactorLevelName]);
+    PrintColumn(T_tredLevel[TempLevelName]);
+    PrintColumn(T_bredLevel[TempLevelName]);
+  }
 }
 
 //void DoTests() { //space to log testing of variables.  Normally not logged
@@ -318,11 +331,12 @@ void PrintColumn(const char * str) {
     strncat(string_buffer, str, BUFFER_SIZE);
     strncat(string_buffer, comma, BUFFER_SIZE); //add comma
     buffer_size = strlen(string_buffer);  //add on size of comma
-  }  else {
+  }  
+  else {
     Serial.print(string_buffer);
     if (save_datalog_to_sd && sd_loaded){
-        DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
-      }
+      DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
+    }
     strcpy(string_buffer, str);
     strncat(string_buffer, comma, BUFFER_SIZE);
     buffer_size = strlen(string_buffer);
@@ -335,11 +349,12 @@ void PrintColumn(float str) {
     strncat(string_buffer, float_buf, BUFFER_SIZE);
     strncat(string_buffer, comma, BUFFER_SIZE); //add comma
     buffer_size = strlen(string_buffer);
-  }  else {
+  }  
+  else {
     Serial.print(string_buffer);
     if (save_datalog_to_sd && sd_loaded){
-        DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
-      }
+      DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
+    }
     strcpy(string_buffer, float_buf);
     strncat(string_buffer, comma, BUFFER_SIZE);
     buffer_size = strlen(string_buffer);
@@ -351,11 +366,12 @@ void PrintColumnInt(int str) {
   if (buffer_size + strlen(float_buf) < BUFFER_SIZE){
     strncat(string_buffer, float_buf, BUFFER_SIZE);
     buffer_size = strlen(string_buffer);
-  }  else {
+  }  
+  else {
     Serial.print(string_buffer);
     if (save_datalog_to_sd && sd_loaded){
-        DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
-      }
+      DatalogSD(sd_data_file_name, false);  //write to SD but don't put line ending
+    }
     strcpy(string_buffer, float_buf);
     buffer_size = strlen(string_buffer);
   }
@@ -364,19 +380,19 @@ void PrintColumnInt(int str) {
 void DoDatalogging() {
   //Serial.begin(115200);
   if (buffer_size > 0){
-    Logln_p("...");
+    Logln_p("..."); //for debugging purposes...remove if no longer needed
   }
   boolean header = false;
   if (lineCount == 0) {
-    if (serial_num[0] != '#'){
-      sprintf(string_buffer, "#%s PCU# %d", serial_num, unique_number);
-      Serial.println(string_buffer);
-      if (save_datalog_to_sd && sd_loaded){
-        DatalogSD(sd_data_file_name, true);
-      }
-      clearBuffer();
-    }
     header = true;
+  }
+  if(lineCount == 1 && serial_num[0] != '#'){
+    sprintf_P(string_buffer, P("#APL Serial:#%s PCU#%u Version:%s"), serial_num, unique_number, CODE_VERSION);
+    Serial.println(string_buffer);
+    if (save_datalog_to_sd && sd_loaded){
+      DatalogSD(sd_data_file_name, true);
+    }
+    clearBuffer();
   }
   LogTime(header);
   LogTemps(header);
@@ -400,9 +416,10 @@ void DoDatalogging() {
   if (save_datalog_to_sd && sd_loaded){
     DatalogSD(sd_data_file_name, true);
   }
-//  DoTests();
+  //  DoTests();
   clearBuffer();
   lineCount++;
 }
+
 
 

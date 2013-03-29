@@ -209,3 +209,12 @@ void resetAlarm(int alarm_num){
   }
 }
 
+word getAlarmBin(){
+  word Bin = word(0);
+  if (alarm_count>0){
+    for(int i; i=0; i<=alarm_count){
+      bitSet(Bin, alarm_queue[i]);
+    }
+  }
+  return Bin;
+}

@@ -123,9 +123,10 @@ void DoLambda() {
         }
         break;
       case LAMBDA_SHUTDOWN:
-        if (millis()-lambda_state_entered > 2000) {
-          SetPremixServoAngle(1);
-        }
+//        if (millis()-lambda_state_entered > 2000) {
+//          SetPremixServoAngle(1);
+//        }
+        SetPremixServoAngle(1);
         if (engine_state == ENGINE_OFF) {
           TransitionLambda(LAMBDA_SEALED);
         }

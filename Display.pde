@@ -499,7 +499,7 @@ void DoDisplay() {
   case DISPLAY_INFO:
     Disp_CursOff();
     Disp_RC(0,0);
-    sprintf(buf, "%s  %8i", serial_num, unique_number);
+    sprintf(buf, "%10s  %8u", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_RC(1,0);
     sprintf(buf, "       Time:%8i", millis()/1000);
@@ -982,6 +982,18 @@ void update_config_var(int var_num){
     break;
   case 19:
     lambda_rich = getConfig(19);
+    break;
+  case 20:
+    use_modbus = getConfig(20);
+    break;
+  case 21:
+    m_baud = getConfig(21);
+    break;
+  case 22:
+    m_parity = getConfig(22);
+    break;
+  case 23:
+    m_address = getConfig(23);
     break;
   }
 }
