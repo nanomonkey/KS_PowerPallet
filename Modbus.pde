@@ -24,7 +24,7 @@ void InitModbusSlave(){  //include in Setup() loop
     regs[MB_CONFIG22]=getConfig(22); //m_parity;
     regs[MB_CONFIG23]=getConfig(23); //m_address;
     
-    init_mb_slave(baud[m_baud], parity[m_parity], 0);  //baud, parity, tx_en_pin
+    init_mb_slave(baud_rates[m_baud], parity[m_parity], 16);  //baud, parity, tx_en_pin
 }
 
 
@@ -72,6 +72,8 @@ void DoModbus() {
 
 
     if (written.num_regs) {
+        Log_p("Modbus recieved Register:");Logln(written.num_regs);
+        
         switch (written.num_regs) {
         case MB_ENGINE_STATE:
           TransitionEngine(regs[MB_ENGINE_STATE]);

@@ -378,7 +378,7 @@ void PrintColumnInt(int str) {
 }
 
 void DoDatalogging() {
-  //Serial.begin(115200);
+  Serial.begin(115200);
   if (buffer_size > 0){
     Logln_p("..."); //for debugging purposes...remove if no longer needed
   }

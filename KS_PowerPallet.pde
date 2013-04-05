@@ -37,7 +37,7 @@ EEPROM bytes used of 4k space:
 #define CODE_VERSION "v1.12" 
 
 //PROGMEM string buffer
-char p_buffer[41];
+char p_buffer[41]; 
 #define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
 #define putstring(x) SerialPrint_P(PSTR(x))
 #define Log_p(x) Log(P(x))
@@ -179,10 +179,10 @@ const prog_char new_engine_state[] PROGMEM = "New Engine State: ";
 const prog_char engine_shutdown[] PROGMEM = ", Engine Shutdown.";
 const prog_char new_auger_state[] PROGMEM = "New Auger State: ";
 const prog_char half_blank[] PROGMEM = "          ";
-char choice[5] = "    ";
-char buf[21];
+char choice[5];
+char buf[21] = "";
 
-char serial_num[11] = "#         ";
+char serial_num[11] = "#";
 unsigned int unique_number;
 
 //Testing States
@@ -618,7 +618,7 @@ prog_char alarm2_15[] PROGMEM = "Reduce Load         ";
 PROGMEM const char *display_alarm2[] = {alarm2_1, alarm2_2, alarm2_3, alarm2_4, alarm2_5, alarm2_6, alarm2_7, blank, blank, alarm2_1, alarm2_11, alarm2_12, blank, blank, alarm2_15, alarm2_15};
 
 //modbus
-long baud[] = {2400, 4800, 9600, 19200, 38400, 57600, 115200 };
+long baud_rates[] = {2400, 4800, 9600, 19200, 38400, 57600, 115200};
 char parity[] = {'n', 'o', 'e'}; 
     
 // SD Card
@@ -673,7 +673,7 @@ void setup() {
   LoadPressureSensorCalibration();
   LoadServo();
   //LoadLambda(); - must save lambda data first?
- 
+  
   Serial.begin(115200);
   
  //Library initializations                    
