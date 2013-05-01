@@ -37,7 +37,7 @@ EEPROM bytes used of 4k space:
 #define CODE_VERSION "v1.12" 
 
 //PROGMEM string buffer
-char p_buffer[41]; 
+char p_buffer[41] = ""; 
 #define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
 #define putstring(x) SerialPrint_P(PSTR(x))
 #define Log_p(x) Log(P(x))
@@ -204,7 +204,7 @@ unsigned int unique_number;
 
 #define BUFFER_SIZE 128
 int buffer_size = 0;
-char string_buffer[BUFFER_SIZE];
+char string_buffer[BUFFER_SIZE] = "";
 char comma[]=", ";
 char float_buf[15] = "";
 
@@ -743,6 +743,9 @@ void loop() {
     DoAuger();
    // DoBattery();
  //     DoCounterHertz();
+    if (use_modbus == 1){
+      DoModbus();
+    }
   }
   DoKeyInput();
   DoHeartBeat(); // blink heartbeat LED
@@ -758,9 +761,6 @@ void loop() {
         DoDatalogging();
         DoAlarmUpdate();
         DoAlarm();
-        if (use_modbus == 1){
-          DoModbus();
-        }
       }
     }
   }
