@@ -147,9 +147,9 @@ void DoSerialIn() {
       if (serial_buffer[0] != '\0'){
         EEPROMWriteAlpha(40, 10, serial_buffer);
       }
-      EEPROMReadAlpha(40, 10, p_buffer);
+      EEPROMReadAlpha(40, 10, serial_buffer);
       Log_p("Serial number: ");
-      Logln(p_buffer);
+      Logln(serial_buffer);
       break;
 //   case 'h' || 'H':
 //      Logln(P(help));
