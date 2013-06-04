@@ -27,83 +27,82 @@ void InitModbusSlave(){  //include in Setup() loop
     
     init_mb_slave(baud_rates[m_baud], parity[m_parity], 16);  //baud, parity, tx_en_pin
     Serial.print("# Modbus Baud Rate:"); Serial.print(baud_rates[m_baud]); Serial.print(" Parity: "); Serial.print(m_parity);
-    Serial.print("Address: "); Serial.print(m_address); Serial.print(" Number of Registers: "); Serial.println(MB_REGS);
-    
+    Serial.print(" Address: "); Serial.print(m_address); Serial.print(" Number of Registers: "); Serial.println(MB_REGS);
 }
 
 
 void DoModbus() {
     start_mb_slave(m_address, regs, MB_REGS);
     
-        if (written.num_regs) {
-        //Log_p("Modbus recieved Register update:");Logln(written.num_regs);
-        //Log_p("Lastwrite.start_addr"); Logln(written.start_addr);    
-        
-        for(int i = written.start_addr; i < (written.start_addr + written.num_regs); i++){
-          Log_p("i = "); Log(i); Log_p(" "); Logln(regs[i]);
-          switch (i) {
-          case MB_ENGINE_STATE:
-            TransitionEngine(regs[MB_ENGINE_STATE]);
-            break;
-          case MB_AUGER_STATE:
-            TransitionAuger(regs[MB_AUGER_STATE]);
-            break;
-          case MB_GRATE_STATE:
-            grateMode = regs[MB_AUGER_STATE];
-            break;
-          case MB_FLARE_STATE:
-            flare_state = regs[MB_FLARE_STATE]; //???
-            break;
-          case  MB_BLOWER_STATE:  
-            break;
-          case MB_LAMBDA_OUT:
-            lambda_output = regs[MB_LAMBDA_OUT]/100.0;
-            break;
-          case MB_LAMBDA_SETPOINT:
-            lambda_setpoint = regs[MB_LAMBDA_SETPOINT]/1000.0;	
-            break;
-          case MB_LAMBDA_P:
-          case MB_LAMBDA_I:
-          case MB_LAMBDA_D:  //the following catches all three:
-            lambda_P[0] = regs[MB_LAMBDA_P]/100.0;
-            lambda_I[0] = regs[MB_LAMBDA_I]/100.0;
-            lambda_PID.SetTunings(lambda_P[0],lambda_I[0],0);
-            WriteLambda();
-            break;
+    if (written.num_regs) {
+    //Log_p("Modbus recieved Register update:");Logln(written.num_regs);
+    //Log_p("Lastwrite.start_addr"); Logln(written.start_addr);    
+    
+      for(int i = written.start_addr; i < (written.start_addr + written.num_regs); i++){
+        Log_p("i = "); Log(i); Log_p(" "); Logln(regs[i]);
+        switch (i) {
+        case MB_ENGINE_STATE:
+          TransitionEngine(regs[MB_ENGINE_STATE]);
+          break;
+        case MB_AUGER_STATE:
+          TransitionAuger(regs[MB_AUGER_STATE]);
+          break;
+        case MB_GRATE_STATE:
+          grateMode = regs[MB_AUGER_STATE];
+          break;
+        case MB_FLARE_STATE:
+          flare_state = regs[MB_FLARE_STATE]; //???
+          break;
+        case  MB_BLOWER_STATE:  
+          break;
+        case MB_LAMBDA_OUT:
+          lambda_output = regs[MB_LAMBDA_OUT]/100.0;
+          break;
+        case MB_LAMBDA_SETPOINT:
+          lambda_setpoint = regs[MB_LAMBDA_SETPOINT]/1000.0;	
+          break;
+        case MB_LAMBDA_P:
+        case MB_LAMBDA_I:
+        case MB_LAMBDA_D:  //the following catches all three:
+          lambda_P[0] = regs[MB_LAMBDA_P]/100.0;
+          lambda_I[0] = regs[MB_LAMBDA_I]/100.0;
+          lambda_PID.SetTunings(lambda_P[0],lambda_I[0],0);
+          WriteLambda();
+          break;
   //        case MB_CONFIG1:
   //          saveConfig(1,regs[MB_CONFIG1]);
   //          updateConfig(1);
   //          break;
-          default:  //catch all configs
-            if((i >= MB_CONFIG1) && (i < MB_CONFIG1+CONFIG_COUNT-1)){
-              saveConfig(i-MB_CONFIG1+1,regs[i]);
-              update_config_var(i);
-              
-//              regs[MB_CONFIG1] = engine_type;
-//              regs[MB_CONFIG2] = relay_board;
-//              regs[MB_CONFIG3] = aug_rev_time;
-//              regs[MB_CONFIG4] = current_low_boundary;
-//              regs[MB_CONFIG5] = current_high_boundary;
-//              regs[MB_CONFIG6] = low_oil_psi;
-//              regs[MB_CONFIG7] = save_datalog_to_sd;
-//              regs[MB_CONFIG8] = pratio_max;
-//              regs[MB_CONFIG9] = high_coolant_temp;
-//              regs[MB_CONFIG10] = display_per;
-//              regs[MB_CONFIG11] = tred_low_temp;
-//              regs[MB_CONFIG12] = ttred_high;
-//              regs[MB_CONFIG13] = tbred_high;
-//              regs[MB_CONFIG14] = pfilter_alarm;
-//              regs[MB_CONFIG15] = grate_max_interval;
-//              regs[MB_CONFIG16] = grate_min_interval;
-//              regs[MB_CONFIG17] = grate_on_interval;
-//              regs[MB_CONFIG18] = servo_start;
-//              regs[MB_CONFIG19] = lambda_rich;
-//              regs[MB_CONFIG20] = use_modbus;
-//              regs[MB_CONFIG21] = m_baud;
-//              regs[MB_CONFIG22] = m_parity;
-//              regs[MB_CONFIG23] = m_address;
-            }
-            break;
+        default:  //catch all configs
+          if((i >= MB_CONFIG1) && (i < MB_CONFIG1+CONFIG_COUNT-1)){
+            saveConfig(i-MB_CONFIG1+1,regs[i]);
+            update_config_var(i);
+            
+  //              regs[MB_CONFIG1] = engine_type;
+  //              regs[MB_CONFIG2] = relay_board;
+  //              regs[MB_CONFIG3] = aug_rev_time;
+  //              regs[MB_CONFIG4] = current_low_boundary;
+  //              regs[MB_CONFIG5] = current_high_boundary;
+  //              regs[MB_CONFIG6] = low_oil_psi;
+  //              regs[MB_CONFIG7] = save_datalog_to_sd;
+  //              regs[MB_CONFIG8] = pratio_max;
+  //              regs[MB_CONFIG9] = high_coolant_temp;
+  //              regs[MB_CONFIG10] = display_per;
+  //              regs[MB_CONFIG11] = tred_low_temp;
+  //              regs[MB_CONFIG12] = ttred_high;
+  //              regs[MB_CONFIG13] = tbred_high;
+  //              regs[MB_CONFIG14] = pfilter_alarm;
+  //              regs[MB_CONFIG15] = grate_max_interval;
+  //              regs[MB_CONFIG16] = grate_min_interval;
+  //              regs[MB_CONFIG17] = grate_on_interval;
+  //              regs[MB_CONFIG18] = servo_start;
+  //              regs[MB_CONFIG19] = lambda_rich;
+  //              regs[MB_CONFIG20] = use_modbus;
+  //              regs[MB_CONFIG21] = m_baud;
+  //              regs[MB_CONFIG22] = m_parity;
+  //              regs[MB_CONFIG23] = m_address;
+              }
+              break;
           }
         }
         written.num_regs=0;
