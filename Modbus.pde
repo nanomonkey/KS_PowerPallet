@@ -36,8 +36,8 @@ void DoModbus() {
     start_mb_slave(m_address, regs, MB_REGS);
     
         if (written.num_regs) {
-        Log_p("Modbus recieved Register update:");Logln(written.num_regs);
-        Log_p("Lastwrite.start_addr"); Logln(written.start_addr);    
+        //Log_p("Modbus recieved Register update:");Logln(written.num_regs);
+        //Log_p("Lastwrite.start_addr"); Logln(written.start_addr);    
         
         for(int i = written.start_addr; i < (written.start_addr + written.num_regs); i++){
           Log_p("i = "); Log(i); Log_p(" "); Logln(regs[i]);
