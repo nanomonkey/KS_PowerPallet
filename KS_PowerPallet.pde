@@ -232,7 +232,7 @@ PROGMEM const char *TestingStateName[] = {testing_state_0, testing_state_1, test
 int lineCount = 0;
 
 //Configuration Variables
-#define CONFIG_COUNT 25  
+#define CONFIG_COUNT 24  
 int config_var;
 byte config_changed = false;
 
@@ -260,9 +260,8 @@ prog_char config_20[] PROGMEM = "Modbus Enabled?";
 prog_char config_21[] PROGMEM = "Modbus Baud    ";  //0:2400, 1:4800, 2:9600, 3:19200, 4:38400, 5:57600, 6:115200 
 prog_char config_22[] PROGMEM = "Modbus Parity  ";  //0:None, 1:Odd, 2:Even
 prog_char config_23[] PROGMEM = "Modbus Address ";  //1-127
-prog_char config_24[] PROGMEM = "Grid tie?      "; 
 
-PROGMEM const char *Configuration[CONFIG_COUNT] = {config_0, config_1, config_2, config_3, config_4, config_5, config_6, config_7, config_8, config_9, config_10, config_11, config_12, config_13, config_14, config_15, config_16, config_17, config_18, config_19, config_20, config_21, config_22, config_23, config_24};
+PROGMEM const char *Configuration[CONFIG_COUNT] = {config_0, config_1, config_2, config_3, config_4, config_5, config_6, config_7, config_8, config_9, config_10, config_11, config_12, config_13, config_14, config_15, config_16, config_17, config_18, config_19, config_20, config_21, config_22, config_23};
 
 prog_char plus_minus[] PROGMEM = "+    -  ";
 prog_char no_yes[] PROGMEM = "NO  YES ";
@@ -294,13 +293,12 @@ plus_minus,
 no_yes,
 plus_minus,
 plus_minus,
-plus_minus,
-no_yes
+plus_minus
 }; 
 
-int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   20,  98,  10,  130, 210, 195, 50,  60,  12,  3,   15, 114, 0, 3, 0, 1, 0};  //default values to be saved to EEPROM for the following getConfig variables
-int config_min[CONFIG_COUNT] = {0,   0,   0,   0,   5,  41,  1,  0,   0,   10,  0,   0,   0,   20,  0,   0,   0,   0,   0,  0,   0, 0, 0, 1, 0};  //minimum values allowed 
-int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1, 6, 3, 127, 254}; //maximum values allowed  
+int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   20,  98,  10,  130, 210, 195, 50,  60,  12,  3,   15, 114, 0, 3, 0, 1};  //default values to be saved to EEPROM for the following getConfig variables
+int config_min[CONFIG_COUNT] = {0,   0,   0,   0,   5,  41,  1,  0,   0,   10,  0,   0,   0,   20,  0,   0,   0,   0,   0,  0,   0, 0, 0, 1};  //minimum values allowed 
+int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1, 6, 3, 127}; //maximum values allowed  
 
 //Don't forget to add the following to update_config_var in Display!  The first Configuration, Reset Defaults, is skipped, so these start at 1, not 0. 
 int engine_type = getConfig(1);  
@@ -326,7 +324,6 @@ int use_modbus = getConfig(20);
 int m_baud = getConfig(21);
 int m_parity = getConfig(22);
 int m_address = getConfig(23);
-int grid_tie = getConfig(24);
 
 // Grate turning variables
 int grateMode = GRATE_SHAKE_PRATIO; //set default starting state
@@ -385,9 +382,9 @@ unsigned long fuel_state_entered;
 #define AUGER_CURRENT_LOW 6
 #define AUGER_ALARM 7
 #define AUGER_PULSE 8
-//#define AUGER_PULSE_FORWORD 9
-#define AUGER_MANUAL_FORWARD 9
-//#define AUGER_MANUAL 11
+#define AUGER_PULSE_FORWORD 9
+#define AUGER_MANUAL_FORWARD 10
+#define AUGER_MANUAL 11
 
 int auger_state = 0;
 int auger_rev_count = 0;

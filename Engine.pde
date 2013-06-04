@@ -73,68 +73,39 @@ void TransitionEngine(int new_state) {
   strcpy_P(p_buffer, new_engine_state);
   //can look at engine_state for "old" state before transitioning at the end of this method
   engine_state_entered = millis();
-  if (grid_tie == 0){
-    switch (new_state) {
-      case ENGINE_OFF:
-        digitalWrite(FET_IGNITION,LOW);
-        digitalWrite(FET_STARTER,LOW);
-        Log(p_buffer); Logln_p("Off"); 
-        //TransitionMessage("Engine: Off         ");
-        break;
-      case ENGINE_ON:
-        digitalWrite(FET_IGNITION,HIGH);
-        digitalWrite(FET_STARTER,LOW);
-        Log(p_buffer); Logln_p("On"); 
-        //TransitionMessage("Engine: Running    ");
-        break;
-      case ENGINE_STARTING:
-        digitalWrite(FET_IGNITION,HIGH);
-        digitalWrite(FET_STARTER,HIGH);
-        Log(p_buffer); Logln_p("Starting"); 
-        //TransitionMessage("Engine: Starting    ");
-        break;
-      case ENGINE_GOV_TUNING:
-        digitalWrite(FET_IGNITION,HIGH);
-        digitalWrite(FET_STARTER,LOW);
-        Log(p_buffer); Logln_p("Governor Tuning"); 
-        //TransitionMessage("Engine: Gov Tuning  ");
-        break;
-      case ENGINE_SHUTDOWN:
-  //      lambda_PID.SetMode(MANUAL);
-  //      SetThrottleAngle(smoothedLambda);
-  //      digitalWrite(FET_IGNITION,LOW);
-  //      digitalWrite(FET_STARTER,LOW);
-        Log(p_buffer); Logln_p("SHUTDOWN"); 
-        //TransitionMessage("Engine: Shutting down");   
-        break;
-    }
-  } else { //Engine controlled by Deap Sea Gridtie
-    switch (new_state) {
-      case ENGINE_OFF:
-        digitalWrite(FET_IGNITION,LOW);
-        if (EngineShutdownFromAlarm()){
-          digitalWrite(FET_STARTER,HIGH);
-        } else {
-          digitalWrite(FET_STARTER,LOW);
-        }
-        break;
-      case ENGINE_ON:
-        digitalWrite(FET_IGNITION,LOW);
-        digitalWrite(FET_STARTER,LOW);
-        break;
-      case ENGINE_STARTING:
-        digitalWrite(FET_IGNITION,LOW);
-        digitalWrite(FET_STARTER,LOW);
-        break;
-      case ENGINE_GOV_TUNING:
-        digitalWrite(FET_IGNITION,LOW);
-        digitalWrite(FET_STARTER,LOW);
-        break;
-      case ENGINE_SHUTDOWN: 
-        digitalWrite(FET_IGNITION,LOW);
-        digitalWrite(FET_STARTER,LOW); 
-        break;
-    }
+  switch (new_state) {
+    case ENGINE_OFF:
+      digitalWrite(FET_IGNITION,LOW);
+      digitalWrite(FET_STARTER,LOW);
+      Log(p_buffer); Logln_p("Off"); 
+      //TransitionMessage("Engine: Off         ");
+      break;
+    case ENGINE_ON:
+      digitalWrite(FET_IGNITION,HIGH);
+      digitalWrite(FET_STARTER,LOW);
+      Log(p_buffer); Logln_p("On"); 
+      //TransitionMessage("Engine: Running    ");
+      break;
+    case ENGINE_STARTING:
+      digitalWrite(FET_IGNITION,HIGH);
+      digitalWrite(FET_STARTER,HIGH);
+      Log(p_buffer); Logln_p("Starting"); 
+      //TransitionMessage("Engine: Starting    ");
+      break;
+    case ENGINE_GOV_TUNING:
+      digitalWrite(FET_IGNITION,HIGH);
+      digitalWrite(FET_STARTER,LOW);
+      Log(p_buffer); Logln_p("Governor Tuning"); 
+      //TransitionMessage("Engine: Gov Tuning  ");
+      break;
+    case ENGINE_SHUTDOWN:
+//      lambda_PID.SetMode(MANUAL);
+//      SetThrottleAngle(smoothedLambda);
+//      digitalWrite(FET_IGNITION,LOW);
+//      digitalWrite(FET_STARTER,LOW);
+      Log(p_buffer); Logln_p("SHUTDOWN"); 
+      //TransitionMessage("Engine: Shutting down");   
+      break;
   }
   engine_state=new_state;
 }
@@ -177,13 +148,4 @@ void DoBattery() {
 }
 
 
-boolean EngineShutdownFromAlarm(){
-  boolean alarms = false; 
-  for (int i=0; i< ALARM_NUM; i++){
-    if ((shutdown[i]>0) && (alarm_on[i]-shutdown[i]>0)){
-      alarms = true;
-      break;
-     }
-  }
-  return alarms;
-}
+

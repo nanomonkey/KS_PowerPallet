@@ -995,9 +995,6 @@ void update_config_var(int var_num){
   case 23:
     m_address = getConfig(23);
     break;
-  case 24:
-    grid_tie = getConfig(24);
-    break;
   }
 }
 
