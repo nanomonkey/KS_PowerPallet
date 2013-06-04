@@ -108,7 +108,7 @@ void TransitionEngine(int new_state) {
         //TransitionMessage("Engine: Shutting down");   
         break;
     }
-  } else { //Engine controlled by Deap Sea for Gridtie
+  } else { //Engine controlled by Deap Sea Gridtie
     switch (new_state) {
       case ENGINE_OFF:
         digitalWrite(FET_IGNITION,LOW);

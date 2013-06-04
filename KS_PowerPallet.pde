@@ -194,13 +194,12 @@ unsigned int unique_number;
 #define TESTING_FLARE_IGNITOR 5
 #define TESTING_O2_RESET 6
 #define TESTING_ALARM 7
-#define TESTING_FUEL_REV 8
-#define TESTING_ANA_LAMBDA 9
-#define TESTING_ANA_ENGINE_SWITCH 10
-#define TESTING_ANA_FUEL_SWITCH 11
-#define TESTING_ANA_OIL_PRESSURE 12
-#define TESTING_GOV_TUNING 13
-#define TESTING_SERVO 14     //used in Display to defeat any other writes to servo.  Must be last testing state!!!
+#define TESTING_ANA_LAMBDA 8
+#define TESTING_ANA_ENGINE_SWITCH 9
+#define TESTING_ANA_FUEL_SWITCH 10
+#define TESTING_ANA_OIL_PRESSURE 11
+#define TESTING_GOV_TUNING 12
+#define TESTING_SERVO 13     //used in Display to defeat any other writes to servo.  Must be last testing state!!!
 
 
 #define BUFFER_SIZE 128
@@ -214,21 +213,20 @@ int testing_state = TESTING_OFF;
 unsigned long testing_state_entered = 0;
 
 prog_char testing_state_0[] PROGMEM = "Off";
-prog_char testing_state_1[] PROGMEM = "FET0 Auger Fwd";
+prog_char testing_state_1[] PROGMEM = "FET0 Auger";
 prog_char testing_state_2[] PROGMEM = "FET1 Grate";
 prog_char testing_state_3[] PROGMEM = "FET2 Engine";
 prog_char testing_state_4[] PROGMEM = "FET3 Starter";
 prog_char testing_state_5[] PROGMEM = "FET4 Flare";
 prog_char testing_state_6[] PROGMEM = "FET5 O2 Reset";
 prog_char testing_state_7[] PROGMEM = "FET6 Alarm";
-prog_char testing_state_8[] PROGMEM = "FET7 Auger Rev";
-prog_char testing_state_9[] PROGMEM = "ANA0 ANA_Lambda";
-prog_char testing_state_10[] PROGMEM = "ANA2 ANA_Eng_Switch";
-prog_char testing_state_11[] PROGMEM = "ANA1 ANA_Fuel_Switch";
-prog_char testing_state_12[] PROGMEM = "ANA3 ANA_Oil";
-prog_char testing_state_13[] PROGMEM = "Gov Tuning";
+prog_char testing_state_8[] PROGMEM = "ANA0 ANA_Lambda";
+prog_char testing_state_9[] PROGMEM = "ANA2 ANA_Eng_Switch";
+prog_char testing_state_10[] PROGMEM = "ANA1 ANA_Fuel_Switch";
+prog_char testing_state_11[] PROGMEM = "ANA3 ANA_Oil";
+prog_char testing_state_12[] PROGMEM = "Gov Tuning";
 
-PROGMEM const char *TestingStateName[] = {testing_state_0, testing_state_1, testing_state_2, testing_state_3, testing_state_4, testing_state_5, testing_state_6, testing_state_7, testing_state_8, testing_state_9, testing_state_10, testing_state_11, testing_state_12, testing_state_13};
+PROGMEM const char *TestingStateName[] = {testing_state_0, testing_state_1, testing_state_2, testing_state_3, testing_state_4, testing_state_5, testing_state_6, testing_state_7, testing_state_8, testing_state_9, testing_state_10, testing_state_11, testing_state_12};
 
 // Datalogging variables
 int lineCount = 0;

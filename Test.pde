@@ -6,35 +6,66 @@ void TransitionTesting(int new_state) {
   case TESTING_OFF:
     break;
   case TESTING_FUEL_AUGER:
-    turnAllOff();
     digitalWrite(FET_AUGER,HIGH);
-    break;
-  case TESTING_FUEL_REV:
-    turnAllOff();
-    digitalWrite(FET_AUGER_REV, HIGH);
+    digitalWrite(FET_GRATE,LOW);
+    digitalWrite(FET_IGNITION,LOW);
+    digitalWrite(FET_STARTER,LOW);
+    digitalWrite(FET_FLARE_IGNITOR,LOW);
+    digitalWrite(FET_O2_RESET,LOW);
+    digitalWrite(FET_ALARM,LOW); // FET6 can't generate PWM due to Servo library using the related timer
     break;
   case TESTING_GRATE:
-    turnAllOff(); 
+    digitalWrite(FET_AUGER,LOW); 
     digitalWrite(FET_GRATE,HIGH);
+    digitalWrite(FET_IGNITION,LOW);
+    digitalWrite(FET_STARTER,LOW);
+    digitalWrite(FET_FLARE_IGNITOR,LOW);
+    digitalWrite(FET_O2_RESET,LOW);
+    digitalWrite(FET_ALARM,LOW); // FET6 can't generate PWM due to Servo library using the related timer
     break;
   case TESTING_ENGINE_IGNITION:
-    turnAllOff();
+    digitalWrite(FET_AUGER,LOW);
+    digitalWrite(FET_GRATE,LOW);
     digitalWrite(FET_IGNITION,HIGH);
+    digitalWrite(FET_STARTER,LOW);
+    digitalWrite(FET_FLARE_IGNITOR,LOW);
+    digitalWrite(FET_O2_RESET,LOW);
+    digitalWrite(FET_ALARM,LOW); // FET6 can't generate PWM due to Servo library using the related timer
     break;
   case TESTING_STARTER:
-    turnAllOff();
+    digitalWrite(FET_AUGER,LOW);
+    digitalWrite(FET_GRATE,LOW);
+    digitalWrite(FET_IGNITION,LOW);
     digitalWrite(FET_STARTER,HIGH);
+    digitalWrite(FET_FLARE_IGNITOR,LOW);
+    digitalWrite(FET_O2_RESET,LOW);
+    digitalWrite(FET_ALARM,LOW); // FET6 can't generate PWM due to Servo library using the related timer
     break;	
   case TESTING_FLARE_IGNITOR:
-    turnAllOff();
+    digitalWrite(FET_AUGER,LOW);
+    digitalWrite(FET_GRATE,LOW);
+    digitalWrite(FET_IGNITION,LOW);
+    digitalWrite(FET_STARTER,LOW);
     digitalWrite(FET_FLARE_IGNITOR,HIGH);
+    digitalWrite(FET_O2_RESET,LOW);
+    digitalWrite(FET_ALARM,LOW); // FET6 can't generate PWM due to Servo library using the related timer
     break;
   case TESTING_O2_RESET:
-    turnAllOff();
+    digitalWrite(FET_AUGER,LOW);
+    digitalWrite(FET_GRATE,LOW);
+    digitalWrite(FET_IGNITION,LOW);
+    digitalWrite(FET_STARTER,LOW);
+    digitalWrite(FET_FLARE_IGNITOR,LOW);
     digitalWrite(FET_O2_RESET,HIGH);
+    digitalWrite(FET_ALARM,LOW); // FET6 can't generate PWM due to Servo library using the related timer
     break;
   case TESTING_ALARM:
-    turnAllOff();
+    digitalWrite(FET_AUGER,LOW);
+    digitalWrite(FET_GRATE,LOW);
+    digitalWrite(FET_IGNITION,LOW);
+    digitalWrite(FET_STARTER,LOW);
+    digitalWrite(FET_FLARE_IGNITOR,LOW);
+    digitalWrite(FET_O2_RESET,LOW);
     digitalWrite(FET_ALARM,HIGH); // FET6 can't generate PWM due to Servo library using the related timer
     break;
   case TESTING_ANA_LAMBDA:
@@ -59,13 +90,6 @@ void GoToNextTestingState() {
     //DoTesting();
     break;
   case TESTING_FUEL_AUGER:
-    if (relay_board == 1){  //AUGER Reverse only on relay board
-      TransitionTesting(TESTING_FUEL_REV);
-    } else {
-      TransitionTesting(TESTING_GRATE);
-    }
-    break;
-  case TESTING_FUEL_REV:
     TransitionTesting(TESTING_GRATE);
     break;
   case TESTING_GRATE:
@@ -85,7 +109,7 @@ void GoToNextTestingState() {
     break;
   case TESTING_ALARM:
     digitalWrite(FET_ALARM,LOW);
-    TransitionTesting(TESTING_ANA_LAMBDA); 
+    TransitionTesting(TESTING_ANA_LAMBDA);
     break;
   case TESTING_ANA_LAMBDA:
     TransitionTesting(TESTING_ANA_ENGINE_SWITCH);
@@ -114,7 +138,6 @@ void turnAllOff(){
     digitalWrite(FET_FLARE_IGNITOR,LOW);
     digitalWrite(FET_O2_RESET,LOW);
     digitalWrite(FET_ALARM,LOW); // FET6 can't generate PWM due to Servo library using the related timer
-    digitalWrite(FET_AUGER_REV,LOW);
 }
 
 

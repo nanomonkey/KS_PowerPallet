@@ -58,7 +58,7 @@ void DoDisplay() {
       Disp_RC(2, 0);
       strcpy_P(p_buffer, (char*)pgm_read_word(&(display_alarm2[alarm_shown])));
       Disp_PutStr(p_buffer);
-      if (shutdown[alarm_shown] > 999 && engine_state == ENGINE_ON){     //anything less than 999 is a count and not a shutdown time in millisecond so don't show. 
+      if (shutdown[alarm_shown] > 999 && engine_state == ENGINE_ON){     //anything less than 999 is probably a count and not a shutdown time in millisecond so don't show. 
         Disp_RC(2, 13);
         sprintf(buf, "OFF:%3i", (shutdown[alarm_shown] - alarm_start[alarm_shown] - (millis() - alarm_on[alarm_shown]))/1000);
         Disp_PutStr(buf);
@@ -930,6 +930,7 @@ void update_config_var(int var_num){
     break;
   case 4:
     current_low_boundary = getConfig(4); 
+    //{ { -140, 10}, {10, current_low_boundary}, {current_low_boundary+5, current_high_boundary-5}, {current_high_boundary, 750} }
     AugerCurrentLevelBoundary[CURRENT_LOW][1] = current_low_boundary; 
     AugerCurrentLevelBoundary[CURRENT_ON][0] = current_low_boundary+5;
     break;
@@ -1000,7 +1001,7 @@ void update_config_var(int var_num){
   }
 }
 
-void resetConfig() {  //sets EEPROM configs back to untouched state
+void resetConfig() {  //sets EEPROM configs back to untouched state...
   int default_count = sizeof(defaults)/sizeof(int);
   for (int i=1; i < default_count; i++){
     EEPROM.write(499+i, defaults[i]);
