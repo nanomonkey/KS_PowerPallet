@@ -154,13 +154,12 @@ void DoSerialIn() {
 //   case 'h' || 'H':
 //      Logln(P(help));
 //      break; 
-//   case '$':
-//      SerialReadString(';');
-//      Logln(serial_buffer);
-//      break;
+   case '$':
+      SerialReadString(';');
+      Serial2.println(serial_buffer);
+      break;
 //   case 'W':  //write to config.ini
 //      Serial.read
-    //used values: $HheMmGgTtLlSscDdIiPp
     }
   }
   

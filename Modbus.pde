@@ -28,6 +28,7 @@ void InitModbusSlave(){  //include in Setup() loop
     init_mb_slave(baud_rates[m_baud], parity[m_parity], 16);  //baud, parity, tx_en_pin
     Serial.print("# Modbus Baud Rate:"); Serial.print(baud_rates[m_baud]); Serial.print(" Parity: "); Serial.print(m_parity);
     Serial.print(" Address: "); Serial.print(m_address); Serial.print(" Number of Registers: "); Serial.println(MB_REGS);
+
 }
 
 
@@ -35,8 +36,8 @@ void DoModbus() {
     start_mb_slave(m_address, regs, MB_REGS);
     
     if (written.num_regs) {
-    //Log_p("Modbus recieved Register update:");Logln(written.num_regs);
-    //Log_p("Lastwrite.start_addr"); Logln(written.start_addr);    
+   // Log_p("Modbus recieved Register update:");Logln(written.num_regs);
+   // Log_p("Lastwrite.start_addr"); Logln(written.start_addr);    
     
       for(int i = written.start_addr; i < (written.start_addr + written.num_regs); i++){
         Log_p("i = "); Log(i); Log_p(" "); Logln(regs[i]);
@@ -144,7 +145,6 @@ void DoModbus() {
     regs[MB_LAMBDA_OUT] = int(100*lambda_output);
     regs[MB_P_RATIO_FILTER] = (int)pRatioFilter;	
     regs[MB_P_RATIO_REACTOR] = (int)pRatioReactor;
-
 }
 
 
