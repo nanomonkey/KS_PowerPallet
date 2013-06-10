@@ -14,37 +14,39 @@ void DoEngine() {
       if (control_state == CONTROL_START) {
         TransitionEngine(ENGINE_STARTING);
       }
-      if (EngineOilPressureLevel == OIL_P_LOW  && millis() - oil_pressure_state > 500 && millis() - engine_state_entered > 3000){
-        Log_p("Low Oil Pressure, Shutting Down Engine at: ");
-        Logln(millis() - oil_pressure_state);
-        setAlarm(ALARM_BAD_OIL_PRESSURE);
-        TransitionEngine(ENGINE_SHUTDOWN);
-      }
-      if (P_reactorLevel == OFF & millis()-engine_state_entered > 2500) { //if reactor is at low vacuum after ten seconds, engine did not catch, so turn off
-        Log_p("Reactor Pressure Too Low, Engine Shutdown at :");
-        Logln(millis()-engine_state_entered);
-        TransitionEngine(ENGINE_SHUTDOWN);
-      }
-      if (Press[P_COMB] > 7472) {  
-        Log_p("Reactor Pressure too high (above 30 inch water)"); Logln(buf);
-        setAlarm(ALARM_HIGH_PCOMB);
-        TransitionEngine(ENGINE_SHUTDOWN);
-      }
-      if (alarm_on[ALARM_HIGH_COOLANT_TEMP] > shutdown[ALARM_HIGH_COOLANT_TEMP]){
-        Log_p("Engine coolant temp too high"); Logln(buf);
-        TransitionEngine(ENGINE_SHUTDOWN);
-      }
-      if (alarm_on[ALARM_TRED_LOW] > shutdown[ALARM_TRED_LOW]){
-        Log_p("Reduction zone temp too low"); Logln(buf);
-        TransitionEngine(ENGINE_SHUTDOWN);
-      }
-      if (alarm_on[ALARM_TTRED_HIGH] > shutdown[ALARM_TTRED_HIGH]){
-        Log_p("Top of reduction zone temp too high"); Logln(buf);
-        TransitionEngine(ENGINE_SHUTDOWN);
-      }
-      if (alarm_on[ALARM_TBRED_HIGH] > shutdown[ALARM_TBRED_HIGH]){
-        Log_p("Bottom of reduction zone temp too high"); Logln(buf);
-        TransitionEngine(ENGINE_SHUTDOWN);
+      if (grid_tie != 1) {
+        if (EngineOilPressureLevel == OIL_P_LOW  && millis() - oil_pressure_state > 500 && millis() - engine_state_entered > 3000){
+          Log_p("Low Oil Pressure, Shutting Down Engine at: ");
+          Logln(millis() - oil_pressure_state);
+          setAlarm(ALARM_BAD_OIL_PRESSURE);
+          TransitionEngine(ENGINE_SHUTDOWN);
+        }
+        if (P_reactorLevel == OFF & millis() - engine_state_entered > 2500) { //if reactor is at low vacuum after ten seconds, engine did not catch, so turn off
+          Log_p("Reactor Pressure Too Low, Engine Shutdown at :");
+          Logln(millis()-engine_state_entered);
+          TransitionEngine(ENGINE_SHUTDOWN);
+        }
+        if (Press[P_COMB] > 7472 && grid_tie != 1) {  
+          Log_p("Reactor Pressure too high (above 30 inch water)"); Logln(buf);
+          setAlarm(ALARM_HIGH_PCOMB);
+          TransitionEngine(ENGINE_SHUTDOWN);
+        }
+        if (alarm_on[ALARM_HIGH_COOLANT_TEMP] > shutdown[ALARM_HIGH_COOLANT_TEMP]){
+          Log_p("Engine coolant temp too high"); Logln(buf);
+          TransitionEngine(ENGINE_SHUTDOWN);
+        }
+        if (alarm_on[ALARM_TRED_LOW] > shutdown[ALARM_TRED_LOW]){
+          Log_p("Reduction zone temp too low"); Logln(buf);
+          TransitionEngine(ENGINE_SHUTDOWN);
+        }
+        if (alarm_on[ALARM_TTRED_HIGH] > shutdown[ALARM_TTRED_HIGH]){
+          Log_p("Top of reduction zone temp too high"); Logln(buf);
+          TransitionEngine(ENGINE_SHUTDOWN);
+        }
+        if (alarm_on[ALARM_TBRED_HIGH] > shutdown[ALARM_TBRED_HIGH]){
+          Log_p("Bottom of reduction zone temp too high"); Logln(buf);
+          TransitionEngine(ENGINE_SHUTDOWN);
+        }
       }
       break;
     case ENGINE_STARTING:

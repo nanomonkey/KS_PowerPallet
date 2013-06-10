@@ -70,38 +70,10 @@ void DoModbus() {
           lambda_PID.SetTunings(lambda_P[0],lambda_I[0],0);
           WriteLambda();
           break;
-  //        case MB_CONFIG1:
-  //          saveConfig(1,regs[MB_CONFIG1]);
-  //          updateConfig(1);
-  //          break;
         default:  //catch all configs
           if((i >= MB_CONFIG1) && (i < MB_CONFIG1+CONFIG_COUNT-1)){
             saveConfig(i-MB_CONFIG1+1,regs[i]);
             update_config_var(i);
-            
-  //              regs[MB_CONFIG1] = engine_type;
-  //              regs[MB_CONFIG2] = relay_board;
-  //              regs[MB_CONFIG3] = aug_rev_time;
-  //              regs[MB_CONFIG4] = current_low_boundary;
-  //              regs[MB_CONFIG5] = current_high_boundary;
-  //              regs[MB_CONFIG6] = low_oil_psi;
-  //              regs[MB_CONFIG7] = save_datalog_to_sd;
-  //              regs[MB_CONFIG8] = pratio_max;
-  //              regs[MB_CONFIG9] = high_coolant_temp;
-  //              regs[MB_CONFIG10] = display_per;
-  //              regs[MB_CONFIG11] = tred_low_temp;
-  //              regs[MB_CONFIG12] = ttred_high;
-  //              regs[MB_CONFIG13] = tbred_high;
-  //              regs[MB_CONFIG14] = pfilter_alarm;
-  //              regs[MB_CONFIG15] = grate_max_interval;
-  //              regs[MB_CONFIG16] = grate_min_interval;
-  //              regs[MB_CONFIG17] = grate_on_interval;
-  //              regs[MB_CONFIG18] = servo_start;
-  //              regs[MB_CONFIG19] = lambda_rich;
-  //              regs[MB_CONFIG20] = use_modbus;
-  //              regs[MB_CONFIG21] = m_baud;
-  //              regs[MB_CONFIG22] = m_parity;
-  //              regs[MB_CONFIG23] = m_address;
               }
               break;
           }
