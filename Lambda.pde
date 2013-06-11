@@ -132,7 +132,7 @@ void DoLambda() {
         }
         break;
       case LAMBDA_STARTING:
-        if ((lambda_input > 0.52) && (lambda_input <= lambda_rich/100)) { //as soon as mixture gets rich
+        if ((lambda_input > 0.52) && (lambda_input <= lambda_rich/100)) { //Check that there is a signal, and then as soon as mixture gets rich switch to closed loop
           SetPremixServoAngle(premix_valve_center);
           lambda_output = premix_valve_center;  //necessary? 
           TransitionLambda(LAMBDA_CLOSEDLOOP);
@@ -180,6 +180,8 @@ void TransitionLambda(int new_state) {
      case LAMBDA_UNKNOWN:
        break;
      case LAMBDA_SHUTDOWN:
+       break;
+     case LAMBDA_STARTING:
        break;
    }
   Log_p("Lambda switching from ");
