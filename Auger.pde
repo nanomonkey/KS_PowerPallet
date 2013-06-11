@@ -158,12 +158,6 @@ void TransitionAuger(int new_state) {
     //TransitionMessage("Auger: Forward      ");
     break;
   case AUGER_HIGH:
-    //Serial.print("Current:");
-    //Serial.print(AugerCurrentValue);
-    //Serial.print(" current_low_boundary:");
-    //Serial.print(current_low_boundary);
-    //Serial.print(" current_high_boundary:");
-    //Serial.println(current_high_boundary);
     Log(p_buffer); Logln_p("Forward, Current High");
     //TransitionMessage("Auger: Current High ");
     break;
@@ -181,12 +175,6 @@ void TransitionAuger(int new_state) {
     //TransitionMessage("Auger: Reverse High"); 
     break; 
   case AUGER_CURRENT_LOW:
-    //Serial.print("Current:");
-    //Serial.print(AugerCurrentValue);
-    //Serial.print(" current_low_boundary:");
-    //Serial.print(current_low_boundary);
-    //Serial.print(" current_high_boundary:");
-    //Serial.println(current_high_boundary);
     Log(p_buffer); Logln_p("Current Low");
     //TransitionMessage("Auger: Low Current");
     break;

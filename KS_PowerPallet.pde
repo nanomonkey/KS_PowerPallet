@@ -300,9 +300,10 @@ plus_minus,
 no_yes
 }; 
 
-int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   20,  98,  10,  130, 210, 195, 50,  60,  12,  3,   15, 114, 0, 3, 0, 1, 0};  //default values to be saved to EEPROM for the following getConfig variables
-int config_min[CONFIG_COUNT] = {0,   0,   0,   0,   5,  41,  1,  0,   0,   10,  0,   0,   0,   20,  0,   0,   0,   0,   0,  0,   0, 0, 0, 1, 0};  //minimum values allowed 
-int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1, 6, 3, 127, 254}; //maximum values allowed  
+//                              0    1    2     3   4   5    6   7    8    9    10   11   12   13   14   15   16   17   18  19   20  21  22  23   24
+int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   20,  98,  10,  130, 210, 195, 50,  60,  12,  3,   15, 114, 0,  3,  0,  1,   0};  //default values to be saved to EEPROM for the following getConfig variables
+int config_min[CONFIG_COUNT] = {0,   0,   0,   0,   5,  41,  1,  0,   0,   10,  0,   0,   0,   20,  0,   0,   0,   0,   0,  0,   0,  0,  0,  1,   0};  //minimum values allowed 
+int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1,  6,  3,  127, 254}; //maximum values allowed  
 
 //Don't forget to add the following to update_config_var in Display!  The first Configuration, Reset Defaults, is skipped, so these start at 1, not 0. 
 int engine_type = getConfig(1);  

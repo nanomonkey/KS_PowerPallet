@@ -53,7 +53,7 @@ void DoGrate() { // call once per second
         grate_motor_state = GRATE_MOTOR_OFF;
       }
     }
-    if (grate_val >= 0 & grate_val <= GRATE_SHAKE_CROSS) { //time to shake or reset
+    if (grate_val >= 0 && grate_val <= GRATE_SHAKE_CROSS) { //time to shake or reset
       grate_motor_state = GRATE_MOTOR_LOW;
       digitalWrite(FET_GRATE,HIGH); 
       grate_val -= m_grate_on;
