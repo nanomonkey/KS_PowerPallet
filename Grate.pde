@@ -57,13 +57,11 @@ void DoGrate() { // call once per second
       grate_motor_state = GRATE_MOTOR_LOW;
       digitalWrite(FET_GRATE,HIGH); 
       grate_val -= m_grate_on;
-    }
-    if (grate_val <= 0) {
+    } else if (grate_val <= 0) {
       grate_val = GRATE_SHAKE_INIT;
       grate_motor_state = GRATE_MOTOR_OFF;
       digitalWrite(FET_GRATE,LOW);
-    }
-    else {
+    } else {
       digitalWrite(FET_GRATE, LOW);
       grate_motor_state = GRATE_MOTOR_OFF;
     }
