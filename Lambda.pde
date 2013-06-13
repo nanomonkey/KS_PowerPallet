@@ -22,18 +22,18 @@ void DoLambda() {
           TransitionLambda(LAMBDA_SEALED);
         }
         if (serial_last_input == 'o') {
-          TransitionLambda(LAMBDA_STEPTEST);
+          TransitionLambda(LAMBDA_STEPTEST);  //Serial input of 'o'
           serial_last_input = '\0';
         }
         if (serial_last_input == 'O') {
-          TransitionLambda(LAMBDA_SPSTEPTEST);
+          TransitionLambda(LAMBDA_SPSTEPTEST); //Serial input of 'O'
           serial_last_input = '\0';
         }
         if (lambda_input < 0.52) {
-          TransitionLambda(LAMBDA_NO_SIGNAL);
+          TransitionLambda(LAMBDA_NO_SIGNAL); //No Signal from Lambda Sensor
         }
         if (engine_state == ENGINE_SHUTDOWN) {
-          TransitionLambda(LAMBDA_SHUTDOWN);
+          TransitionLambda(LAMBDA_SHUTDOWN);  //
         }
         break;
       case LAMBDA_SEALED:
@@ -102,7 +102,7 @@ void DoLambda() {
           TransitionLambda(LAMBDA_SEALED);
         }
         if (lambda_input > 0.52 && millis() - lambda_state_entered > 1000) {
-          if (engine_state == ENGINE_ON){
+          if (engine_state == ENGINE_ON) {
             TransitionLambda(LAMBDA_CLOSEDLOOP);
           }  else {
             TransitionLambda(LAMBDA_SEALED);
