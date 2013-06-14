@@ -37,7 +37,7 @@ void DoLambda() {
         }
         break;
       case LAMBDA_SEALED:
-        if (engine_state == ENGINE_STARTING) {
+        if (engine_state == ENGINE_STARTING || engine_state == ENGINE_ON) {
           TransitionLambda(LAMBDA_STARTING);
         }
         if (lambda_input < 0.52) {
