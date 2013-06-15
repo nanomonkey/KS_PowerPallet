@@ -27,9 +27,11 @@ void DoControlInputs() {
     }
   } else {  //Controlled by Deapsea 
     if (control_input > 515){ 
-     if (control_state != CONTROL_OFF){
+      //Serial.println("# Ignition signal");
+     if (control_state == CONTROL_OFF){
        control_state = CONTROL_START;
        control_state_entered = millis();
+       Serial.println("# Control start");
      }
      if (control_state == CONTROL_START && (millis() - control_state_entered >= 500)){
        control_state = CONTROL_ON;
@@ -38,6 +40,7 @@ void DoControlInputs() {
       if (control_state != CONTROL_OFF) {
         control_state_entered = millis();
         control_state = CONTROL_OFF;
+        Serial.println("# Control off");
       }
     } 
   }
