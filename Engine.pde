@@ -113,11 +113,11 @@ void TransitionEngine(int new_state) {
   } else { //Engine controlled by Deap Sea for Gridtie
     switch (new_state) {
       case ENGINE_OFF:
-        digitalWrite(FET_IGNITION,LOW);
+        digitalWrite(FET_STARTER,LOW);
         if (EngineShutdownFromAlarm()){
-          digitalWrite(FET_STARTER,HIGH);
+          digitalWrite(FET_IGNITION,HIGH);
         } else {
-          digitalWrite(FET_STARTER,LOW);
+          digitalWrite(FET_IGNITION,LOW);
         }
         break;
       case ENGINE_ON:
@@ -179,10 +179,10 @@ void DoBattery() {
 }
 
 
-boolean EngineShutdownFromAlarm(){
+boolean EngineShutdownFromAlarm() {
   boolean alarms = false; 
   for (int i=0; i< ALARM_NUM; i++){
-    if ((shutdown[i]>0) && (alarm_on[i]-shutdown[i]>0)){
+    if ((shutdown[i]>0) && (alarm_on[i] >= shutdown[i])){
       alarms = true;
       break;
      }
