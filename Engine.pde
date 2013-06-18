@@ -113,6 +113,7 @@ void TransitionEngine(int new_state) {
   } else { //Engine controlled by Deap Sea for Gridtie
     switch (new_state) {
       case ENGINE_OFF:
+        Log(p_buffer); Logln_p("Off");
         digitalWrite(FET_STARTER,LOW);
         if (EngineShutdownFromAlarm()){
           digitalWrite(FET_IGNITION,HIGH);
@@ -121,18 +122,22 @@ void TransitionEngine(int new_state) {
         }
         break;
       case ENGINE_ON:
+        Log(p_buffer); Logln_p("On");
         digitalWrite(FET_IGNITION,LOW);
         digitalWrite(FET_STARTER,LOW);
         break;
       case ENGINE_STARTING:
+        Log(p_buffer); Logln_p("Starting");
         digitalWrite(FET_IGNITION,LOW);
         digitalWrite(FET_STARTER,LOW);
         break;
       case ENGINE_GOV_TUNING:
+        Log(p_buffer); Logln_p("Gov Tuning");
         digitalWrite(FET_IGNITION,LOW);
         digitalWrite(FET_STARTER,LOW);
         break;
       case ENGINE_SHUTDOWN: 
+        Log(p_buffer); Logln_p("Shutdown");
         digitalWrite(FET_IGNITION,LOW);
         digitalWrite(FET_STARTER,LOW); 
         break;

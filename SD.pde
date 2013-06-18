@@ -67,7 +67,7 @@ void Logln(const char * str) {
   strncat(string_buffer, str, BUFFER_SIZE);
   Serial.print(string_buffer); Serial.println();
   if (save_datalog_to_sd && sd_loaded){
-    DatalogSD(sd_data_file_name, true);  
+    DatalogSD(sd_log_file_name, true);  
   }
   clearBuffer();
 }

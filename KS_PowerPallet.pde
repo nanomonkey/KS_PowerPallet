@@ -388,9 +388,7 @@ unsigned long fuel_state_entered;
 #define AUGER_CURRENT_LOW 6
 #define AUGER_ALARM 7
 #define AUGER_PULSE 8
-//#define AUGER_PULSE_FORWORD 9
 #define AUGER_MANUAL_FORWARD 9
-//#define AUGER_MANUAL 11
 
 int auger_state = 0;
 int auger_rev_count = 0;
