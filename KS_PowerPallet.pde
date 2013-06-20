@@ -457,41 +457,11 @@ int item_count,cur_item;
 //Keypad
 int key = -1;
 
-////Hertz
-//double hertz = 0;
-//volatile unsigned long hertz_last_interrupt;
-//volatile int hertz_period;
-
-////Counter Hertz
-//int counter_hertz = 0;
-
-////Energy Pulse
-//double power = 0;
-//volatile int energy_pulse_count;
-//volatile unsigned long energy_last_interrupt;
-//volatile int energy_period;
-
-// Lambda variables
-// Servo Valve Calibration - will vary depending on the servo valve
-//PP #2 (now upgraded to #7)
-//TO DO: Move to % based on open/closed instead of degrees
-//double premix_valve_open = 180; //calibrated angle for servo valve open
-//double premix_valve_closed = 105; //calibrated angle for servo valve closed (must be smaller value than open)
-//New batch of throttle bodies from Jewen
-
-//double premix_valve_open = 153; //calibrated angle for servo valve open
-//double premix_valve_closed = 53; //calibrated angle for servo valve closed (must be smaller value than open)
-//PP20 Jewen Throttle - apparent variation in throttle angle to servo angle in this batch, need to add calibration/storage in EEPROM...
 
 byte servo_min,servo_max;
 double premix_valve_open = 95;
 double premix_valve_closed = 5;
 
- //premix_valve_closed
- //premix_valve_open
-//Jewen Throttle
-//double premix_valve_open = 110; //calibrated angle for servo valve open
-//double premix_valve_closed = 30; //calibrated angle for servo valve closed (must be smaller value than open)
 
 double premix_valve_max = 1.0;  //minimum of range for closed loop operation (percent open)
 double premix_valve_min = 0.00; //maximum of range for closed loop operation (percent open)
@@ -649,13 +619,9 @@ char sd_log_file_name[] = "No SD Card  ";
 
 void setup() {
   GCU_Setup(V3,FULLFILL,P777722);
-  //
   DDRJ |= 0x80;      
-  PORTJ |= 0x80;
-  //DIDR0 = 0xFF; //set adc0 to adc7 as analog inputs [removes pullups]
-  
-  
-  //TODO: Check attached libraries, FET6 seemed to be set to non-OUTPUT mode
+  PORTJ |= 0x80;  
+
   //set all FET pins to output
   pinMode(FET0,OUTPUT);
   pinMode(FET1,OUTPUT);
@@ -666,17 +632,12 @@ void setup() {
   pinMode(FET6,OUTPUT);
   pinMode(FET7,OUTPUT);
   
-  //pinMode(FET_BLOWER,OUTPUT); //TODO: Move into library (set PE0 to output)
-  //digitalWrite(FET_BLOWER,HIGH);
-  //delay(50);	
-  
   // timer initialization
   nextTime1 = millis() + loopPeriod1;
   nextTime2 = millis() + loopPeriod2;
   
   LoadPressureSensorCalibration();
   LoadServo();
-  //LoadLambda(); - must save lambda data first?
   
   Serial.begin(115200);
   
@@ -707,18 +668,14 @@ void setup() {
   unique_number = uniqueNumber();
   InitSD();
   DoDatalogging();
-  //Sketch initializations
-  //InitFlow();
+
   InitLambda();
   InitServos();
   InitGrate();  
   if (use_modbus == 1){
     InitModbusSlave();
   }
-  //InitPeriodHertz(); //attach interrupt
-  //InitCounterHertz();
-  //InitGovernor();
-  //InitPulseEnergyMonitoring();
+
   
   
   TransitionEngine(ENGINE_ON); //default to engine on. if PCU resets, don't shut a running engine off. in the ENGINE_ON state, should detect and transition out of engine on.
@@ -732,28 +689,21 @@ void loop() {
   if (testing_state == TESTING_OFF) {
     Temp_ReadAll();  // reads into array Temp_Data[], in deg C
     Press_ReadAll(); // reads into array Press_Data[], in hPa
- //   Timer_ReadAll(); // reads pulse timer into Timer_Data, in RPM ??? XXX
     DoPressure();
-    //DoFlow();
     DoSerialIn();
     DoLambda();
-    //DoGovernor();
     DoControlInputs();
     DoOilPressure();
     DoEngine();
-    //DoServos();
     DoFlare();
     DoReactor();
     DoAuger();
-   // DoBattery();
- //     DoCounterHertz();
     if (use_modbus == 1){
       DoModbus();
     }
   }
   DoKeyInput();
   DoHeartBeat(); // blink heartbeat LED
-  //TODO: Add OpenEnergyMonitor Library
   if (millis() >= nextTime2) {
     nextTime2 += loopPeriod2;
     DoDisplay();

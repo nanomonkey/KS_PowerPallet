@@ -131,7 +131,7 @@ void TransitionEngine(int new_state) {
         digitalWrite(FET_IGNITION,LOW);
         digitalWrite(FET_STARTER,LOW);
         break;
-      case ENGINE_GOV_TUNING:
+      case ENGINE_GOV_TUNING:     //How is this handled by Deap Sea?
         Log(p_buffer); Logln_p("Gov Tuning");
         digitalWrite(FET_IGNITION,LOW);
         digitalWrite(FET_STARTER,LOW);
