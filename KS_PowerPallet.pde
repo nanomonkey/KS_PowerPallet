@@ -180,7 +180,7 @@ const prog_char engine_shutdown[] PROGMEM = ", Engine Shutdown.";
 const prog_char new_auger_state[] PROGMEM = "New Auger State: ";
 const prog_char half_blank[] PROGMEM = "          ";
 char choice[5];
-char buf[21] = "";
+char buf[22] = "";
 
 char serial_num[11] = "#";
 unsigned int unique_number;
@@ -344,7 +344,7 @@ int m_grate_on;
 // Reactor pressure ratio
 float pRatioReactor;
 enum pRatioReactorLevels { PR_HIGH = 0, PR_CORRECT = 1, PR_LOW = 2} pRatioReactorLevel;
-static char *pRatioReactorLevelName[] = { "High", "Correct","Low" };
+static char *pRatioReactorLevelName[] = { "High", "Correct", "Low" };
 float pRatioReactorLevelBoundary[3][2] = { { 0.6, 1.0 }, { 0.3, 0.6 }, {0.0, 0.3} };
 
 // Filter pressure ratio

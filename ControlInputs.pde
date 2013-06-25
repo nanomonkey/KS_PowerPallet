@@ -30,17 +30,17 @@ void DoControlInputs() {
      if (control_state == CONTROL_OFF){
        control_state = CONTROL_START;
        control_state_entered = millis();
-       Logln_p("# Deapsea controller set to: Start");
+       Logln_p("# Deap Sea controller set to: Start");
      }
      if (control_state == CONTROL_START && (millis() - control_state_entered >= 500)){
        control_state = CONTROL_ON;
-       Logln_p("# Deapsea controller set to: On");
+       Logln_p("# Deap Sea controller set to: On");
      }
     } else {
       if (control_state != CONTROL_OFF) {
         control_state_entered = millis();
         control_state = CONTROL_OFF;
-        Logln_p("# Deapsea controller set to:  Off");
+        Logln_p("# Deap Sea controller set to:  Off");
       }
     } 
   }

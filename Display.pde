@@ -401,7 +401,7 @@ void DoDisplay() {
     sprintf(buf, "       Time:%8i", millis()/1000);
     Disp_PutStr(buf);
     Disp_RC(2,0);
-    sprintf(buf, "    %s   ", sd_data_file_name);
+    sprintf(buf, "    %12s   ", sd_data_file_name);
     Disp_PutStr(buf);
     Disp_RC(3,0);
     Disp_PutStr(P("NEXT                "));
