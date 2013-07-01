@@ -356,7 +356,7 @@ int filter_pratio_accumulator;
 #define TEMP_LEVEL_COUNT 5
 enum TempLevels { COLD = 0,COOL = 1,WARM = 2 ,HOT = 3, EXCESSIVE = 4} TempLevel;
 TempLevels T_tredLevel;
-static char *TempLevelName[] = { "Cold", "Cool", "Warm", "Hot ", "Too Hot" };
+static char *TempLevelName[] = { "Cold", "Cool", "Warm", "Hot ", "TooHot" };
 int T_tredLevelBoundary[TEMP_LEVEL_COUNT][2] = { { 0, 40 }, {50, 80}, {300,790}, {800,950}, {1000,1250} };
 
 TempLevels T_bredLevel;
@@ -530,7 +530,7 @@ int pressureRatioAccumulator = 0;
 #define ALARM_NUM 16
 unsigned long alarm_on[ALARM_NUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, pfilter_alarm, 230, 0, 0, 0, 30000, 60000, 10, 0, 0, 3000, 15000};  //count or time in milliseconds when alarm goes off
-unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 0, 0, 0, 0, 180000, 0, 0, 3000, 7000, 15000};  //time when engine will be shutdown
+unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 60000, 60000, 0, 0, 180000, 0, 0, /*3000*/60000, 7000, 15000};  //time when engine will be shutdown
 int alarm_count = 0;
 int alarm_queue[ALARM_NUM] = {};
 int alarm_shown = 0;
@@ -557,10 +557,10 @@ prog_char alarm_2[] PROGMEM = "Auger off too long  ";
 prog_char alarm_3[] PROGMEM = "Bad Reactor P_ratio ";
 prog_char alarm_4[] PROGMEM = "Bad Filter P_ratio  ";
 prog_char alarm_5[] PROGMEM = "Reactor Fuel Low    ";
-prog_char alarm_6[] PROGMEM = "tred low for eng.   ";
-prog_char alarm_7[] PROGMEM = "bred high for eng.  ";
+prog_char alarm_6[] PROGMEM = "tred low for engine ";
+prog_char alarm_7[] PROGMEM = "bred high for engine";
 prog_char alarm_8[] PROGMEM = "Check Oil Pressure  ";
-prog_char alarm_9[] PROGMEM = "No O2 Sensor Signal ";
+prog_char alarm_9[] PROGMEM  = "No O2 Sensor Signal ";
 prog_char alarm_10[] PROGMEM = "Auger Low Current   ";
 prog_char alarm_11[] PROGMEM = "FuelSwitch/Auger Jam";
 prog_char alarm_12[] PROGMEM = "High P_comb         ";

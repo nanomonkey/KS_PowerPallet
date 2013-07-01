@@ -27,7 +27,7 @@ void DoEngine() {
         Logln(millis()-engine_state_entered);
         TransitionEngine(ENGINE_SHUTDOWN);
       }
-      if (Press[P_COMB] > 7472 && grid_tie != 1) {  
+      if (Press[P_COMB] < -7472 && grid_tie != 1) {  
         Log_p("Reactor Pressure too high (above 30 inch water)"); Logln(buf);
         setAlarm(ALARM_HIGH_PCOMB);
         TransitionEngine(ENGINE_SHUTDOWN);
