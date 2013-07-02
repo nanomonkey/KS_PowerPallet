@@ -76,7 +76,7 @@ int smoothed_filters[8] = {0, 0, 0, 8, 0, 0, 0, 0};  //filter values for each an
 //#define SERVO_CALIB SERVO1
 //#define SERVO_THROTTLE SERVO2
 
-Servo Servo_Mixture;
+Servo Servo_Mixture; 
 //Servo Servo_Calib;
 //Servo Servo_Throttle;
 

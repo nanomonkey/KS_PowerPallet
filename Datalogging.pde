@@ -36,6 +36,7 @@ void LogPID(boolean header = false) {
     PrintColumn(P("Lambda_P"));
     PrintColumn(P("Lambda_I"));
     PrintColumn(P("Lambda_D"));
+    PrintColumn(P("Servo_Pos"));
   } 
   else {
     PrintColumn(lambda_input);
@@ -44,6 +45,7 @@ void LogPID(boolean header = false) {
     PrintColumn(lambda_PID.GetP_Param());
     PrintColumn(lambda_PID.GetI_Param());
     PrintColumn(lambda_PID.GetD_Param());
+    PrintColumn(Servo_Mixture.read());
   }
 }
 
