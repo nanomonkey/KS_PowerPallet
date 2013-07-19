@@ -49,7 +49,7 @@ void DoModbus() {
           TransitionAuger(regs[MB_AUGER_STATE]);
           break;
         case MB_GRATE_STATE:
-          grateMode = regs[MB_AUGER_STATE];
+          grateMode = regs[MB_GRATE_STATE];
           break;
         case MB_FLARE_STATE:
           flare_state = regs[MB_FLARE_STATE]; //???
@@ -106,7 +106,7 @@ void DoModbus() {
     regs[MB_T_BRED] = (int)Temp_Data[T_BRED];
     //regs[MB_T_COMB] = (int)Temp_Data[T_COMB]; //ABSENT;
     //regs[MB_T_DRYING_GAS_OUT] = (int)Temp_Data[T_COMB]; //ABSENT;
-    //regs[MB_T_ENG_COOLANT] = (int)Temp_Data[T_ENG_COOLANT];
+    regs[MB_T_ENG_COOLANT] = (int)Temp_Data[T_ENG_COOLANT];
     //regs[MB_T_LOW_FUEL] = (int)Temp_Data[T_LOW_FUEL]; //ABSENT;
     //regs[MB_T_PYRO_IN] = Temp_Data[T_PYRO_IN]; //ABSENT;
     //regs[MB_T_PYRO_OUT] = Temp_Data[T_PYRO_OUT]; //ABSENT;
@@ -115,8 +115,8 @@ void DoModbus() {
     regs[MB_GRATE_VAL] = grate_val;	
     regs[MB_LAMBDA_IN] = int(100*lambda_input);
     regs[MB_LAMBDA_OUT] = int(100*lambda_output);
-    regs[MB_P_RATIO_FILTER] = (int)pRatioFilter;	
-    regs[MB_P_RATIO_REACTOR] = (int)pRatioReactor;
+    regs[MB_P_RATIO_FILTER] = int(pRatioFilter*100);	
+    regs[MB_P_RATIO_REACTOR] = int(pRatioReactor*100);
 }
 
 

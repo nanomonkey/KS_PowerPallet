@@ -1,7 +1,8 @@
 void TransitionTesting(int new_state) {
   testing_state_entered = millis();
   Log_p("Switching to testing state:");
-  Logln(TestingStateName[new_state]);
+  strcpy_P(p_buffer, (char*)pgm_read_word(&(TestingStateName[new_state])));
+  Logln(p_buffer);
   switch (new_state) {
   case TESTING_OFF:
     break;

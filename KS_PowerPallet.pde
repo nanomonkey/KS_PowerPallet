@@ -96,7 +96,7 @@ Servo Servo_Mixture;
 #define P_REACTOR 0
 #define P_COMB 2
 #define P_FILTER 1
-#define P_Q_AIR_ENG ABSENT
+#define P_Q_AIR_ENG 3
 #define P_Q_AIR_RCT 4
 #define P_Q_GAS_ENG 5
 

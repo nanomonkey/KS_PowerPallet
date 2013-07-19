@@ -37,6 +37,7 @@ void LogPID(boolean header = false) {
     PrintColumn(P("Lambda_I"));
     PrintColumn(P("Lambda_D"));
     PrintColumn(P("Servo_Pos"));
+    PrintColumn(P("Throt_Pos"));
   } 
   else {
     PrintColumn(lambda_input);
@@ -46,6 +47,7 @@ void LogPID(boolean header = false) {
     PrintColumn(lambda_PID.GetI_Param());
     PrintColumn(lambda_PID.GetD_Param());
     PrintColumn(Servo_Mixture.read());
+    PrintColumn(map(analogRead(ANA_THROTTLE_POS), 153, 870, 0, 100));  //0.75V-4.25V range on TPS output of Woodward Governor
   }
 }
 

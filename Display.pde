@@ -817,78 +817,101 @@ void update_config_var(int var_num){
     break;
   case 1:
     engine_type = getConfig(1);
+    regs[MB_CONFIG1] = engine_type;
     break;
   case 2:
     relay_board = getConfig(2);
+    regs[MB_CONFIG2] = relay_board;
     break;
   case 3:
     aug_rev_time = getConfig(3)*100;
+    regs[MB_CONFIG3] = aug_rev_time;
     break;
   case 4:
     current_low_boundary = getConfig(4); 
     AugerCurrentLevelBoundary[CURRENT_LOW][1] = current_low_boundary; 
     AugerCurrentLevelBoundary[CURRENT_ON][0] = current_low_boundary+5;
+    regs[MB_CONFIG4] = current_low_boundary;
     break;
   case 5:
     current_high_boundary = getConfig(5);
     AugerCurrentLevelBoundary[CURRENT_ON][1] = current_high_boundary - 5; 
     AugerCurrentLevelBoundary[CURRENT_HIGH][0] = current_high_boundary;
+    regs[MB_CONFIG5] = current_high_boundary;
     break;
   case 6:
     low_oil_psi = getConfig(6);
+    regs[MB_CONFIG6] = low_oil_psi;
     break;
   case 7:
     save_datalog_to_sd = getConfig(7);
+    regs[MB_CONFIG7] = save_datalog_to_sd;
     break;
   case 8:
     pratio_max = getConfig(8)*5;
     alarm_start[ALARM_BAD_REACTOR] = pratio_max;
+    regs[MB_CONFIG8] = pratio_max;
     break;
   case 9:
     high_coolant_temp = getConfig(9);
+    regs[MB_CONFIG9] = high_coolant_temp;
     break;
   case 10:
     display_per = getConfig(10);
+    regs[MB_CONFIG10] = display_per;
     break;
   case 11:
     tred_low_temp = getConfig(11)*5;
+    regs[MB_CONFIG11] = tred_low_temp;
     break;
   case 12:
     ttred_high = getConfig(12)*5;
+    regs[MB_CONFIG12] = ttred_high;
     break;
   case 13:
     tbred_high = getConfig(13)*5;
+    regs[MB_CONFIG13] = tbred_high;
     break;
   case 14:
     pfilter_alarm = getConfig(14);
     alarm_start[ALARM_BAD_FILTER] = pfilter_alarm;
+    regs[MB_CONFIG14] = pfilter_alarm;
     break;
   case 15:
     grate_max_interval = getConfig(15)*5;  //longest total interval in seconds
+    regs[MB_CONFIG15] = grate_max_interval;
     break;
   case 16:
     grate_min_interval = getConfig(16)*5;
+    regs[MB_CONFIG16] = grate_min_interval;
     break;
   case 17:
     grate_on_interval = getConfig(17); 
+    regs[MB_CONFIG17] = grate_on_interval;
     break;
   case 18:
     servo_start = getConfig(18);
+    regs[MB_CONFIG18] = servo_start;
     break;
   case 19:
     lambda_rich = getConfig(19);
+    regs[MB_CONFIG19] = lambda_rich;
     break;
   case 20:
     use_modbus = getConfig(20);
+    regs[MB_CONFIG20] = use_modbus;
     break;
   case 21:
     m_baud = getConfig(21);
+    regs[MB_CONFIG21] = m_baud;
     break;
   case 22:
     m_parity = getConfig(22);
+    regs[MB_CONFIG22] = m_parity;
     break;
   case 23:
     m_address = getConfig(23);
+    regs[MB_CONFIG23] = m_address;
     break;
   case 24:
     grid_tie = getConfig(24);

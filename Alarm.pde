@@ -212,7 +212,7 @@ void resetAlarm(int alarm_num){
 int getAlarmBin(){
   int bin = 0;
   if (alarm_count>0){
-    for(int i=0; i<=alarm_count; i++){
+    for(int i=0; i<alarm_count; i++){
       bitSet(bin, alarm_queue[i]);
     }
   }

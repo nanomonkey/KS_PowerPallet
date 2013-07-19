@@ -138,28 +138,29 @@ void DoLambda() {
     }
     break;
   case LAMBDA_STARTING:
-    if ((lambda_input > 0.52) && (lambda_input <= lambda_rich/100)) { //Check that there is a signal, and then as soon as mixture gets rich switch to closed loop
-      SetPremixServoAngle(premix_valve_center);
-      //lambda_output = premix_valve_center;  //necessary? 
-      TransitionLambda(LAMBDA_CLOSEDLOOP);
-    }
-    if (engine_state == ENGINE_OFF) {
-      TransitionLambda(LAMBDA_SEALED);
-    }
-    if (serial_last_input == 'o') {
-      TransitionLambda(LAMBDA_STEPTEST);
-      serial_last_input = '\0';
-    }
-    if (serial_last_input == 'O') {
-      TransitionLambda(LAMBDA_SPSTEPTEST);
-      serial_last_input = '\0';
-    }
-    //        if (lambda_input < 0.52) {
-    //          TransitionLambda(LAMBDA_NO_SIGNAL);
-    //        }
-    if (engine_state == ENGINE_SHUTDOWN) {
-      TransitionLambda(LAMBDA_SHUTDOWN);
-    }
+//    if ((lambda_input > 0.52) && (lambda_input <= lambda_rich/100)) { //Check that there is a signal, and then as soon as mixture gets rich switch to closed loop
+//      SetPremixServoAngle(premix_valve_center);
+//      //lambda_output = premix_valve_center;  //necessary? 
+//      TransitionLambda(LAMBDA_CLOSEDLOOP);
+//    }
+//    if (engine_state == ENGINE_OFF) {
+//      TransitionLambda(LAMBDA_SEALED);
+//    }
+//    if (serial_last_input == 'o') {
+//      TransitionLambda(LAMBDA_STEPTEST);
+//      serial_last_input = '\0';
+//    }
+//    if (serial_last_input == 'O') {
+//      TransitionLambda(LAMBDA_SPSTEPTEST);
+//      serial_last_input = '\0';
+//    }
+//    //        if (lambda_input < 0.52) {
+//    //          TransitionLambda(LAMBDA_NO_SIGNAL);
+//    //        }
+//    if (engine_state == ENGINE_SHUTDOWN) {
+//      TransitionLambda(LAMBDA_SHUTDOWN);
+//    }
+    TransitionLambda(LAMBDA_CLOSEDLOOP);
     break;
   }
 }
