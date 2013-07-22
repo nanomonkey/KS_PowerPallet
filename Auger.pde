@@ -5,7 +5,8 @@ void DoAuger() {
     if (FuelDemand == SWITCH_ON) {
       if (relay_board == 1){
         TransitionAuger(AUGER_STARTING);
-      } else {
+      } 
+      else {
         TransitionAuger(AUGER_FORWARD);
       }
     }
@@ -48,12 +49,14 @@ void DoAuger() {
     if (FuelDemand == SWITCH_OFF) {
       TransitionAuger(AUGER_OFF);
     }
-    if (AugerCurrentLevel == CURRENT_HIGH  && millis() - auger_state_entered > 500){
-      TransitionAuger(AUGER_HIGH);
-    } 
-    if (AugerCurrentLevel == CURRENT_LOW or AugerCurrentLevel == CURRENT_OFF && millis() - auger_state_entered > 500){
-      TransitionAuger(AUGER_CURRENT_LOW);
-    } 
+    if (relay_board == 1) {
+      if (AugerCurrentLevel == CURRENT_HIGH  && millis() - auger_state_entered > 500){
+        TransitionAuger(AUGER_HIGH);
+      } 
+      if (AugerCurrentLevel == CURRENT_LOW or AugerCurrentLevel == CURRENT_OFF && millis() - auger_state_entered > 500){
+        TransitionAuger(AUGER_CURRENT_LOW);
+      } 
+    }
     if ((millis() - auger_state_entered) > shutdown[ALARM_AUGER_ON_LONG]){  //turn engine and auger off if auger runs none stop for too long
       TransitionAuger(AUGER_ALARM);
       if (engine_state == ENGINE_ON){
@@ -76,8 +79,8 @@ void DoAuger() {
     break;
   case AUGER_REVERSE:
     if (FuelDemand == SWITCH_OFF) {
-       TransitionAuger(AUGER_OFF);
-     }
+      TransitionAuger(AUGER_OFF);
+    }
     if (millis() - auger_state_entered > 500  && AugerCurrentLevel == CURRENT_HIGH){
       TransitionAuger(AUGER_REVERSE_HIGH);
     }
@@ -96,8 +99,8 @@ void DoAuger() {
     break;
   case AUGER_REVERSE_HIGH:
     if (FuelDemand == SWITCH_OFF) {
-       TransitionAuger(AUGER_OFF);
-     }
+      TransitionAuger(AUGER_OFF);
+    }
     if (AugerCurrentLevel != CURRENT_HIGH){
       TransitionAuger(AUGER_REVERSE);
     }
@@ -111,15 +114,17 @@ void DoAuger() {
     if (millis() - auger_pulse_entered > auger_pulse_time){
       if (auger_pulse_state == 1){
         TransitionAuger(AUGER_PULSE);
-      } else {
+      } 
+      else {
         TransitionAuger(AUGER_OFF);
       }
     }
     if (AugerCurrentLevel == CURRENT_HIGH && millis() - auger_pulse_entered > 500){
       if (auger_pulse_state == 1){  //if in reverse...try going forward
         TransitionAuger(AUGER_PULSE);
-      } else {
-      TransitionAuger(AUGER_OFF);
+      } 
+      else {
+        TransitionAuger(AUGER_OFF);
       }
     }  
     break;
@@ -142,28 +147,33 @@ void TransitionAuger(int new_state) {
   switch (new_state) {
   case AUGER_OFF:
     AugerOff();
-    Log(p_buffer); Logln_p("Off");
+    Log(p_buffer); 
+    Logln_p("Off");
     //TransitionMessage("Auger: Off         ");
     auger_rev_count = 0;
     auger_pulse_state = 0;
     break;
   case AUGER_STARTING:
     AugerReverse(); //start in reverse for a few moments to reduce bridging 
-    Log(p_buffer); Logln_p("Starting Forward");  
+    Log(p_buffer); 
+    Logln_p("Starting Forward");  
     //TransitionMessage("Auger: Starting      "); 
     break;
   case AUGER_FORWARD:
     AugerForward();
-    Log(p_buffer); Logln_p("Forward");
+    Log(p_buffer); 
+    Logln_p("Forward");
     //TransitionMessage("Auger: Forward      ");
     break;
   case AUGER_HIGH:
-    Log(p_buffer); Logln_p("Forward, Current High");
+    Log(p_buffer); 
+    Logln_p("Forward, Current High");
     //TransitionMessage("Auger: Current High ");
     break;
   case AUGER_REVERSE:
     auger_reverse_entered = millis();
-    Log(p_buffer); Logln_p("Reverse");
+    Log(p_buffer); 
+    Logln_p("Reverse");
     AugerReverse();
     auger_rev_count++;
     Logln_p("Auger Rev Count Incremented to ");
@@ -171,23 +181,28 @@ void TransitionAuger(int new_state) {
     //TransitionMessage("Auger: Reverse      ");
     break;
   case AUGER_REVERSE_HIGH:
-    Log(p_buffer); Logln_p("Reverse High Current"); 
+    Log(p_buffer); 
+    Logln_p("Reverse High Current"); 
     //TransitionMessage("Auger: Reverse High"); 
     break; 
   case AUGER_CURRENT_LOW:
-    Log(p_buffer); Logln_p("Current Low");
+    Log(p_buffer); 
+    Logln_p("Current Low");
     //TransitionMessage("Auger: Low Current");
     break;
   case AUGER_ALARM:
     AugerOff();
-    Log(p_buffer); Logln_p("Alarmed, Off");
+    Log(p_buffer); 
+    Logln_p("Alarmed, Off");
     //TransitionMessage("Auger: Off          ");
     break; 
   case AUGER_PULSE:
-    Log(p_buffer); Logln_p("Pulse");
+    Log(p_buffer); 
+    Logln_p("Pulse");
     if (auger_pulse_state == 0){
       AugerReverse();
-    } else {
+    } 
+    else {
       AugerForward();
     }
     auger_pulse_entered = millis();
@@ -248,5 +263,6 @@ void AugerOff(){
     digitalWrite(FET_AUGER_REV, LOW);
   }
 }
+
 
 
