@@ -38,12 +38,35 @@ EEPROM bytes used of 4k space:
 
 //PROGMEM string buffer
 char p_buffer[41] = ""; 
-#define P(str) (strcpy_P(p_buffer, PSTR(str)), p_buffer)
+// remove excess macro parameter:
+#define P(str) (strcpy_P(p_buffer, PSTR(str)))
 #define putstring(x) SerialPrint_P(PSTR(x))
 #define Log_p(x) Log(P(x))
 #define Logln_p(x) Logln(P(x))
 
+const prog_char co_product[] PROGMEM = "# http:\\\\AllPowerlabs.org  Power Pallet ";
 //const prog_char help[] PROGMEM = "#p: add 0.02 to p\r\n#P: subtract 0.02 from p\r\n#i: add 0.02 to i\r\n#I: subtract 0.02 from i\r\n#d & D: reserved for d in PID (not implemented)\r\n#c: Calibrate Pressure Sensors\r\n#s: add 10 to Servo1 calibration\r\n#S: subtract 10  degrees from Servo1 position\r\n#l: add 0.01 to lambda_setpoint\r\n#L: subtract 0.01 from lambda_setpoint\r\n#t: subtract 100 ms from Sample Period (loopPeriod1)\r\n#T: add 100 ms from Sample Period (loopPeriod1)\r\n#g: Shake grate\r\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\r\n#m: add 5ms to grate shake interval\r\n#M: subtract 5 ms from grate shake interval\r\n#e: Engine Governor Tuning mode\r\n# h: Print Help Text";
+const prog_char help[] PROGMEM = { /* Fleshed out for 1.2 */
+  "#All Power Labs Power Pallet Serial Help:\r\n"
+  "# ?: device info\r\n"
+  "# p: add 0.02 to p\r\n"
+  "# P: subtract 0.02 from p\r\n"
+  "# i: add 0.02 to i\r\n"
+  "# I: subtract 0.02 from i\r\n"
+  "# dD: reserved for d in PID (not implemented)\r\n"
+  "# c: Calibrate Pressure Sensors\r\n"
+  "# s: add 10 to Servo1 calibration\r\n"
+  "# S: subtract 10 from Servo1 position\r\n"
+  "# l: add 0.01 to lambda_setpoint\r\n"
+  "# L: subtract 0.01 from lambda_setpoint\r\n"
+  "# t: subtract 100 ms from Sample Period (loopPeriod1)\r\n"
+  "# T: add 100 ms from Sample Period (loopPeriod1)\r\n"
+  "# g: Shake grate\r\n"
+  "# G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\r\n"
+  "# m: add 5ms to grate shake interval\r\n"
+  "# M: subtract 5 ms from grate shake interval\r\n"
+  "# e: Engine Governor Tuning mode\r\n"
+  "# hH: Print Help Text\r\n" };
 
 // Analog Input Mapping
 #define ANA_LAMBDA ANA0
@@ -689,6 +712,7 @@ void loop() {
   if (testing_state == TESTING_OFF) {
     Temp_ReadAll();  // reads into array Temp_Data[], in deg C
     Press_ReadAll(); // reads into array Press_Data[], in hPa
+    // the above two Readalls take peak 2.9msec, avg 2.2msec
     DoPressure();
     DoSerialIn();
     DoLambda();
@@ -712,7 +736,7 @@ void loop() {
       if (testing_state == TESTING_OFF) {
         DoGrate();
         DoFilter();
-        DoDatalogging();
+        DoDatalogging(); // No SD card: 27msec peak, 22msec normal. With SD card: 325msec at first, 288msec normal
         DoAlarmUpdate();
         DoAlarm();
       }

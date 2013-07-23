@@ -3,9 +3,10 @@ boolean InitSD() {
   pinMode(MOSI_PIN, OUTPUT); 
   pinMode(MISO_PIN, INPUT); 
   pinMode(SCK_PIN, OUTPUT); 
+
   putstring("#Initializing SD card...");
-  if(!SD.begin(SS_PIN)){
-    putstring("initialization failed. \r\n");
+  if(!SD.begin(SS_PIN)){        // 2.004 seconds if no SD card (fail), 60msec if SD card (succeed).
+    putstring("initialization failed.\r\n");
     sd_loaded = false;
   } 
   else {
@@ -30,6 +31,7 @@ boolean InitSD() {
 void DatalogSD(char file_name[13], boolean newline) {    //file_name should be 8.3 format names
   //SD.begin(SS_PIN);
   File dataFile = SD.open(file_name, FILE_WRITE);  //if file doesn't exist it will be created
+                                                   //if file exists, it will be appended to, even though no seek is performed?
   if (dataFile) {
     if (newline) {
       dataFile.println(string_buffer);
@@ -336,5 +338,6 @@ unsigned int uniqueNumber(){
 //  }
 //  file.close();
 //}
+
 
 

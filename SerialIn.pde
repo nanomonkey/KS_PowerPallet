@@ -147,13 +147,18 @@ void DoSerialIn() {
       if (serial_buffer[0] != '\0'){
         EEPROMWriteAlpha(40, 10, serial_buffer);
       }
-      EEPROMReadAlpha(40, 10, serial_buffer);
+      EEPROMReadAlpha(40, 10, serial_num); // EEPROM is now blasted, so previous serial number no longer matters. Update public serial_num.
       Log_p("Serial number: ");
-      Logln(serial_buffer);
+      Logln(serial_num); // for public use
       break;
-//   case 'h' || 'H':
+   case 'h':
+   case 'H':
 //      Logln(P(help));
-//      break; 
+      printProgStr(help);
+      break; 
+   case '?':
+      SerialShowInfo();
+      break;
    case '$':
       SerialReadString(';');
       Serial2.println(serial_buffer);
@@ -172,6 +177,7 @@ int SerialReadInt(){
     incomingByte = Serial.read();
     if (incomingByte == '\n') break;   // exit the while(1), we're done receiving
     if (incomingByte == -1) continue;  // if no characters are in the buffer read() returns -1
+    if (!isdigit(incomingByte)) continue; // nondigit? get out.
     integerValue *= 10;  // shift left 1 decimal place
     // convert ASCII to integer, add, and shift left 1 decimal place
     integerValue = ((incomingByte - 48) + integerValue);
@@ -183,11 +189,12 @@ void SerialReadString(char endString){
   byte incomingByte;
   int charCount = 0;
   unsigned long serial_time = millis();
-  while(charCount <= 20){
+  while(charCount < sizeof(serial_buffer)){ // was <=20, which led to /0 write past end.
     //if (millis() - serial_time > 300) break;
     incomingByte = Serial.read();
     if (incomingByte == '\n' || incomingByte == endString) break;
     if (incomingByte == -1) continue;
+    if (!isprint(incomingByte)) continue; // only allow printable ASCII and ' ', and incidentally solves the 0x255 problem
     serial_buffer[charCount] = incomingByte;
     incomingByte++;
     serial_buffer[charCount+1] = '\0';
@@ -198,6 +205,7 @@ void SerialReadString(char endString){
 
 
 void PrintLambdaUpdate(double P, double I, double D, double nP, double nI, double nD) {
+/*  -- mixing Log_p and Serial.print doesn't work, because Serial.print is immediate.
   Log_p("Updating PID from [");
   Serial.print(P);
   Log_p(",");
@@ -211,5 +219,41 @@ void PrintLambdaUpdate(double P, double I, double D, double nP, double nI, doubl
   Log_p(",");
   Serial.print(nD);
   Logln(P("]"));
+*/
+  Log_p("Updating PID from [");
+  Log(P);
+  Log_p(",");
+  Log(I);
+  Log_p(",");
+  Log(D);
+  Log_p("] to [");
+  Log(nP);
+  Log_p(",");
+  Log(nI);
+  Log_p(",");
+  Log(nD);
+  Logln(P("]"));
 }
+
+// given a zero-terminated huge PROGMEM string, without copying to RAM, using Serial.print() to send it out
+// pgm read is far on ATMega1280, 128k
+void printProgStr(const prog_char str[])
+{
+  char c;
+  if(!str) return;
+  while((c = (char) pgm_read_byte_far(str++))) 
+    Serial.print(c,BYTE);
+}
+
+void SerialShowInfo(void) {
+  char buf[20];
+   printProgStr(co_product);
+   sprintf(buf, "%4s ", CODE_VERSION);
+   Serial.print(buf);
+   sprintf(buf, "%10s %05u", serial_num, unique_number);
+   Serial.println(buf);
+ }
+ 
+ void SerialShowSDInfo(void) {
+ }
 

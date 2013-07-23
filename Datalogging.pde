@@ -382,18 +382,19 @@ void PrintColumnInt(int str) {
 }
 
 void DoDatalogging() {
-  Serial.begin(115200);
+  Serial.begin(115200); // Can glitch logging, but seems to be required due to MODBus code baud rate change(?) - investigate further.
   if (buffer_size > 0){
     Logln_p("..."); //for debugging purposes...remove if no longer needed
   }
   boolean header = false;
   if (lineCount == 0) {
     header = true;
+    clearBuffer(); //guarantee no extra chars in buffer first time through
   }
 
   if(lineCount == 1 && serial_num[0] != '#'){
 //    sprintf_P(string_buffer, P("#APL Serial:#%s PCU#%u Version:%s"), serial_num, unique_number, CODE_VERSION);// This line, with sprintf_P produces a bare "ent" in serial and log
-    sprintf(string_buffer, "#APL Serial:%s\r\n#PCU UID:%u\r\n#Version:%s", serial_num, unique_number, CODE_VERSION);//sprintf is trustworthy, worth eating a small amount of RAM
+    sprintf(string_buffer, "#APL Serial:%s\r\n#PCU UID:%05u\r\n#Version:%s", serial_num, unique_number, CODE_VERSION);//sprintf is trustworthy, worth eating a small amount of RAM
     Serial.println(string_buffer);
     if (save_datalog_to_sd && sd_loaded){
       DatalogSD(sd_data_file_name, true);

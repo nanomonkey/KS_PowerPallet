@@ -25,7 +25,7 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
-    sprintf(buf, "%s  %u", serial_num, unique_number);
+    sprintf(buf, "%-10s     %05u", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_CursOff();
     //Transition out after delay
@@ -83,7 +83,7 @@ void DoDisplay() {
           sprintf(buf, "Ttred%4i  ", Temp_Data[T_TRED]);
         } 
         else {
-          sprintf(buf, "Ttred%s", T_tredLevel[TempLevelName]);
+          sprintf(buf, "Ttred%s  ", T_tredLevel[TempLevelName]); // add spaces to erase prior
         }
         Disp_PutStr(buf);
         Disp_RC(0, 11);
@@ -97,7 +97,7 @@ void DoDisplay() {
         sprintf(buf, "Tbred%4i  ", Temp_Data[T_BRED]);
       } 
       else {
-        sprintf(buf, "Tbred%s", T_bredLevel[TempLevelName]);
+        sprintf(buf, "Tbred%s  ", T_bredLevel[TempLevelName]); // add spaces to erase prior
       }
       Disp_PutStr(buf);
       Disp_RC(1, 11);
@@ -257,11 +257,12 @@ void DoDisplay() {
     }
     break;
   case DISPLAY_LAMBDA:
-    Disp_CursOff();
+     Disp_CursOff();
     double P,I;
-    item_count = 4;
+    item_count = 3;  // was 4, but moved Lambda display out of the edit path
     P=lambda_PID.GetP_Param();
     I=lambda_PID.GetI_Param();
+    // Row 0
     Disp_RC(0,0);
     sprintf(buf, "LamSet%3i  ", int(ceil(lambda_setpoint*100.0)));
     Disp_PutStr(buf);
@@ -293,13 +294,7 @@ void DoDisplay() {
       strcpy_P(buf, menu1);
       Disp_PutStr(buf);
       break;
-    case 2: //Lambda reading
-      Disp_RC(3,0);
-      Disp_PutStr(P("NEXT  ADV           "));
-      Disp_RC(0,11);
-      Disp_CursOn();
-      break;
-    case 3: //Lambda P
+    case 2: //Lambda P
       if (key == 2) {
         P += 0.01;
         lambda_P[0] = P;
@@ -317,7 +312,7 @@ void DoDisplay() {
       Disp_RC(1,0);
       Disp_CursOn();
       break;
-    case 4: //Lambda I
+    case 3: //Lambda I
       if (key == 2) {
         I += 0.1;
         lambda_I[0] = I;
@@ -325,7 +320,7 @@ void DoDisplay() {
       }
       if (key == 3) {
         I -= 0.1;
-        lambda_I[0] = I;
+        lambda_I[0] = I; 
         WriteLambda();
       }
       lambda_PID.SetTunings(P,I,0);
@@ -335,6 +330,12 @@ void DoDisplay() {
       Disp_RC(1,11);
       Disp_CursOn();
       break;
+//    case 4: //Lambda reading - because it's NOT editable, moved it out of the edit selection path.
+//      Disp_RC(3,0);
+//      Disp_PutStr(P("NEXT  ADV           "));
+//      Disp_RC(0,11);
+//      Disp_CursOn();
+//      break;
     }
     break;
   case DISPLAY_GRATE: 
@@ -395,7 +396,7 @@ void DoDisplay() {
   case DISPLAY_INFO:
     Disp_CursOff();
     Disp_RC(0,0);
-    sprintf(buf, "%10s  %8u", serial_num, unique_number);
+    sprintf(buf, "%-10s     %05u", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_RC(1,0);
     sprintf(buf, "       Time:%8i", millis()/1000);
