@@ -324,9 +324,9 @@ no_yes
 }; 
 
 //                              0    1    2     3   4   5    6   7    8    9    10   11   12   13   14   15   16   17   18  19   20  21  22  23   24
-int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   20,  98,  10,  130, 210, 195, 50,  60,  12,  3,   30, 140, 0,  3,  0,  1,   0};  //default values to be saved to EEPROM for the following getConfig variables
+int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   10,  98,  10,  130, 210, 195, 50,  60,  12,  3,   30, 140, 0,  3,  0,  1,   0};  //default values to be saved to EEPROM for the following getConfig variables
 int config_min[CONFIG_COUNT] = {0,   0,   0,   0,   5,  41,  1,  0,   0,   10,  0,   0,   0,   20,  0,   0,   0,   0,   0,  0,   0,  0,  0,  1,   0};  //minimum values allowed 
-int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 254, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1,  6,  3,  127, 254}; //maximum values allowed  
+int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 15, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1,  6,  3,  127, 254}; //maximum values allowed  
 
 //Don't forget to add the following to update_config_var in Display!  The first Configuration, Reset Defaults, is skipped, so these start at 1, not 0. 
 int engine_type = getConfig(1);  
@@ -353,6 +353,7 @@ int m_baud = getConfig(21);
 int m_parity = getConfig(22);
 int m_address = getConfig(23);
 int grid_tie = getConfig(24);
+//int pratio_low = getConfig(25);
 
 // Grate turning variables
 int grateMode = GRATE_SHAKE_PRATIO; //set default starting state
@@ -368,7 +369,8 @@ int m_grate_on;
 float pRatioReactor;
 enum pRatioReactorLevels { PR_HIGH = 0, PR_CORRECT = 1, PR_LOW = 2} pRatioReactorLevel;
 static char *pRatioReactorLevelName[] = { "High", "Correct", "Low" };
-float pRatioReactorLevelBoundary[3][2] = { { 0.6, 1.0 }, { 0.3, 0.6 }, {0.0, 0.3} };
+float pratio_low = 0.3 //change to 0.2
+float pRatioReactorLevelBoundary[3][2] = { { 0.6, 1.0 }, { pratio_low, 0.6 }, {0.0, pratio_low} };
 
 // Filter pressure ratio
 float pRatioFilter;
@@ -553,7 +555,7 @@ int pressureRatioAccumulator = 0;
 #define ALARM_NUM 16
 unsigned long alarm_on[ALARM_NUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, pfilter_alarm, 230, 0, 0, 0, 30000, 60000, 10, 0, 0, 3000, 15000};  //count or time in milliseconds when alarm goes off
-unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 60000, 60000, 0, 0, 180000, 0, 0, /*3000*/60000, 7000, 15000};  //time when engine will be shutdown
+unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 60000, 60000, 0, 0, 180000, 0, 0, 3000, 7000, 15000};  //time when engine will be shutdown
 int alarm_count = 0;
 int alarm_queue[ALARM_NUM] = {};
 int alarm_shown = 0;
