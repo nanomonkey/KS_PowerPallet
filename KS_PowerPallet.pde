@@ -46,9 +46,11 @@ char p_buffer[41] = "";
 
 const prog_char co_product[] PROGMEM = "# http:\\\\AllPowerlabs.org  Power Pallet ";
 //const prog_char help[] PROGMEM = "#p: add 0.02 to p\r\n#P: subtract 0.02 from p\r\n#i: add 0.02 to i\r\n#I: subtract 0.02 from i\r\n#d & D: reserved for d in PID (not implemented)\r\n#c: Calibrate Pressure Sensors\r\n#s: add 10 to Servo1 calibration\r\n#S: subtract 10  degrees from Servo1 position\r\n#l: add 0.01 to lambda_setpoint\r\n#L: subtract 0.01 from lambda_setpoint\r\n#t: subtract 100 ms from Sample Period (loopPeriod1)\r\n#T: add 100 ms from Sample Period (loopPeriod1)\r\n#g: Shake grate\r\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\r\n#m: add 5ms to grate shake interval\r\n#M: subtract 5 ms from grate shake interval\r\n#e: Engine Governor Tuning mode\r\n# h: Print Help Text";
-const prog_char help[] PROGMEM = { /* Fleshed out for 1.2 */
+const prog_char help[] PROGMEM = { 
   "#All Power Labs Power Pallet Serial Help:\r\n"
   "# ?: device info\r\n"
+  "# #: Serial Number (follow with number if changing)\r\n"
+  "# !: Rewrite specified EEPROM space (give number followed by ';')\r\n"
   "# p: add 0.02 to p\r\n"
   "# P: subtract 0.02 from p\r\n"
   "# i: add 0.02 to i\r\n"
