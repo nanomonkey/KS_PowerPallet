@@ -259,7 +259,7 @@ PROGMEM const char *TestingStateName[] = {testing_state_0, testing_state_1, test
 int lineCount = 0;
 
 //Configuration Variables
-#define CONFIG_COUNT 25  
+#define CONFIG_COUNT 26  
 int config_var;
 byte config_changed = false;
 
@@ -283,11 +283,12 @@ prog_char config_16[] PROGMEM = "Grate Min Inter";
 prog_char config_17[] PROGMEM = "Grate On Interv";
 prog_char config_18[] PROGMEM = "Servo Start Pos";
 prog_char config_19[] PROGMEM = "Lambda Rich    ";
-prog_char config_20[] PROGMEM = "Modbus Enabled?";
+prog_char config_20[] PROGMEM = "Modbus Enabled?";  //Set to Modbus baud of zero and remove this configuration?
 prog_char config_21[] PROGMEM = "Modbus Baud    ";  //0:2400, 1:4800, 2:9600, 3:19200, 4:38400, 5:57600, 6:115200 
 prog_char config_22[] PROGMEM = "Modbus Parity  ";  //0:None, 1:Odd, 2:Even
 prog_char config_23[] PROGMEM = "Modbus Address ";  //1-127
 prog_char config_24[] PROGMEM = "Grid tie?      "; 
+prog_char config_25[] PROGMEM = "Pratio Low     ";
 
 PROGMEM const char *Configuration[CONFIG_COUNT] = {config_0, config_1, config_2, config_3, config_4, config_5, config_6, config_7, config_8, config_9, config_10, config_11, config_12, config_13, config_14, config_15, config_16, config_17, config_18, config_19, config_20, config_21, config_22, config_23, config_24};
 
@@ -322,13 +323,14 @@ no_yes,
 plus_minus,
 plus_minus,
 plus_minus,
-no_yes
+no_yes,
+plus_minus
 }; 
 
-//                              0    1    2     3   4   5    6   7    8    9    10   11   12   13   14   15   16   17   18  19   20  21  22  23   24
-int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   10,  98,  10,  130, 210, 195, 50,  60,  12,  3,   30, 140, 0,  3,  0,  1,   0};  //default values to be saved to EEPROM for the following getConfig variables
-int config_min[CONFIG_COUNT] = {0,   0,   0,   0,   5,  41,  1,  0,   0,   10,  0,   0,   0,   20,  0,   0,   0,   0,   0,  0,   0,  0,  0,  1,   0};  //minimum values allowed 
-int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 15, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1,  6,  3,  127, 254}; //maximum values allowed  
+//                              0    1    2     3   4   5    6   7    8    9    10   11   12   13   14   15   16   17   18  19   20  21  22  23   24  25
+int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   10,  98,  10,  130, 210, 195, 50,  60,  12,  3,   30, 140, 0,  3,  0,  1,   0,  30};  //default values to be saved to EEPROM for the following getConfig variables
+int config_min[CONFIG_COUNT] = {0,   0,   0,   0,   5,  41,  1,  0,   0,   10,  0,   0,   0,   20,  0,   0,   0,   0,   0,  0,   0,  0,  0,  1,   0,   0};  //minimum values allowed 
+int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 15, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1,  6,  3,  127, 254,  100}; //maximum values allowed  
 
 //Don't forget to add the following to update_config_var in Display!  The first Configuration, Reset Defaults, is skipped, so these start at 1, not 0. 
 int engine_type = getConfig(1);  
@@ -355,7 +357,7 @@ int m_baud = getConfig(21);
 int m_parity = getConfig(22);
 int m_address = getConfig(23);
 int grid_tie = getConfig(24);
-//int pratio_low = getConfig(25);
+int pratio_low_boundary = getConfig(25);
 
 // Grate turning variables
 int grateMode = GRATE_SHAKE_PRATIO; //set default starting state
@@ -371,7 +373,7 @@ int m_grate_on;
 float pRatioReactor;
 enum pRatioReactorLevels { PR_HIGH = 0, PR_CORRECT = 1, PR_LOW = 2} pRatioReactorLevel;
 static char *pRatioReactorLevelName[] = { "High", "Correct", "Low" };
-float pratio_low = 0.3 //change to 0.2
+float pratio_low = pratio_low_boundary/10.0;
 float pRatioReactorLevelBoundary[3][2] = { { 0.6, 1.0 }, { pratio_low, 0.6 }, {0.0, pratio_low} };
 
 // Filter pressure ratio

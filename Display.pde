@@ -917,6 +917,10 @@ void update_config_var(int var_num){
   case 24:
     grid_tie = getConfig(24);
     break;
+  case 25:
+    pratio_low_boundary = getConfig(25);
+    //regs[MB_CONFIG24] = m_pratio_low_boundary;
+    break;
   }
 }
 
