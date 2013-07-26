@@ -290,7 +290,7 @@ prog_char config_23[] PROGMEM = "Modbus Address ";  //1-127
 prog_char config_24[] PROGMEM = "Grid tie?      "; 
 prog_char config_25[] PROGMEM = "Pratio Low     ";
 
-PROGMEM const char *Configuration[CONFIG_COUNT] = {config_0, config_1, config_2, config_3, config_4, config_5, config_6, config_7, config_8, config_9, config_10, config_11, config_12, config_13, config_14, config_15, config_16, config_17, config_18, config_19, config_20, config_21, config_22, config_23, config_24};
+PROGMEM const char *Configuration[CONFIG_COUNT] = {config_0, config_1, config_2, config_3, config_4, config_5, config_6, config_7, config_8, config_9, config_10, config_11, config_12, config_13, config_14, config_15, config_16, config_17, config_18, config_19, config_20, config_21, config_22, config_23, config_24, config_25};
 
 prog_char plus_minus[] PROGMEM = "+    -  ";
 prog_char no_yes[] PROGMEM = "NO  YES ";
