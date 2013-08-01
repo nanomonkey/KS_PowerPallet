@@ -5,6 +5,13 @@ void DoEngine() {
       if (control_state == CONTROL_START) {
         TransitionEngine(ENGINE_STARTING);
       }
+      if (grid_tie == 1){
+        if (EngineShutdownFromAlarm()){
+          digitalWrite(FET_IGNITION,HIGH);
+        } else {
+          digitalWrite(FET_IGNITION,LOW);
+        }
+      }
       break;
     case ENGINE_ON:
       if (control_state == CONTROL_OFF & millis()-control_state_entered > 100) {
