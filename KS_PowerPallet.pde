@@ -373,7 +373,7 @@ int m_grate_on;
 float pRatioReactor;
 enum pRatioReactorLevels { PR_HIGH = 0, PR_CORRECT = 1, PR_LOW = 2} pRatioReactorLevel;
 static char *pRatioReactorLevelName[] = { "High", "Correct", "Low" };
-float pratio_low = pratio_low_boundary/10.0;
+float pratio_low = pratio_low_boundary/100.0;
 float pRatioReactorLevelBoundary[3][2] = { { 0.6, 1.0 }, { pratio_low, 0.6 }, {0.0, pratio_low} };
 
 // Filter pressure ratio
@@ -705,8 +705,7 @@ void setup() {
     InitModbusSlave();
   }
 
-  
-  
+ 
   TransitionEngine(ENGINE_ON); //default to engine on. if PCU resets, don't shut a running engine off. in the ENGINE_ON state, should detect and transition out of engine on.
   TransitionLambda(LAMBDA_UNKNOWN);
   TransitionAuger(AUGER_OFF);
