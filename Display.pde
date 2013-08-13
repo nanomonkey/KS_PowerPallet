@@ -487,18 +487,20 @@ void DoDisplay() {
     sprintf(buf, "%-20s", config_buffer);
     Disp_PutStr(buf);
     Disp_RC(2,0);
-    Disp_PutStr("                    ");
+    if (config_changed == true){
+      Disp_PutStr(P("State: ON           "));
+    } else { 
+      Disp_PutStr(P("State: OFF          "));
+    }
     Disp_RC(3,0);
     Disp_PutStr(P("NEXT  ADV   ON   OFF"));
     if (key == 2) {
       relayOn(cur_item+1);
-      Disp_RC(2,0);
-      Disp_PutStr(P("           ON       "));
+      config_changed = true;
     }
     if (key == 3) {
       relayOff(cur_item+1);
-      Disp_RC(2,0);
-    Disp_PutStr(P("           OFF        "));
+      config_changed = false;
     }
     break;
   case DISPLAY_CONFIG:
@@ -797,6 +799,7 @@ void DoKeyInput() {
       config_changed = false;
     }
     if (display_state == DISPLAY_RELAY){
+      config_changed = false;
       turnAllOff();
     }
     cur_item += 1;
