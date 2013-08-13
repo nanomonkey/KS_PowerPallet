@@ -46,9 +46,6 @@ void TransitionTesting(int new_state) {
     break;
   case TESTING_ANA_OIL_PRESSURE:
     break;
-  case TESTING_GOV_TUNING:
-    TransitionEngine(ENGINE_GOV_TUNING);
-    break;
   }
   testing_state=new_state;
 }
@@ -98,10 +95,6 @@ void GoToNextTestingState() {
     TransitionTesting(TESTING_ANA_OIL_PRESSURE);
     break;
   case TESTING_ANA_OIL_PRESSURE:
-    TransitionTesting(TESTING_GOV_TUNING);
-    break;
-  case TESTING_GOV_TUNING:
-    TransitionEngine(ENGINE_ON);
     TransitionTesting(TESTING_OFF);
     break;
   }

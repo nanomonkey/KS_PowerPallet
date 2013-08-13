@@ -161,18 +161,18 @@ void EEPROMWriteAlpha(int address, int length, char* buffer){
   }
 }
 
-unsigned int uniqueNumber(){
-  if (EEPROM.read(35) == 255){ 
-    for (int y=0; y<=1; y++){
-      byte uniqueByte;
-      for (int x=0; x<8; x++){
-        bitWrite(uniqueByte, x, bitRead(analogRead(ANA0),0));
-      }
-      EEPROM.write(35+y, uniqueByte);
-    }
-  }
-  return EEPROMReadInt(35);
-}
+//unsigned int uniqueNumber(){
+//  if (EEPROM.read(35) == 255){ 
+//    for (int y=0; y<=1; y++){
+//      byte uniqueByte;
+//      for (int x=0; x<8; x++){
+//        bitWrite(uniqueByte, x, bitRead(analogRead(ANA0),0));
+//      }
+//      EEPROM.write(35+y, uniqueByte);
+//    }
+//  }
+//  return EEPROMReadInt(35);
+//}
 
 //void testSD() {
 //  switch(sd_card.type()) {

@@ -25,7 +25,7 @@ void DoDisplay() {
     Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
-    sprintf(buf, "%-10s     %05u", serial_num, unique_number);
+    sprintf(buf, "%-10s     %5s", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_CursOff();
     //Transition out after delay
@@ -36,7 +36,7 @@ void DoDisplay() {
   case DISPLAY_REACTOR:
     Disp_CursOff();
     alarm_shown = alarm_queue[cur_item - 1];
-    if (millis() % 4000 > 2000 && (alarm_count > 0)) {
+    if (millis() % 10000 > 5000 && (alarm_count > 0)) {
       item_count = alarm_count;
       if (cur_item>item_count) {  //if an alarm is removed while displaying start over at beginning
         cur_item = 1;
@@ -396,7 +396,7 @@ void DoDisplay() {
   case DISPLAY_INFO:
     Disp_CursOff();
     Disp_RC(0,0);
-    sprintf(buf, "%-10s     %05u", serial_num, unique_number);
+    sprintf(buf, "%-10s     %5s", serial_num, unique_number);
     Disp_PutStr(buf);
     Disp_RC(1,0);
     sprintf(buf, "       Time:%8i", millis()/1000);
@@ -475,30 +475,32 @@ void DoDisplay() {
       Disp_PutStr(P("   CALIBRATED!      "));
     }
     break;
-    //  case DISPLAY_RELAY:
-    //    Disp_CursOff();
-    //    item_count = 8;
-    //    testing_state = TESTING_SERVO;
-    //    Disp_RC(0,0);
-    //    sprintf(buf, "Test Relay: %1i       ", cur_item);
-    //    Disp_PutStr(buf);
-    //    Disp_RC(1,0);
-    //    Disp_PutStr("                    ");
-    //    Disp_RC(2,0);
-    //    Disp_PutStr("                    ");
-    //    Disp_RC(3,0);
-    //    Disp_PutStr("NEXT  ADV   ON   OFF");
-    //    if (key == 2) {
-    //      relayOn(cur_item);
-    //      Disp_RC(1,0);
-    //      Disp_PutStr("           ON       ");
-    //    }
-    //    if (key == 3) {
-    //      relayOff(cur_item);
-    //      Disp_RC(1,0);
-    //    Disp_PutStr("           OFF        ");
-    //    }
-    //    break;
+  case DISPLAY_RELAY:
+    Disp_CursOff();
+    item_count = 7;
+    testing_state = TESTING_SERVO;
+    Disp_RC(0,0);
+    sprintf(buf, "Test Relay: %1i       ", cur_item);
+    Disp_PutStr(buf);
+    Disp_RC(1,0);
+    strcpy_P(config_buffer, (char*)pgm_read_word(&(TestingStateName[cur_item])));
+    sprintf(buf, "%-20s", config_buffer);
+    Disp_PutStr(buf);
+    Disp_RC(2,0);
+    Disp_PutStr("                    ");
+    Disp_RC(3,0);
+    Disp_PutStr(P("NEXT  ADV   ON   OFF"));
+    if (key == 2) {
+      relayOn(cur_item+1);
+      Disp_RC(2,0);
+      Disp_PutStr(P("           ON       "));
+    }
+    if (key == 3) {
+      relayOff(cur_item+1);
+      Disp_RC(2,0);
+    Disp_PutStr(P("           OFF        "));
+    }
+    break;
   case DISPLAY_CONFIG:
     Disp_CursOff();
     item_count = CONFIG_COUNT - 1; //sizeof(defaults)/sizeof(int);
@@ -599,32 +601,51 @@ void DoDisplay() {
     //      cur_item++;  
     //    }
     //    break;
-    //  case DISPLAY_PHIDGET:
-    //      Disp_CursOff();
-    ////    Disp_RC(0,0);
-    ////    sprintf(buf, "O2%4i Fu%4iKey%4i", analogRead(ANA0),analogRead(ANA1),analogRead(ANA2));
-    ////    Disp_PutStr(buf);
-    ////    Disp_RC(1,0);
-    ////    sprintf(buf, "Oil%4iAug%4iTh%4i", analogRead(ANA3),analogRead(ANA4),analogRead(ANA5));
-    ////    Disp_PutStr(buf);
-    ////    Disp_RC(2,0);
-    ////    sprintf(buf, "CoolT%4i Aux%4i   ", analogRead(ANA6),analogRead(ANA7));
-    ////    Disp_PutStr(buf);  
-    ////    Disp_RC(3,0);
-    ////    Disp_PutStr("NEXT                ");
-    //    Disp_RC(0,0);
-    //    sprintf(buf, "Phidgits:     0:%4i", analogRead(ANA0));
-    //    Disp_PutStr(buf);
-    //    Disp_RC(1,0);
-    //    sprintf(buf, "1:%4i 2:%4i 3:%4i", analogRead(ANA1),analogRead(ANA2),analogRead(ANA3));
-    //    Disp_PutStr(buf);
-    //    Disp_RC(2,0);
-    //    sprintf(buf, "4:%4i 5:%4i 6:%4i", analogRead(ANA4),analogRead(ANA5),analogRead(ANA6));
-    //    Disp_PutStr(buf);  
-    //    Disp_RC(3,0);
-    //    sprintf(buf, "NEXT          7:%4i", analogRead(ANA7));
-    //    Disp_PutStr(buf);
-    //    break;
+//  case DISPLAY_PHIDGET:
+//      Disp_CursOff();
+////    Disp_RC(0,0);
+////    sprintf(buf, "O2%4i Fu%4iKey%4i", analogRead(ANA0),analogRead(ANA1),analogRead(ANA2));
+////    Disp_PutStr(buf);
+////    Disp_RC(1,0);
+////    sprintf(buf, "Oil%4iAug%4iTh%4i", analogRead(ANA3),analogRead(ANA4),analogRead(ANA5));
+////    Disp_PutStr(buf);
+////    Disp_RC(2,0);
+////    sprintf(buf, "CoolT%4i Aux%4i   ", analogRead(ANA6),analogRead(ANA7));
+////    Disp_PutStr(buf);  
+////    Disp_RC(3,0);
+////    Disp_PutStr("NEXT                ");
+//    Disp_RC(0,0);
+//    sprintf(buf, "Phidgits:     0:%4i", analogRead(ANA0));
+//    Disp_PutStr(buf);
+//    Disp_RC(1,0);
+//    sprintf(buf, "1:%4i 2:%4i 3:%4i", analogRead(ANA1),analogRead(ANA2),analogRead(ANA3));
+//    Disp_PutStr(buf);
+//    Disp_RC(2,0);
+//    sprintf(buf, "4:%4i 5:%4i 6:%4i", analogRead(ANA4),analogRead(ANA5),analogRead(ANA6));
+//    Disp_PutStr(buf);  
+//    Disp_RC(3,0);
+//    sprintf(buf, "NEXT          7:%4i", analogRead(ANA7));
+//    Disp_PutStr(buf);
+//    break;
+  case DISPLAY_ANA:
+    Disp_CursOff();
+    item_count = 7;
+    //testing_state = TESTING_SERVO;
+    Disp_RC(0,0);
+    sprintf(buf, "Analog Input: ANA%1i  ", cur_item);
+    Disp_PutStr(buf);
+    Disp_RC(1,0);
+    strcpy_P(config_buffer, (char*)pgm_read_word(&(TestingStateName[cur_item+8])));
+    sprintf(buf, "%-20s", config_buffer);
+    Disp_PutStr(buf);
+    Disp_RC(2,0);
+    sprintf(buf, "Value: %4i         ", int(analogRead(analog_inputs[cur_item])));
+    //sprintf(buf, "Value: %4i         ", smoothed[cur_item]);
+    Disp_PutStr(buf);
+    Disp_RC(3,0);
+    Disp_PutStr("NEXT  ADV           ");
+    break;
+         
     //    case DISPLAY_TEMP2:
     //      break;
     //    case DISPLAY_FETS:
@@ -662,9 +683,10 @@ void TransitionDisplay(int new_state) {
   case DISPLAY_CALIBRATE_PRESSURE:
     cur_item = 1;
     break;
-    //  case DISPLAY_RELAY:
-    //    cur_item = 1;
-    //    break; 
+  case DISPLAY_RELAY:
+    turnAllOff();
+    cur_item = 0;
+    break; 
   case DISPLAY_CONFIG: 
     cur_item = 0;
     config_changed = false;
@@ -673,6 +695,9 @@ void TransitionDisplay(int new_state) {
     //    break;
   case DISPLAY_SD:
     cur_item = 1;
+    break;
+  case DISPLAY_ANA:
+    cur_item = 0;
     break;
   }
   display_state=new_state;
@@ -708,7 +733,7 @@ void DoKeyInput() {
       break;
     case DISPLAY_INFO:
       if (engine_state == ENGINE_OFF) {
-        TransitionDisplay(DISPLAY_TESTING);
+        TransitionDisplay(DISPLAY_RELAY);
       } 
       else {
         TransitionDisplay(DISPLAY_REACTOR);
@@ -721,6 +746,23 @@ void DoKeyInput() {
       } 
       else {
         TransitionTesting(TESTING_OFF);
+        TransitionDisplay(DISPLAY_REACTOR);
+      }
+      break;
+    case DISPLAY_RELAY:
+      turnAllOff();
+      if (engine_state == ENGINE_OFF) {
+        TransitionDisplay(DISPLAY_ANA);
+      } 
+      else {
+        TransitionDisplay(DISPLAY_REACTOR);
+      }
+      break;
+    case DISPLAY_ANA:
+      if (engine_state == ENGINE_OFF) {
+        TransitionDisplay(DISPLAY_SERVO);
+      } 
+      else {
         TransitionDisplay(DISPLAY_REACTOR);
       }
       break;
@@ -754,13 +796,20 @@ void DoKeyInput() {
       update_config_var(cur_item);
       config_changed = false;
     }
+    if (display_state == DISPLAY_RELAY){
+      turnAllOff();
+    }
     cur_item += 1;
     if (cur_item > item_count) {
-      if (display_state == DISPLAY_CONFIG){
-        cur_item = 0;
-      } 
-      else {
-        cur_item = 1;
+      switch (display_state) {
+        case DISPLAY_CONFIG:
+        case DISPLAY_RELAY:
+        case DISPLAY_ANA:
+          cur_item = 0;
+          break;
+        default:
+          cur_item = 1;
+          break;
       }
     } 
     key = -1; //key caught

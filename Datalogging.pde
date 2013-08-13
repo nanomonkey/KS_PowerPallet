@@ -394,7 +394,7 @@ void DoDatalogging() {
 
   if(lineCount == 1 && serial_num[0] != '#'){
 //    sprintf_P(string_buffer, P("#APL Serial:#%s PCU#%u Version:%s"), serial_num, unique_number, CODE_VERSION);// This line, with sprintf_P produces a bare "ent" in serial and log
-    sprintf(string_buffer, "#APL Serial:%s\r\n#PCU UID:%05u\r\n#Version:%s", serial_num, unique_number, CODE_VERSION);//sprintf is trustworthy, worth eating a small amount of RAM
+    sprintf(string_buffer, "#APL Serial:%s\r\n#PCU UID:%5s\r\n#Version:%s", serial_num, unique_number, CODE_VERSION);//sprintf is trustworthy, worth eating a small amount of RAM
     Serial.println(string_buffer);
     if (save_datalog_to_sd && sd_loaded){
       DatalogSD(sd_data_file_name, true);

@@ -26,7 +26,7 @@
 
 /*
 EEPROM bytes used of 4k space:
-0,1,2,3,4,5,6,7,8,9,10, 13,14,15,16,17,18,19,21, 33,34,35,36, 40-50,
+0,1,2,3,4,5,6,7,8,9,10, 13,14,15,16,17,18,19,21, 33,34,35,36,37,38  40-50,
 500-999 DISPLAY_CONFIG states
 1000-4000 Sensor configuration
 */
@@ -45,7 +45,6 @@ char p_buffer[41] = "";
 #define Logln_p(x) Logln(P(x))
 
 const prog_char co_product[] PROGMEM = "# http:\\\\AllPowerlabs.org  Power Pallet ";
-//const prog_char help[] PROGMEM = "#p: add 0.02 to p\r\n#P: subtract 0.02 from p\r\n#i: add 0.02 to i\r\n#I: subtract 0.02 from i\r\n#d & D: reserved for d in PID (not implemented)\r\n#c: Calibrate Pressure Sensors\r\n#s: add 10 to Servo1 calibration\r\n#S: subtract 10  degrees from Servo1 position\r\n#l: add 0.01 to lambda_setpoint\r\n#L: subtract 0.01 from lambda_setpoint\r\n#t: subtract 100 ms from Sample Period (loopPeriod1)\r\n#T: add 100 ms from Sample Period (loopPeriod1)\r\n#g: Shake grate\r\n#G: Switch Grate Shaker mode (Off/On/Pressure Ratio)\r\n#m: add 5ms to grate shake interval\r\n#M: subtract 5 ms from grate shake interval\r\n#e: Engine Governor Tuning mode\r\n# h: Print Help Text";
 const prog_char help[] PROGMEM = { 
   "#All Power Labs Power Pallet Serial Help:\r\n"
   "# ?: device info\r\n"
@@ -83,6 +82,7 @@ const prog_char help[] PROGMEM = {
 
 int smoothed[8];  //array of smoothed analog signals.
 int smoothed_filters[8] = {0, 0, 0, 8, 0, 0, 0, 0};  //filter values for each analog channel
+int analog_inputs[] = {ANA0, ANA1, ANA2, ANA3, ANA4, ANA5, ANA6, ANA7};
 
 // FET Mappings
 #define FET_AUGER FET0
@@ -197,6 +197,8 @@ Servo Servo_Mixture;
 #define DISPLAY_CALIBRATE_PRESSURE 9
 #define DISPLAY_CONFIG 10
 #define DISPLAY_SD 11
+#define DISPLAY_RELAY 12
+#define DISPLAY_ANA 13
 
 const prog_char menu1[] PROGMEM = "NEXT  ADV   +    -  ";
 const prog_char blank[] PROGMEM = "                    ";
@@ -208,7 +210,7 @@ char choice[5];
 char buf[22] = "";
 
 char serial_num[11] = "#";
-unsigned int unique_number;
+char unique_number[5] = "#";
 
 //Testing States
 #define TESTING_OFF 0
@@ -224,8 +226,7 @@ unsigned int unique_number;
 #define TESTING_ANA_ENGINE_SWITCH 10
 #define TESTING_ANA_FUEL_SWITCH 11
 #define TESTING_ANA_OIL_PRESSURE 12
-#define TESTING_GOV_TUNING 13
-#define TESTING_SERVO 14     //used in Display to defeat any other writes to servo.  Must be last testing state!!!
+#define TESTING_SERVO 13     //used in Display to defeat any other writes to servo.  Must be last testing state!!!
 
 
 #define BUFFER_SIZE 128
@@ -237,23 +238,28 @@ char float_buf[15] = "";
 //Test Variables
 int testing_state = TESTING_OFF;
 unsigned long testing_state_entered = 0;
+int analog_input[] = {ANA0, ANA1, ANA2, ANA3, ANA4, ANA5, ANA6, ANA7};
 
-prog_char testing_state_0[] PROGMEM = "Off";
+//prog_char testing_state_0[] PROGMEM = "Off";
 prog_char testing_state_1[] PROGMEM = "FET0 Auger Fwd";
 prog_char testing_state_2[] PROGMEM = "FET1 Grate";
-prog_char testing_state_3[] PROGMEM = "FET2 Engine";
+prog_char testing_state_3[] PROGMEM = "FET2 Engine/Governor";
 prog_char testing_state_4[] PROGMEM = "FET3 Starter";
 prog_char testing_state_5[] PROGMEM = "FET4 Flare";
 prog_char testing_state_6[] PROGMEM = "FET5 O2 Reset";
 prog_char testing_state_7[] PROGMEM = "FET6 Alarm";
 prog_char testing_state_8[] PROGMEM = "FET7 Auger Rev";
-prog_char testing_state_9[] PROGMEM = "ANA0 ANA_Lambda";
-prog_char testing_state_10[] PROGMEM = "ANA2 ANA_Eng_Switch";
-prog_char testing_state_11[] PROGMEM = "ANA1 ANA_Fuel_Switch";
-prog_char testing_state_12[] PROGMEM = "ANA3 ANA_Oil";
-prog_char testing_state_13[] PROGMEM = "Gov Tuning";
 
-PROGMEM const char *TestingStateName[] = {testing_state_0, testing_state_1, testing_state_2, testing_state_3, testing_state_4, testing_state_5, testing_state_6, testing_state_7, testing_state_8, testing_state_9, testing_state_10, testing_state_11, testing_state_12, testing_state_13};
+prog_char testing_state_9[] PROGMEM =  "ANA_Lambda";
+prog_char testing_state_10[] PROGMEM = "ANA_Fuel_Switch";
+prog_char testing_state_11[] PROGMEM = "ANA_Eng_Switch";
+prog_char testing_state_12[] PROGMEM = "ANA_Oil";
+prog_char testing_state_13[] PROGMEM = "ANA_Auger_current";
+prog_char testing_state_14[] PROGMEM = "ANA_Throttle_Pos";
+prog_char testing_state_15[] PROGMEM = "ANA_Coolant_Temp";
+prog_char testing_state_16[] PROGMEM = "Unused"; 
+
+PROGMEM const char *TestingStateName[] = {testing_state_1, testing_state_2, testing_state_3, testing_state_4, testing_state_5, testing_state_6, testing_state_7, testing_state_8, testing_state_9, testing_state_10, testing_state_11, testing_state_12, testing_state_13, testing_state_14, testing_state_15, testing_state_16};
 
 // Datalogging variables
 int lineCount = 0;
@@ -694,7 +700,10 @@ void setup() {
   if(EEPROM.read(40) != 255){
     EEPROMReadAlpha(40, 10, serial_num);
   }
-  unique_number = uniqueNumber();
+  if(EEPROM.read(35) != 255){
+    EEPROMReadAlpha(35, 4, unique_number);
+  }
+  //unique_number = uniqueNumber();
   InitSD();
   DoDatalogging();
 

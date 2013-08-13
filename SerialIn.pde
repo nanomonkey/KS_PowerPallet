@@ -159,9 +159,19 @@ void DoSerialIn() {
    case '?':
       SerialShowInfo();
       break;
-   case '$':
+   case '$':  //write to log
       SerialReadString(';');
-      Serial2.println(serial_buffer);
+      Logln(serial_buffer);
+      break;
+   case 'n':
+      serial_buffer[0] = '\0';
+      SerialReadString(';');
+      if (serial_buffer[0] != '\0'){
+        EEPROMWriteAlpha(35, 4, serial_buffer);
+      }
+      EEPROMReadAlpha(35, 4, unique_number); // EEPROM is now blasted, so previous serial number no longer matters. Update public serial_num.
+      Log_p("PCU unique number: ");
+      Logln(unique_number); // for public use
       break;
 //   case 'W':  //write to config.ini
 //      Serial.read
@@ -250,7 +260,7 @@ void SerialShowInfo(void) {
    printProgStr(co_product);
    sprintf(buf, "%4s ", CODE_VERSION);
    Serial.print(buf);
-   sprintf(buf, "%10s %05u", serial_num, unique_number);
+   sprintf(buf, "%10s %5s", serial_num, unique_number);
    Serial.println(buf);
  }
  
