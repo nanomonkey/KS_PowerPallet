@@ -687,6 +687,7 @@ void TransitionDisplay(int new_state) {
     break;
   case DISPLAY_RELAY:
     turnAllOff();
+    TransitionAuger(AUGER_OFF);  //reboot auger states
     cur_item = 0;
     break; 
   case DISPLAY_CONFIG: 
@@ -933,14 +934,17 @@ void update_config_var(int var_num){
   case 15:
     grate_max_interval = getConfig(15)*5;  //longest total interval in seconds
     regs[MB_CONFIG15] = grate_max_interval;
+    CalculateGrate();
     break;
   case 16:
     grate_min_interval = getConfig(16)*5;
     regs[MB_CONFIG16] = grate_min_interval;
+    CalculateGrate();
     break;
   case 17:
     grate_on_interval = getConfig(17); 
     regs[MB_CONFIG17] = grate_on_interval;
+    CalculateGrate();
     break;
   case 18:
     servo_start = getConfig(18);
@@ -971,6 +975,9 @@ void update_config_var(int var_num){
     break;
   case 25:
     pratio_low_boundary = getConfig(25);
+    pratio_low = pratio_low_boundary/100.0;
+    pRatioReactorLevelBoundary[1][0] = pratio_low;
+    pRatioReactorLevelBoundary[2][1] = pratio_low;
     //regs[MB_CONFIG24] = m_pratio_low_boundary;
     break;
   }
