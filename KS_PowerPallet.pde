@@ -34,7 +34,7 @@ EEPROM bytes used of 4k space:
 //constant definitions
 #define ABSENT -500
 
-#define CODE_VERSION "v1.2" 
+#define CODE_VERSION "v1.21" 
 
 //PROGMEM string buffer
 char p_buffer[41] = ""; 
@@ -565,7 +565,7 @@ int pressureRatioAccumulator = 0;
 #define ALARM_NUM 16
 unsigned long alarm_on[ALARM_NUM] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 unsigned long alarm_start[ALARM_NUM] = {240000, 480000, pratio_max, pfilter_alarm, 230, 0, 0, 0, 30000, 60000, 10, 0, 0, 3000, 15000};  //count or time in milliseconds when alarm goes off
-unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 60000, 60000, 0, 0, 180000, 0, 0, 3000, 7000, 15000};  //time when engine will be shutdown
+unsigned long shutdown[ALARM_NUM] = {360000, 600000, 0, 0, 0, 0, 60000, 0, 0, 180000, 0, 0, 3000, 7000, 15000};  //time when engine will be shutdown
 int alarm_count = 0;
 int alarm_queue[ALARM_NUM] = {};
 int alarm_shown = 0;
