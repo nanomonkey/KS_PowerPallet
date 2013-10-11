@@ -19,7 +19,7 @@ void DoAuger() {
       TransitionEngine(ENGINE_SHUTDOWN);
       TransitionAuger(AUGER_ALARM);
     } 
-    if ((millis() - auger_state_entered) % 60000 > 59000) {  //pulse every minute of auger off
+    if (relay_board == 1 && ((millis() - auger_state_entered) % 60000 > 59000)) {  //pulse every minute of auger off...only on relay board enabled units
       Logln_p("Pulsing Auger");
       TransitionAuger(AUGER_PULSE);
     } 
@@ -50,6 +50,9 @@ void DoAuger() {
       TransitionAuger(AUGER_OFF);
     }
     if (relay_board == 1) {
+      if (millis() - auger_direction_entered > 2 * aug_rev_time && millis() - auger_direction_entered > 1000){  //oscillations are okay if the auger is moving forward
+        auger_rev_count = 0;
+      }
       if (AugerCurrentLevel == CURRENT_HIGH  && millis() - auger_state_entered > 500){
         TransitionAuger(AUGER_HIGH);
       } 
@@ -57,7 +60,7 @@ void DoAuger() {
         TransitionAuger(AUGER_CURRENT_LOW);
       } 
     }
-    if ((millis() - auger_state_entered) > shutdown[ALARM_AUGER_ON_LONG]){  //turn engine and auger off if auger runs none stop for too long
+    if ((millis() - auger_state_entered) > shutdown[ALARM_AUGER_ON_LONG]){  //turn engine and auger off if auger runs non-stop for too long, use auger_direction_entered???
       TransitionAuger(AUGER_ALARM);
       if (engine_state == ENGINE_ON){
         Log_p("Auger on too long, Engine Shutdown at:");
@@ -84,7 +87,7 @@ void DoAuger() {
     if (millis() - auger_state_entered > 500  && AugerCurrentLevel == CURRENT_HIGH){
       TransitionAuger(AUGER_REVERSE_HIGH);
     }
-    if (millis() - auger_reverse_entered > aug_rev_time){
+    if (millis() - auger_direction_entered > aug_rev_time){
       TransitionAuger(AUGER_FORWARD);
     }
     if (auger_rev_count > 20){  //catch oscillating auger from broken Fuel Switch
@@ -160,6 +163,9 @@ void TransitionAuger(int new_state) {
     //TransitionMessage("Auger: Starting      "); 
     break;
   case AUGER_FORWARD:
+    if (auger_state != AUGER_HIGH){
+      auger_direction_entered = millis();
+    }
     AugerForward();
     Log(p_buffer); 
     Logln_p("Forward");
@@ -171,7 +177,9 @@ void TransitionAuger(int new_state) {
     //TransitionMessage("Auger: Current High ");
     break;
   case AUGER_REVERSE:
-    auger_reverse_entered = millis();
+    if (auger_state != AUGER_REVERSE_HIGH){
+      auger_direction_entered = millis();
+    }
     Log(p_buffer); 
     Logln_p("Reverse");
     AugerReverse();

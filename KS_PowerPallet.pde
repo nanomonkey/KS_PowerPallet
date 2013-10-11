@@ -429,9 +429,9 @@ int auger_state = 0;
 int auger_rev_count = 0;
 unsigned long auger_current_low = 0;
 unsigned long auger_state_entered;
-unsigned long auger_reverse_entered;
+unsigned long auger_direction_entered;
 unsigned long auger_pulse_entered;
-unsigned long auger_pulse_time = 1000;
+unsigned long auger_pulse_time = 500;
 int auger_pulse_state = 0;
 
 //Auger Current Levels
@@ -673,6 +673,10 @@ void setup() {
   
   LoadPressureSensorCalibration();
   LoadServo();
+  if (engine_type == 0) {
+    shutdown[ALARM_AUGER_OFF_LONG] = shutdown[ALARM_AUGER_OFF_LONG] * 2;
+    alarm_start[ALARM_AUGER_ON_LONG] = alarm_start[ALARM_AUGER_ON_LONG] * 2;
+  }
   
   Serial.begin(115200);
   

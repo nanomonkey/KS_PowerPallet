@@ -872,6 +872,9 @@ void update_config_var(int var_num){
   case 1:
     engine_type = getConfig(1);
     regs[MB_CONFIG1] = engine_type;
+    if (engine_type == 0){
+        shutdown[ALARM_AUGER_OFF_LONG] = shutdown[ALARM_AUGER_OFF_LONG] * 2;  //10k power pallet goes through fuel slower, give it more time.
+    }
     break;
   case 2:
     relay_board = getConfig(2);
