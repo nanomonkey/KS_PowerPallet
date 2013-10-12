@@ -29,7 +29,7 @@ void DoEngine() {
           TransitionEngine(ENGINE_SHUTDOWN);
         }
       }
-      if (P_reactorLevel == OFF & millis() - engine_state_entered > 2500) { //if reactor is at low vacuum after ten seconds, engine did not catch, so turn off
+      if (P_reactorLevel == OFF & millis() - engine_state_entered > 2500 && grid_tie != 1) { //if reactor is at low vacuum after ten seconds, engine did not catch, so turn off
         Log_p("Reactor Pressure Too Low, Engine Shutdown at :");
         Logln(millis()-engine_state_entered);
         TransitionEngine(ENGINE_SHUTDOWN);
