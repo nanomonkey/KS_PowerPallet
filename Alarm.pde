@@ -70,10 +70,12 @@ void DoAlarm() {
 
 //Engine On Alarms
   //if (engine_state == ENGINE_ON && P_reactorLevel != OFF && T_tredLevel != HOT && T_tredLevel != EXCESSIVE) {
-  if (engine_state == ENGINE_ON && P_reactorLevel != OFF && Temp_Data[T_TRED]<750) {
+  if (engine_state == ENGINE_ON && P_reactorLevel != OFF && Temp_Data[T_TRED] < ttred_warn - 10) {
     setAlarm(ALARM_LOW_TRED);
   } else { 
-    removeAlarm(ALARM_LOW_TRED);
+    if (Temp_Data[T_TRED] > ttred_warn) {
+      removeAlarm(ALARM_LOW_TRED);
+    }
   }
   if (engine_state == ENGINE_ON && P_reactorLevel != OFF && T_bredLevel == EXCESSIVE) {
     setAlarm(ALARM_HIGH_BRED);

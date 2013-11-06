@@ -983,6 +983,15 @@ void update_config_var(int var_num){
     pRatioReactorLevelBoundary[2][1] = pratio_low;
     //regs[MB_CONFIG24] = m_pratio_low_boundary;
     break;
+  case 26:
+    ttred_warn = getConfig(26)*5;
+    break;
+  case 27:
+    pratio_high_boundary = getConfig(27);
+    pratio_high = pratio_high_boundary/100.0;
+    pRatioReactorLevelBoundary[0][0] = pratio_high;
+    pRatioReactorLevelBoundary[1][0] = pratio_high;
+    break;
   }
 }
 
