@@ -26,9 +26,9 @@
 
 /*
 EEPROM bytes used of 4k space:
-0,1,2,3,4,5,6,7,8,9,10, 13,14,15,16,17,18,19,21, 33,34,35,36,37,38  40-50,
+0-10,  13-21,  33-38,  40-50,
 500-999 DISPLAY_CONFIG states
-1000-4000 Sensor configuration
+1000-4000 Sensor configuration (not yet implemented)
 */
 
 //constant definitions
@@ -106,21 +106,21 @@ Servo Servo_Mixture;
 //Servo Servo_Throttle;
 
 //Thermocouple Mappings
-#define T_BRED 1
 #define T_TRED 0
+#define T_BRED 1
+#define T_ENG_COOLANT 2
+#define T_REACTOR_GAS_OUT 3
 #define T_PYRO_IN ABSENT
 #define T_PYRO_OUT ABSENT
 #define T_COMB ABSENT
-#define T_REACTOR_GAS_OUT 3
 #define T_DRYING_GAS_OUT ABSENT
 #define T_FILTER ABSENT
-#define T_ENG_COOLANT 2
 #define T_LOW_FUEL ABSENT
 
 //Pressure Mapping
 #define P_REACTOR 0
-#define P_COMB 2
 #define P_FILTER 1
+#define P_COMB 2
 #define P_Q_AIR_ENG 3
 #define P_Q_AIR_RCT 4
 #define P_Q_GAS_ENG 5
@@ -711,6 +711,7 @@ void setup() {
   if(EEPROM.read(40) != 255){
     EEPROMReadAlpha(40, 10, serial_num);
   }
+  
   if(EEPROM.read(35) != 255){
     EEPROMReadAlpha(35, 4, unique_number);
   }

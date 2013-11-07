@@ -50,9 +50,6 @@ void DoAuger() {
       TransitionAuger(AUGER_OFF);
     }
     if (relay_board == 1) {
-      if (millis() - auger_direction_entered > 2 * aug_rev_time && millis() - auger_direction_entered > 1000){  //oscillations are okay if the auger is moving forward
-        auger_rev_count = 0;
-      }
       if (AugerCurrentLevel == CURRENT_HIGH  && millis() - auger_state_entered > 500){
         TransitionAuger(AUGER_HIGH);
       } 
