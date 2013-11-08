@@ -210,7 +210,7 @@ char choice[5];
 char buf[22] = "";
 
 char serial_num[11] = "#         ";
-char unique_number[5] = "#   ";
+char unique_number[5] = "#";
 
 //Testing States
 #define TESTING_OFF 0
@@ -337,7 +337,7 @@ plus_minus_five,
 plus_minus
 }; 
 
-//                              0    1    2     3   4   5    6   7    8    9    10   11   12   13   14   15   16   17   18  19   20  21  22  23   24  25   26   27
+//                              0    1    2    3    4   5    6   7    8    9    10   11   12   13   14   15   16   17   18  19   20  21  22  23   24  25   26   27
 int defaults[CONFIG_COUNT]   = {0,   0,   1,   10,  35, 100, 6,  1,   10,  98,  10,  130, 210, 195, 50,  60,  12,  3,   30, 140, 0,  3,  0,  1,   0,  30,  150, 60};  //default values to be saved to EEPROM for the following getConfig variables
 int config_min[CONFIG_COUNT] = {0,   0,   0,   0,   5,  41,  1,  0,   0,   10,  0,   0,   0,   20,  0,   0,   0,   0,   0,  0,   0,  0,  0,  1,   0,  0,   0,   0};  //minimum values allowed 
 int config_max[CONFIG_COUNT] = {254, 254, 254, 254, 40, 135, 10, 254, 15, 254, 199, 254, 254, 254, 254, 254, 254, 254, 90, 150, 1,  6,  3,  127, 254, 100, 254, 254}; //maximum values allowed  
@@ -708,9 +708,9 @@ void setup() {
   Servo_Reset();
   Timer_Reset();
   
-//  if(EEPROM.read(35) != 255){
-//    EEPROMReadAlpha(35, 4, unique_number);
-//  }
+  if(EEPROM.read(35) != 255){
+    EEPROMReadAlpha(35, 4, unique_number);
+  }
   if(EEPROM.read(40) != 255){
     EEPROMReadAlpha(40, 10, serial_num);
   }

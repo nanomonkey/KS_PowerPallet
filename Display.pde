@@ -21,7 +21,8 @@ void DoDisplay() {
     Disp_PutStr(P("www.allpowerlabs.org"));
     //Row 2
     Disp_RC(2,0);
-    sprintf(buf, "       %s        ", CODE_VERSION);
+    strcpy_P(buf,blank);
+    sprintf(buf, "%s", CODE_VERSION);
     Disp_PutStr(buf);
     //Row 3
     Disp_RC(3,0);
