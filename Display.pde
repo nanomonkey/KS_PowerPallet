@@ -20,8 +20,7 @@ void DoDisplay() {
     Disp_RC(1,0);
     Disp_PutStr(P("www.allpowerlabs.org"));
     //Row 2
-    Disp_RC(2,0);
-    strcpy_P(buf,blank);
+    Disp_RC(2,(20-strlen(CODE_VERSION))/2);
     sprintf(buf, "%s", CODE_VERSION);
     Disp_PutStr(buf);
     //Row 3
