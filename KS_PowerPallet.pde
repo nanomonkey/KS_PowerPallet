@@ -209,8 +209,8 @@ const prog_char half_blank[] PROGMEM = "          ";
 char choice[5];
 char buf[22] = "";
 
-char serial_num[11] = "#";
-char unique_number[5] = "#";
+char serial_num[11] = "#         ";
+char unique_number[5] = "#   ";
 
 //Testing States
 #define TESTING_OFF 0
@@ -708,17 +708,16 @@ void setup() {
   Servo_Reset();
   Timer_Reset();
   
+//  if(EEPROM.read(35) != 255){
+//    EEPROMReadAlpha(35, 4, unique_number);
+//  }
   if(EEPROM.read(40) != 255){
     EEPROMReadAlpha(40, 10, serial_num);
   }
   
-  if(EEPROM.read(35) != 255){
-    EEPROMReadAlpha(35, 4, unique_number);
-  }
   //unique_number = uniqueNumber();
   InitSD();
   DoDatalogging();
-
   InitLambda();
   InitServos();
   InitGrate();  
