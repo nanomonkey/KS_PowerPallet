@@ -1,6 +1,6 @@
 void InitGrate() {
   //setup grate slopes
-  LoadGrate();
+  //LoadGrate();
   CalculateGrate();
 }
 
@@ -69,27 +69,28 @@ void DoGrate() { // call once per second
   }
 }
 
-void LoadGrate() {
-  byte check;
-  double ming,maxg,gon;
-  check = EEPROM.read(16); 
-  ming = EEPROM.read(17)*3;
-  maxg = EEPROM.read(19)*3;
-  gon= EEPROM.read(21);
-  if (check == 128) { //check to see if grate has been set
-    Logln_p("Loading grate from EEPROM");
-    grate_min_interval = ming;
-    grate_max_interval = maxg;
-    grate_on_interval = gon;
-  } else {
-    WriteGrate();
-  }
-}
-
-void WriteGrate() {
-  Logln_p("Writing grate to EEPROM");
-  EEPROM.write(16,128);
-  EEPROM.write(17,constrain(grate_min_interval/3,0,255));
-  EEPROM.write(19,constrain(grate_max_interval/3,0,255));
-  EEPROM.write(21,constrain(grate_on_interval,0,255));
-}
+//
+//void LoadGrate() {
+//  byte check;
+//  double ming,maxg,gon;
+//  check = EEPROM.read(16); 
+//  ming = EEPROM.read(17)*3;
+//  maxg = EEPROM.read(19)*3;
+//  gon= EEPROM.read(21);
+//  if (check == 128) { //check to see if grate has been set
+//    Logln_p("Loading grate from EEPROM");
+//    grate_min_interval = ming;
+//    grate_max_interval = maxg;
+//    grate_on_interval = gon;
+//  } else {
+//    WriteGrate();
+//  }
+//}
+//
+//void WriteGrate() {
+//  Logln_p("Writing grate to EEPROM");
+//  EEPROM.write(16,128);
+//  EEPROM.write(17,constrain(grate_min_interval/3,0,255));
+//  EEPROM.write(19,constrain(grate_max_interval/3,0,255));
+//  EEPROM.write(21,constrain(grate_on_interval,0,255));
+//}
